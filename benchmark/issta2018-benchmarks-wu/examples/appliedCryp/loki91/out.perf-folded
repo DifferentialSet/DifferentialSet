@@ -1,0 +1,114 @@
+:1161;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+:1281;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+:4456;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+:988;[unknown];[unknown];[unknown];[unknown] 1
+APEX_CONTEXT_NE;[unknown];[libdropbox_core.so] 1
+NUCLEUS_CONTROL;[unknown];[libdropbox_core.so] 1
+node;__libc_start_main;node::Start;node::NodeMainInstance::Run;uv_run;__libc_disable_asynccancel 1
+node;__libc_start_main;node::Start;node::NodeMainInstance::Run;uv_run;uv__io_poll;uv__async_io.part.1;uv__work_done;node::ThreadPoolWork::ScheduleWork;non-virtual thunk to node::(anonymous namespace)::CompressionStream<node::(anonymous namespace)::ZlibContext>::AfterThreadPoolWork;node::AsyncWrap::MakeCallback;node::InternalMakeCallback;node::InternalCallbackScope::Close;v8::internal::MicrotaskQueue::PerformCheckpoint;v8::internal::MicrotaskQueue::RunMicrotasks;v8::internal::Execution::TryRunMicrotasks;v8::internal::(anonymous namespace)::Invoke;Builtins_JSRunMicrotasksEntry;Builtins_RunMicrotasks;Builtins_PromiseFulfillReactionJob;Builtins_AsyncFunctionAwaitResolveClosure;[perf-1877653.map];[perf-1877653.map];Builtins_InterpreterEntryTrampoline;[perf-1877653.map];[perf-1877653.map];Builtins_InterpreterEntryTrampoline;[perf-1877653.map];[perf-1877653.map];Builtins_InterpreterEntryTrampoline;[perf-1877653.map];Builtins_GrowFastSmiOrObjectElements 1
+node;__libc_start_main;node::Start;node::NodeMainInstance::Run;uv_run;uv__io_poll;uv__stream_io;uv__read;node::LibuvStreamWrap::OnUvRead;node::EmitToJSStreamListener::OnStreamRead;node::StreamBase::CallJSOnreadMethod;node::AsyncWrap::MakeCallback;node::InternalMakeCallback;node::InternalCallbackScope::Close;v8::Function::Call;v8::internal::Execution::Call;v8::internal::(anonymous namespace)::Invoke;Builtins_JSEntry;Builtins_JSEntryTrampoline;Builtins_InterpreterEntryTrampoline;Builtins_InterpreterEntryTrampoline;Builtins_ArgumentsAdaptorTrampoline;Builtins_InterpreterEntryTrampoline;Builtins_ArgumentsAdaptorTrampoline;Builtins_ReflectApply 1
+node;__libc_start_main;node::Start;node::NodeMainInstance::Run;uv_run;uv__run_timers;node::Environment::RunTimers;v8::Function::Call;v8::internal::Execution::Call;v8::internal::(anonymous namespace)::Invoke;Builtins_JSEntry;Builtins_JSEntryTrampoline;[perf-1877690.map];[perf-1877690.map];[unknown] 1
+node;__libc_start_main;node::Start;node::NodeMainInstance::Run;uv_run;uv__run_timers;node::Environment::RunTimers;v8::Function::Call;v8::internal::Execution::Call;v8::internal::(anonymous namespace)::Invoke;Builtins_JSEntry;Builtins_JSEntryTrampoline;[perf-1887882.map];[perf-1887882.map];[perf-1887882.map];Builtins_LoadGlobalIC;[perf-1887882.map] 1
+perf;__libc_start_main;main;run_builtin;cmd_record;__evlist__enable;__GI___ioctl;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 24
+perf;__libc_start_main;main;run_builtin;cmd_record;perf_event__synthesize_comm;__libc_read;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+ps;[unknown];__vsnprintf_internal;__vfprintf_internal 1
+python;[libffi.so.7.1.0] 5
+python;[unknown];ConvParam 1
+python;[unknown];PyBool_FromLong 1
+python;[unknown];PyCArgObject_new 1
+python;[unknown];PyCFuncPtr_call;ConvParam 1
+python;[unknown];PyCFuncPtr_call;PyLong_FromLong 1
+python;[unknown];PyCFuncPtr_call;[_ctypes.cpython-39-x86_64-linux-gnu.so] 1
+python;[unknown];PyCFuncPtr_call;[libffi.so.7.1.0] 2
+python;[unknown];PyCFuncPtr_call;__memset_avx2_unaligned_erms 1
+python;[unknown];PyCFuncPtr_call;_ctypes_callproc 5
+python;[unknown];PyCFuncPtr_call;_ctypes_callproc;[libffi.so.7.1.0] 5
+python;[unknown];PyCFuncPtr_call;_ctypes_get_fielddesc 1
+python;[unknown];PyCFuncPtr_call;drop_gil 1
+python;[unknown];PyCFuncPtr_call;i_get 1
+python;[unknown];PyCSimpleType_paramfunc 1
+python;[unknown];PyDict_GetItemWithError 3
+python;[unknown];PyErr_Occurred 1
+python;[unknown];PyList_New 1
+python;[unknown];PyObject_GenericGetAttr 3
+python;[unknown];PyObject_GetAttr 3
+python;[unknown];PyObject_RichCompare 2
+python;[unknown];PyType_IsSubtype 1
+python;[unknown];PyUnicode_AsUTF8 2
+python;[unknown];Z3_dec_ref 1
+python;[unknown];[unknown];[unknown];ast_manager::compact_memory 1
+python;[unknown];[unknown];_PyTuple_FromArray 2
+python;[unknown];[unknown];__memmove_avx_unaligned_erms 1
+python;[unknown];[unknown];ast_manager::compact_memory 10
+python;[unknown];[unknown];frame_dealloc 3
+python;[unknown];[unknown];syscall;[unknown] 1
+python;[unknown];_PyDict_GetItemIdWithError 1
+python;[unknown];_PyEval_EvalCode 3
+python;[unknown];_PyEval_EvalFrameDefault 48
+python;[unknown];_PyFrame_New_NoTrack 1
+python;[unknown];_PyFunction_Vectorcall 4
+python;[unknown];_PyObjectDict_SetItem 1
+python;[unknown];_PyObject_GenericGetAttrWithDict 1
+python;[unknown];_PyObject_GetMethod 7
+python;[unknown];_PyObject_MakeTpCall 1
+python;[unknown];_PyObject_Malloc 1
+python;[unknown];_PyTrash_end 1
+python;[unknown];_PyType_Lookup 3
+python;[unknown];_Py_CheckFunctionResult 1
+python;[unknown];__errno_location 1
+python;[unknown];__memmove_avx_unaligned_erms 1
+python;[unknown];__munmap;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 6
+python;[unknown];__munmap;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+python;[unknown];__munmap;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 3
+python;[unknown];__pthread_mutex_lock 3
+python;[unknown];__pthread_mutex_unlock 4
+python;[unknown];_ctypes_get_fielddesc 1
+python;[unknown];ast_manager::compact_memory 33
+python;[unknown];compare_nodes 1
+python;[unknown];dict_dealloc 1
+python;[unknown];frame_dealloc 1
+python;[unknown];function_code_fastcall 1
+python;[unknown];insertdict 1
+python;[unknown];is_numeral_sort 1
+python;[unknown];long_new 1
+python;[unknown];lookdict_split 1
+python;[unknown];lookdict_unicode 1
+python;[unknown];lookdict_unicode_nodummy 2
+python;[unknown];module_getattro 1
+python;[unknown];object_init 1
+python;[unknown];object_isinstance 1
+python;[unknown];slot_tp_init 1
+python;[unknown];slot_tp_str 1
+python;[unknown];smt::context::bcp 1
+python;[unknown];tupledealloc 2
+python;__memset_avx2_erms 1
+python;__pthread_mutex_unlock 2
+python;acquire_timed 1
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table 64
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown] 26
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown];[unknown];[unknown] 3
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown];[unknown];[unknown];[unknown] 10
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown];[unknown];[unknown];[unknown];[unknown] 2
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 3
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 2
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 5
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 16
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 2
+python;chashtable<ast*, obj_ptr_hash<ast>, ast_eq_proc>::expand_table;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+python;lookdict_split 5
+python;take_gil 1
+swapper;[unknown];[unknown];[unknown];[unknown] 1
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown] 1
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 2
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 4
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 3
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 2
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 3
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+swapper;[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown];[unknown] 1
+systemd-journal;[unknown];[unknown] 1
+systemd;[unknown];[unknown];[unknown];[unknown] 1

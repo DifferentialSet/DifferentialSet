@@ -1,0 +1,27 @@
+{
+    "files.associations": {
+        "stdint.h": "c",
+        "stdio.h": "c",
+        "pycrypto_common.h": "c",
+        "unistd.h": "c",
+        "array": "c",
+        "functional": "c",
+        "istream": "c",
+        "ostream": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "assert.h": "c",
+        "optional": "c",
+        "system_error": "c",
+        "*.tcc": "c",
+        "fstream": "c",
+        "iosfwd": "c",
+        "limits": "c",
+        "sstream": "c",
+        "streambuf": "c",
+        "string.h": "c",
+        "chrono": "c",
+        "ratio": "c"
+    }
+}

@@ -1,0 +1,1 @@
+{"src/Blowfish": {"Compile transform_only TIME": [1.44, 0.01], "Compile mitigated.c TIME": [5.68, 0.0], "Run mitigated TIME": [0.81, 0.01], "Run transform_only TIME": [0.72, 0.02], "mitigated_cycle": 291997, "baseline_cycle": 162411, "overhead": 0.797889305527335, "Total Time": 8.69, "Wall Clock Time": 7.268909454345703}}
