@@ -1,0 +1,5 @@
+digraph "CFG for 'hsum_epi32_avx' function" {
+	label="CFG for 'hsum_epi32_avx' function";
+
+	Node0x501c90 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%1:\l  %2 = bitcast \<2 x i64\> %0 to \<4 x i32\>\l  %3 = shufflevector \<4 x i32\> %2, \<4 x i32\> poison, \<4 x i32\> \<i32 2, i32 3,\l... i32 2, i32 3\>\l  %4 = bitcast \<2 x i64\> %0 to \<4 x i32\>\l  %5 = add \<4 x i32\> %3, %4\l  %6 = shufflevector \<4 x i32\> %5, \<4 x i32\> poison, \<4 x i32\> \<i32 1, i32\l... undef, i32 undef, i32 undef\>\l  %7 = add \<4 x i32\> %6, %5\l  %8 = extractelement \<4 x i32\> %7, i32 0\l  ret i32 %8\l}"];
+}

@@ -1,0 +1,120 @@
+Reading GOTO program from 'main'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+__CPROVER__start /* __CPROVER__start */
+        // 28 no location
+        // Labels: __CPROVER_HIDE
+        SKIP
+        // 29 no location
+        CALL __CPROVER_initialize()
+        // 30 file alignment.c line 1
+        CALL return' := main()
+        // 31 file alignment.c line 1
+        OTHER code #source_location="" statement="output"(address_of("return'"[0]), return')        // 32 no location
+        END_FUNCTION
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+__CPROVER_initialize /* __CPROVER_initialize */
+        // 33 no location
+        // Labels: __CPROVER_HIDE
+        SKIP
+        // 34 file <built-in-additions> line 20
+        ASSIGN __CPROVER_alloca_object := NULL
+        // 35 file <built-in-additions> line 14
+        ASSIGN __CPROVER_dead_object := NULL
+        // 36 file <built-in-additions> line 13
+        ASSIGN __CPROVER_deallocated := NULL
+        // 37 file <built-in-additions> line 23
+        ASSIGN __CPROVER_malloc_failure_mode_assert_then_assume := 2
+        // 38 file <built-in-additions> line 22
+        ASSIGN __CPROVER_malloc_failure_mode_return_null := 1
+        // 39 file <built-in-additions> line 17
+        ASSIGN __CPROVER_malloc_is_new_array := 0 ≠ 0
+        // 40 file <built-in-additions> line 15
+        ASSIGN __CPROVER_malloc_object := NULL
+        // 41 file <built-in-additions> line 16
+        ASSIGN __CPROVER_malloc_size := 0
+        // 42 file <built-in-additions> line 24
+        ASSIGN __CPROVER_max_malloc_size := cast(8388608, unsignedbv[32])
+        // 43 file <built-in-additions> line 18
+        ASSIGN __CPROVER_memory_leak := NULL
+        // 44 file <built-in-additions> line 8
+        ASSIGN __CPROVER_next_thread_id := cast(0, unsignedbv[32])
+        // 45 file <built-in-additions> line 11
+        ASSIGN __CPROVER_next_thread_key := cast(0, unsignedbv[32])
+        // 46 file <built-in-additions> line 38
+        ASSIGN __CPROVER_pipe_count := cast(0, unsignedbv[32])
+        // 47 file <built-in-additions> line 29
+        ASSIGN __CPROVER_rounding_mode := 0
+        // 48 file <built-in-additions> line 6
+        ASSIGN __CPROVER_thread_id := cast(0, unsignedbv[32])
+        // 49 file <built-in-additions> line 10
+        ASSIGN __CPROVER_thread_key_dtors := array_of #source_location=""(NULL)
+        // 50 file <built-in-additions> line 9
+        ASSIGN __CPROVER_thread_keys := array_of #source_location=""(NULL)
+        // 51 file <built-in-additions> line 7
+        ASSIGN __CPROVER_threads_exited := array_of #source_location=""(false)
+        // 52 no location
+        END_FUNCTION
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+main /* main */
+        // 0 file alignment.c line 2 function main
+        DECL main::1::s0 : signedbv[32]
+        // 1 file alignment.c line 2 function main
+        DECL main::1::s1 : signedbv[32]
+        // 2 file alignment.c line 2 function main
+        DECL main::1::s2 : signedbv[32]
+        // 3 file alignment.c line 2 function main
+        DECL main::1::a0 : signedbv[32]
+        // 4 file alignment.c line 2 function main
+        DECL main::1::a1 : signedbv[32]
+        // 5 file alignment.c line 2 function main
+        DECL main::1::a2 : signedbv[32]
+        // 6 file alignment.c line 2 function main
+        DECL main::1::b0 : signedbv[32]
+        // 7 file alignment.c line 2 function main
+        DECL main::1::b1 : signedbv[32]
+        // 8 file alignment.c line 2 function main
+        DECL main::1::b2 : signedbv[32]
+        // 9 file alignment.c line 3 function main
+        IF ¬(main::1::s0 ≠ 0) THEN GOTO 1
+        // 10 file alignment.c line 4 function main
+        ASSIGN main::1::a0 := main::1::a1
+        // 11 file alignment.c line 5 function main
+        ASSIGN main::1::a1 := 1
+        // 12 file alignment.c line 6 function main
+        ASSIGN main::1::a2 := 3
+        // 13 file alignment.c line 6 function main
+        GOTO 2
+        // 14 file alignment.c line 9 function main
+     1: ASSIGN main::1::a0 := main::1::a1
+        // 15 no location
+     2: SKIP
+        // 16 file alignment.c line 11 function main
+        ASSIGN main::1::b0 := 1
+        // 17 file alignment.c line 12 function main
+        DEAD main::1::b2
+        // 18 file alignment.c line 12 function main
+        DEAD main::1::b1
+        // 19 file alignment.c line 12 function main
+        DEAD main::1::b0
+        // 20 file alignment.c line 12 function main
+        DEAD main::1::a2
+        // 21 file alignment.c line 12 function main
+        DEAD main::1::a1
+        // 22 file alignment.c line 12 function main
+        DEAD main::1::a0
+        // 23 file alignment.c line 12 function main
+        DEAD main::1::s2
+        // 24 file alignment.c line 12 function main
+        DEAD main::1::s1
+        // 25 file alignment.c line 12 function main
+        DEAD main::1::s0
+        // 26 file alignment.c line 12 function main
+        RETURN side_effect #source_location="" statement="nondet" is_nondet_nullable="1"
+        // 27 file alignment.c line 12 function main
+        END_FUNCTION
+

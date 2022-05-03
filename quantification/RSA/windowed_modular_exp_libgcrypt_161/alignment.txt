@@ -1,0 +1,2 @@
+Observation_$0$1_0,decoy_$0$0__0,decoy_$0$0__0
+Observation_$0$1_1,decoy_$0$0__1,decoy_$0$0__1

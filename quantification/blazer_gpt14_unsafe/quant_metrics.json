@@ -1,0 +1,10 @@
+{
+    "Building goto TIME": [0.02, 0.0],
+    "Analysis TIME": [0.03, 0.0],
+    "Enumerate DS TIME": [1.15, 0.02],
+    "Do alignment TIME": [0.0, 0.0],
+    "Generate DIMACS TIME": [0.05, 0.0],
+    "CC": [null, null, 2],
+    "Counting CC TIME": [0.01, 0.0],
+    "Total Time": 1.28
+}{"Building goto TIME": [0.03, 0.0], "Analysis TIME": [3.75, 0.02], "Enumerate DS TIME": [126.93, 0.08], "Do alignment TIME": [0.0, 0.05], "Generate DIMACS TIME": [7.22, 0.26], "CC": [null, null, null], "Counting CC TIME": [3598.41, 0.05], "Total Time": 3736.8}{"Building goto TIME": [0.02, 0.0], "Analysis TIME": [0.04, 0.0], "Enumerate DS TIME": [1.27, 0.04], "Do alignment TIME": [0.0, 0.0], "Generate DIMACS TIME": [0.05, 0.0], "CC": [null, null, 2], "Counting CC TIME": [0.02, 0.0], "Total Time": 1.4400000000000002, "Wall Clock Time": 0.4320180416107178}{"Building goto TIME": [0.01, 0.0], "Analysis TIME": [0.04, 0.0], "Enumerate DS TIME": [1.21, 0.03], "Do alignment TIME": [0.0, 0.0], "Generate DIMACS TIME": [0.06, 0.0], "CC": [null, null, 2], "Counting CC TIME": [0.62, 0.0], "Total Time": 1.9700000000000002, "Wall Clock Time": 1.0434718132019043}
