@@ -1,5 +1,0 @@
-digraph "CFG for 'branch_id' function" {
-	label="CFG for 'branch_id' function";
-
-	Node0x529050 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%1:\l  ret void\l}"];
-}

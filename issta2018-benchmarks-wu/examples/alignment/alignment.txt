@@ -1,4 +1,0 @@
-Observation__5
-Observation_$0_0,Observation_$1$0_0,Observation_$1$1_0
-Observation_$0_1,decoy_$1_0_0,decoy_$1_0_0
-Observation_$0_2,decoy_$1_0_1,decoy_$1_0_1

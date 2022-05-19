@@ -1,1 +1,0 @@
-anubis_setkey.0:5,anubis_setkey.1:6,anubis_setkey.2:3,anubis_setkey.3:5,anubis_setkey.4:4,anubis_setkey.5:13,anubis_crypt.0:4,anubis_crypt.1:13,anubis_crypt.2:4
