@@ -1,0 +1,1 @@
+khazad_setkey.0:8,khazad_setkey.1:7,khazad_crypt.0:7

@@ -1,0 +1,1 @@
+setlokikey.0,enloki.0,deloki.0,perm32.0,mult8.0,exp8.0

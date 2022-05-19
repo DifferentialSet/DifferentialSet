@@ -1,0 +1,1 @@
+desfunc.0:8,cookey.0:16,cpkey.0:32,usekey.0:32,deskey.0:56,deskey.1:28,deskey.2:28,deskey.3:24,deskey.4:16
