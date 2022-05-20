@@ -54,6 +54,9 @@ benchmark_paths += ["/app/benchmarks/mitigation/pycrypto/src/Blowfish/"]
 benchmark_paths += ["/app/benchmarks/mitigation/pycrypto/src/CAST/"]
 benchmark_paths += ["/app/benchmarks/mitigation/pycrypto/src/DES3/"]
 
+import cpufeature
+
+have_avx2 = cpufeature.CPUFeature.get("AVX2") or cpufeature.CPUFeature.get("OS_AVX2")
 
 import multiprocessing
 n_jobs = int(multiprocessing.cpu_count())
@@ -96,7 +99,7 @@ for benchmark_path in benchmark_paths:
         subprocess.run(["goto-instrument", "--dump-c", "instrumented", "instrumented.c"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Do alignment: {}".format(benchmark_name))
     with time_context(metrics_collector, "Do alignment"):
-        do_alignment(benchmark_path, align_only=False)
+        do_alignment(benchmark_path, align_only=False, have_avx2=have_avx2)
     print("Combining instrumented.c: {}".format(benchmark_name))
     with time_context(metrics_collector, "Combine instrumented.c"):
         combine_components(benchmark_path)

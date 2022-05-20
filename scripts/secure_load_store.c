@@ -11,30 +11,17 @@ struct ds_base {
 };
 typedef struct ds_base ds_base_t;
 
-uint32_t hsum_epi32_avx(__m128i x)
-{
-    __m128i hi64  = _mm_unpackhi_epi64(x, x);           // 3-operand non-destructive AVX lets us save a byte without needing a movdqa
-    __m128i sum64 = _mm_add_epi32(hi64, x);
-    __m128i hi32  = _mm_shuffle_epi32(sum64, _MM_SHUFFLE(2, 3, 0, 1));    // Swap the low two elements
-    __m128i sum32 = _mm_add_epi32(sum64, hi32);
-    return _mm_cvtsi128_si32(sum32);       // movd
-}
-
-uint32_t mm256_hadd_to_32(__m256i v)
-{
-    __m128i sum128 = _mm_add_epi32( 
-                 _mm256_castsi256_si128(v),
-                 _mm256_extracti128_si256(v, 1));
-    return hsum_epi32_avx(sum128);
-}
-
 uint64_t mm256_hadd_to_64(__m256i v) {
+  #ifdef __AVX2__
     __m128i vlow    = _mm256_castsi256_si128(v);
     __m128i vhigh   = _mm256_extracti128_si256(v, 1);
             vlow    = _mm_add_epi64(vlow, vhigh);
     __m128i vhigh64 = _mm_unpackhi_epi64(vlow, vlow);
     uint64_t ret = _mm_cvtsi128_si64(_mm_add_epi64(vlow, vhigh64));
     return ret;
+  #else
+    abort();
+  #endif
 }
 
 __attribute__((noinline)) uint64_t uint64_t_secure_load_impl(const uint64_t * ptr, const ds_base_t *bases, uint32_t base_size, uint32_t total_size) {

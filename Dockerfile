@@ -23,6 +23,9 @@ mkdir build && cd build &&\
 cmake -DCMAKE_BUILD_TYPE:STRING=Release .. &&\
 make -j && make install
 
+RUN pip3 install cpufeature
+RUN apt-get install -y vim
+
 COPY ./benchmarks/ /app/benchmarks
 COPY ./scripts/ /app/scripts
 
