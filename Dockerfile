@@ -8,7 +8,7 @@ WORKDIR /app
 COPY ./cbmc/ /app/cbmc
 RUN cd /app/cbmc && mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE:STRING=Release && make -j goto-cc goto-instrument && make install
 
-# Buil and Install ApproxMC
+# Build and Install ApproxMC
 RUN apt-get install -y zlib1g-dev libboost-program-options-dev libm4ri-dev libgmp3-dev
 RUN cd /app &&\
 git clone https://github.com/msoos/cryptominisat &&\
