@@ -113,10 +113,10 @@ for benchmark_path in benchmark_paths:
     wall_clock_time_end = time.time()
     print("Run mitigated program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Run mitigated"):
-        result_mitigated = subprocess.run(["taskset", "-c", "3", "perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "6000", "./mitigated"], stdin=open(home_path+"/issta2018-benchmarks-wu/random_input_large.txt"), capture_output=True, cwd=benchmark_path)
+        result_mitigated = subprocess.run(["taskset", "-c", "3", "perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "6000", "./mitigated"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
     print("Run baseline program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Run transform_only"):
-        result_baseline = subprocess.run(["taskset", "-c", "3", "perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "6000", "./transform_only"], stdin=open(home_path+"/issta2018-benchmarks-wu/random_input_large.txt"), capture_output=True, cwd=benchmark_path)
+        result_baseline = subprocess.run(["taskset", "-c", "3", "perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "6000", "./transform_only"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
 
     mitigated_cycle = int(result_mitigated.stderr.split(b",")[0])
     baseline_cycle = int(result_baseline.stderr.split(b",")[0])
