@@ -1,7 +1,7 @@
 System Requirement:
-Linux as Host OS
-Intel CPU(For best performance, needs to support AVX2 extension)
-64G Memory
+1. Linux as Host OS
+2. Intel CPU(For best performance, needs to support AVX2 extension)
+3. 64G Memory
 
 We recommend run DSA through Docker. You can find prebuilt Docker Image at https://hub.docker.com/r/hflsmax/dsa, or you can build it yourself by running `docker build -t dsa .`.
 
