@@ -32,3 +32,6 @@ COPY ./scripts/ /app/scripts
 WORKDIR /app/scripts
 RUN chmod +x run_miti.py && chmod +x run_quant.py
 
+COPY ./entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]
