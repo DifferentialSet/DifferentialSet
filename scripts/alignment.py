@@ -46,6 +46,7 @@ def align_simple_branches(left, right):
     # pc_is_sensitive = left["pc_is_sensitive"]
     decoy_local_index = 0
     list_of_aligned_pairs = align_simple_branches_rec(left, right)
+
     result = []
     if left:
         left_pc = left[0][0][0].split("_")[1]
@@ -70,7 +71,8 @@ def align_simple_branches(left, right):
             right_decoy_prefixes = ["decoy_" + right_pc + "_" + o.split("_")[2] for o in r[0]]
             assert(l[2] == r[2]) # pc_is_sensitive should be the same
 
-            result.append((l[0] + r[0], {k: l[1].get(k, []) + r[1].get(k, []) for k in list(l[1].keys()) + list(r[1].keys())}, l[2]))
+            # result.append((l[0] + r[0], {k: l[1].get(k, []) + r[1].get(k, []) for k in list(l[1].keys()) + list(r[1].keys())}, l[2]))
+            result.append((l[0] + r[0], l[1] + r[1], l[2]))
     return result
 
 
@@ -99,7 +101,8 @@ def align_ds(ds_map):
     # return [([obsv_id], [(base, offset)], pc_is_sensitive)]
     def dfs(pc_trie):
         if len(pc_trie["branches"]) == 0:
-            stripped_curr = [(o[0], pub_three_tuple_to_dict(o[1]), pc_trie["pc_is_sensitive"]) for o in pc_trie["current"] if o[1][0][0] != -1]
+            # stripped_curr = [(o[0], pub_three_tuple_to_dict(o[1]), pc_trie["pc_is_sensitive"]) for o in pc_trie["current"] if o[1][0][0] != -1]
+            stripped_curr = [(o[0], o[1], pc_trie["pc_is_sensitive"]) for o in pc_trie["current"] if o[1][0][0] != -1]
             return stripped_curr
         max_branch_index = int(max(pc_trie["branches"].keys(), key=lambda x: int(x)))
 
