@@ -1,6 +1,7 @@
 
 def combine_components(config_dir):
-    with open("secure_load_store.c", "r") as f:
+    with open("secure_load_store_avx512.c", "r") as f:
+    # with open("secure_load_store.c", "r") as f:
     # with open("secure_load_store_bulk_only.c", "r") as f:
         secure_load_store_code = f.read()
     
@@ -17,4 +18,3 @@ def combine_components(config_dir):
         f.write(transformed_aligned_program)
 
     from util import clean_up_code
-    clean_up_code(config_dir + "mitigated.c")

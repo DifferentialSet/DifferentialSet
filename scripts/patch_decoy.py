@@ -71,7 +71,7 @@ def get_decoy_name_to_real_func_call(vars_of_alignments, id_to_real_func_call):
 def insert_decoy_func_call_after_target(decoy_name_to_real_func_call, id_to_compound_node_pair):
     id_to_list_of_decoy_names = {}
     for decoy_name in decoy_name_to_real_func_call.keys():
-        id = decoy_name.split("_", 1)[1].rsplit("_", 1)[0]
+        id = decoy_name.split("_", 1)[1].rsplit("_", 2)[0] + "_"
         assert(id in id_to_compound_node_pair)
         id_to_list_of_decoy_names[id] = id_to_list_of_decoy_names.get(id, []) + [decoy_name]
 
@@ -203,7 +203,7 @@ class FunctionModifier(c_ast.NodeVisitor):
 
             # append _onebase if ds has only one base and has more than one element. If there's single element it's already marked as _single
             assert(id in self.macro_defs_raw)
-            if (len(self.macro_defs_raw[id]) == 1 and self.macro_defs_raw[id][0][2] > 1):
+            if (is_single == "" and len(self.macro_defs_raw[id]) == 1 and self.macro_defs_raw[id][0][2] >= 1):
                 self.update_func_call(func_call, self.macro_defs_raw[id][0], index, update_inplace=True)
 
             self.id_to_real_func_call[obsv_id] = func_call
@@ -247,6 +247,7 @@ def transform_program_using_alignment(instrumented_program_path, alignments_thre
             remaining_lines += line
     
     pp_code = check_output(["cpp"], input=remaining_lines, text=True)
+    pp_code = pp_code.split("extern void * memcpy(void *dst, const void *src, size_t n)\n{")[0]
     ast = parser.parse(pp_code)
     ensure_compound_v = BranchToCompoundVisitor()
     ensure_compound_v.visit(ast)

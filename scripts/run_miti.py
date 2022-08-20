@@ -5,8 +5,10 @@ from z3_enumerate import parallel_enumerate, do_alignment
 from contextlib import contextmanager
 from combine import combine_components
 import time
+from util import clean_up_code
+import datetime
 
-
+now = datetime.datetime.now()
 
 @contextmanager
 def time_context(collector, item_name):
@@ -23,44 +25,85 @@ def time_context(collector, item_name):
 
 my_env = os.environ.copy()
 home_path = "/app/benchmarks/mitigation"
-# my_env["PATH"] = "/home/cream/src/cbmc/build/bin:" + my_env["PATH"]
+# my_env["PATH"] = "/home/cream/src/DSA_github/cbmc/build_rel/bin:" + my_env["PATH"]
+# my_env["PATH"] = "/home/cream/src/cbmc/build_5.62_rel/bin:" + my_env["PATH"]
+my_env["PATH"] = "/home/cream/src/cbmc/aws_build/bin:/home/ubuntu/src/constantine/src/llvm-9/bin/bin:" + my_env["PATH"]
 # my_env["PATH"] = "/home/ubuntu/src/cbmc/aws_build/bin:" + my_env["PATH"]
 
 benchmark_paths = []
 
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/aes/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/des/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/des3/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/anubis/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/cast5/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/cast6/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/fcrypt/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/khazad/"]
+# if /app exists
+if os.path.exists("/app"):
+    root = "/app/benchmarks/mitigation/"
+else:
+    if os.getlogin() == "cream":
+        root = "/home/cream/src/DSA_github/benchmarks/mitigation/"
+    elif os.getlogin() == "ubuntu":
+        root = "/home/ubuntu/src/DSA_github/benchmarks/mitigation/"
+    else:
+        assert(0)
 
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/supercop/aes_core/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/supercop/cast-ssl/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/aes/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/des/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/des3/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/anubis/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/cast5/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/cast6/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/fcrypt/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/khazad/"]
 
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/libg/camellia/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/libg/des/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/libg/seed/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/libg/twofish/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/supercop/aes_core/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/supercop/cast-ssl/"]
 
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/ghostrider/histogram/"]
-benchmark_paths += ["/app/benchmarks/mitigation/issta2018-benchmarks-wu/examples/ghostrider/matmul/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/libg/camellia/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/libg/des/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/libg/seed/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/libg/twofish/"]
 
-benchmark_paths += ["/app/benchmarks/mitigation/pycrypto/src/AES/"]
-benchmark_paths += ["/app/benchmarks/mitigation/pycrypto/src/ARC4/"]
-benchmark_paths += ["/app/benchmarks/mitigation/pycrypto/src/Blowfish/"]
-benchmark_paths += ["/app/benchmarks/mitigation/pycrypto/src/CAST/"]
-benchmark_paths += ["/app/benchmarks/mitigation/pycrypto/src/DES3/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/ghostrider/histogram/"]
+benchmark_paths += [root + "issta2018-benchmarks-wu/examples/ghostrider/matmul/"]
+
+benchmark_paths += [root + "pycrypto/src/AES/"]
+benchmark_paths += [root + "pycrypto/src/ARC4/"]
+benchmark_paths += [root + "pycrypto/src/Blowfish/"]
+benchmark_paths += [root + "pycrypto/src/CAST/"]
+benchmark_paths += [root + "pycrypto/src/DES3/"]
+
+benchmark_paths += [root + "binsec/bearssl/aes_big_wrapper/"]
+benchmark_paths += [root + "binsec/bearssl/des_tab_wrapper/"]
+benchmark_paths += [root + "binsec/tls1_cbc_remove_padding_lucky13_wrapper/"]
+
+benchmark_paths += [root + "wolfssl/"]
+
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/tail_while/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/head_while/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/strlen/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/memset/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/complex/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/alias/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/two_alias/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/object_size/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/condition/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/loop_with_memop/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/branch/"]
+# benchmark_paths += ["/home/ubuntu/src/DSA_github/benchmarks/mitigation/play/store/"]
+# benchmark_paths += ["/home/ubuntu/src/DSA_github/benchmarks/mitigation/play/pub_index/"]
+# benchmark_paths += ["/home/ubuntu/src/DSA_github/benchmarks/mitigation/play/offset_multi_vars/"]
+# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/fcrypt/"]
+# benchmark_paths += ["/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/"]
+# benchmark_paths += ["/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/unroll_1/"]
+# benchmark_paths += ["/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/test0/"]
+# benchmark_paths += ["/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/test1/"]
+
 
 import cpufeature
 
 have_avx2 = cpufeature.CPUFeature.get("AVX2") or cpufeature.CPUFeature.get("OS_AVX2")
 
 import multiprocessing
-n_jobs = int(multiprocessing.cpu_count())
-compiler = "gcc"
+n_jobs = int(multiprocessing.cpu_count()) - 3
+# compiler = "gcc"
+compiler = "clang"
 
 metrics_file = "miti_metrics.json"
 
@@ -87,10 +130,7 @@ for benchmark_path in benchmark_paths:
 
     print("Get transform only baseline: {}".format(benchmark_name))
     with time_context(metrics_collector, "Get transform only"):
-        subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--transform-only", "--function", "main", "main", "transform_only"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    print("Dump baseline to C: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Dump transform only"):
-        subprocess.run(["goto-instrument", "--dump-c", "transform_only", "transform_only.c"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--transform-only", "--function", "main", "main", "transform_only_dump"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Replace memops with secure version: {}".format(benchmark_name))
     with time_context(metrics_collector, "Transform"):
         subprocess.run(["goto-instrument", "--config-dir", ".", "--mitigate-cache-sidechannel", "--function", "main", "captured", "instrumented"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
@@ -100,14 +140,16 @@ for benchmark_path in benchmark_paths:
     print("Do alignment: {}".format(benchmark_name))
     with time_context(metrics_collector, "Do alignment"):
         do_alignment(benchmark_path, align_only=False, have_avx2=have_avx2)
+    print("Dump baseline to C: {}".format(benchmark_name))
+    with time_context(metrics_collector, "Dump transform only"):
+        subprocess.run(["goto-instrument", "--dump-c", "transform_only_dump", "transform_only.c"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+    print("Compile baseline: {}".format(benchmark_name))
+    with time_context(metrics_collector, "Compile transform_only"):
+        clean_up_code(benchmark_path + "transform_only.c")
+        subprocess.run([compiler, "-O3", "-flto", "transform_only.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "transform_only", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Combining instrumented.c: {}".format(benchmark_name))
     with time_context(metrics_collector, "Combine instrumented.c"):
         combine_components(benchmark_path)
-    print("Compile baseline: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Compile transform_only"):
-        from util import clean_up_code
-        clean_up_code(benchmark_path + "transform_only.c")
-        subprocess.run([compiler, "-O3", "-flto", "transform_only.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "transform_only", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Compile mitigated program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Compile mitigated.c"):
         clean_up_code(benchmark_path + "mitigated.c")
@@ -116,24 +158,28 @@ for benchmark_path in benchmark_paths:
     wall_clock_time_end = time.time()
     print("Run mitigated program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Run mitigated"):
-        result_mitigated = subprocess.run(["taskset", "-c", "3", "perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "6000", "./mitigated"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
+        result_mitigated = subprocess.run(["taskset", "-c", "6", "perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./mitigated"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
     print("Run baseline program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Run transform_only"):
-        result_baseline = subprocess.run(["taskset", "-c", "3", "perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "6000", "./transform_only"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
+        result_baseline = subprocess.run(["taskset", "-c", "6", "perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./transform_only"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
 
     mitigated_cycle = int(result_mitigated.stderr.split(b",")[0])
     baseline_cycle = int(result_baseline.stderr.split(b",")[0])
     metrics_collector["mitigated_cycle"] = mitigated_cycle
     metrics_collector["baseline_cycle"] = baseline_cycle
     metrics_collector["overhead"] = (mitigated_cycle - baseline_cycle) / baseline_cycle
+    print(mitigated_cycle)
+    print(baseline_cycle)
     print((mitigated_cycle - baseline_cycle) / baseline_cycle)
     assert(str(result_baseline.stdout) == str(result_mitigated.stdout))
 
     metrics_collector["Total Time"] = sum([v[0] + v[1] for k, v in metrics_collector.items() if k.endswith("TIME")])
     metrics_collector["Wall Clock Time"] = wall_clock_time_end - wall_clock_time_begin
     with open(benchmark_path+"/{}".format(metrics_file), "a") as f:
+        f.write("\n" + str(now) + "\n")    
         f.write(json.dumps(metrics_collector))
 
 
 with open("./{}".format(metrics_file), "a") as f:
-    f.write(json.dumps(benchmark_collector))
+    f.write("\n" + str(now) + "\n")    
+    f.write(json.dumps({k:(v["baseline_cycle"], v["mitigated_cycle"], v["overhead"]) for k,v in benchmark_collector.items()}))

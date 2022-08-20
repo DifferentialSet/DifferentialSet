@@ -2,6 +2,7 @@
 from unittest import skip
 from z3 import *
 import json
+import re
 # %%
 # Wrapper for allowing Z3 ASTs to be stored into Python Hashtables. 
 class AstRefKey:
@@ -74,7 +75,7 @@ def get_interfering_public_vars(constraints, ctx, target_var, pub_vars, sec_vars
             interefering_public_vars.append(pub_v)
     return interefering_public_vars
 
-def enumerate_solution(constraints, ctx, target_var, pub_vars, sec_vars, timeout=3, debug=False):
+def enumerate_solution(constraints, ctx, target_var, pub_vars, sec_vars, timeout=600, debug=False):
 
     total_timeout = 600
 
@@ -112,7 +113,9 @@ def enumerate_solution(constraints, ctx, target_var, pub_vars, sec_vars, timeout
         if (solver_result == sat):
             m = solver.model()
             if debug:
-                print(m)
+                import pprint
+                pprint.pprint(sorted ([(d, m[d]) for d in m], key = lambda x: str(x[0])))
+                # print({d: m[d] for d in m})
 
             # pub_models = []
             # if interfering_pub_vars:
@@ -180,19 +183,15 @@ def split_script(smt2_path):
     f.close()
     smt2_script = smt2_script.replace("(assert (not false))", "")
 
-    declarations = "\n".join([s for s in smt2_script.split("\n") if s.startswith("(declare-fun")])
-    smt2_script = "\n".join([s for s in smt2_script.split("\n") if not s.startswith("(declare-fun")])
+    declarations = "\n".join([s for s in smt2_script.split("\n") if s.startswith("(declare")])
+    smt2_script = "\n".join([s for s in smt2_script.split("\n") if not s.startswith("(declare")])
 
-    split0 = smt2_script.split(";convert_assignments")
-    assert(len(split0) == 2)
-    split1 = split0[1].split("; done converting program")
-    assert(len(split1) == 2)
-    split2 = split1[1].split("; done converting obsv_constraints")
-    assert(len(split2) == 2)
-    # split2 = split1[1].split(";convert_object_size")
-    bounds_script, cbmc_script, obsv_script, branch_script = split0[0], split1[0], split2[0], split2[1]
+    import re
+    splits = re.split(';convert_assignments|; converting object size|; done converting program|; done converting obsv_constraints', smt2_script)
 
-    return declarations, bounds_script, cbmc_script, obsv_script, branch_script
+    bounds_script, cbmc_script, object_size_script, obsv_script, branch_script = splits[0], splits[1], splits[2], splits[3], splits[4]
+
+    return declarations, bounds_script, cbmc_script, object_size_script, obsv_script, branch_script
 
 
 
@@ -237,22 +236,40 @@ def get_bounds_var_eq_mapping(bounds_constraints):
             var_eq_mapping[v] = [c]
     return var_eq_mapping
 
+def add_or_create(s, v, c):
+    if v in s:
+        s[v].append(c)
+    else:
+        s[v] = [c]
 
 def get_cbmc_var_eq_mapping(cbmc_constraints):
     var_eq_mapping = {}
     for c in cbmc_constraints:
         # var_eq_mapping[c.children()[0]] = c
         if (is_eq(c)):
-            var_eq_mapping[c.children()[0]] = c
+            if "Store" in str(c):
+                vars = get_vars(c)
+                for arr in [v for v in vars if "array" in str(v)]:
+                    add_or_create(var_eq_mapping, arr, c)
+                    # var_eq_mapping[arr] = [c] if arr not in var_eq_mapping else var_eq_mapping[arr] + [c]
+            if ("array" in str(c.children()[0]) and "[" in str(c.children()[0])):
+                arr = c.children()[0].children()[0]
+                add_or_create(var_eq_mapping, arr, c)
+                # var_eq_mapping[arr] = [c] if arr not in var_eq_mapping else var_eq_mapping[arr] + [c]
+            add_or_create(var_eq_mapping, c.children()[0], c)
+            # var_eq_mapping[c.children()[0]] = [c] if c.children()[0] not in var_eq_mapping else var_eq_mapping[c.children()[0]] + [c]
         else:
             vs = list(get_vars(c))
             object_size_vs = [v for v in vs if str(v).startswith("object_size")]
             if len(object_size_vs) == 1:
                 object_size_v = object_size_vs[0]
                 if object_size_v in var_eq_mapping:
-                    var_eq_mapping[object_size_v] = And(var_eq_mapping[object_size_v], c)
+                    a = And(var_eq_mapping[object_size_v], c)
+                    add_or_create(var_eq_mapping, object_size_v, a)
+                    # var_eq_mapping[object_size_v] = [a] if object_size_v not in var_eq_mapping else var_eq_mapping[object_size_v] + [a]
                 else:
-                    var_eq_mapping[object_size_v] = c
+                    add_or_create(var_eq_mapping, object_size_v, c)
+                    # var_eq_mapping[object_size_v] = [c] if object_size_v not in var_eq_mapping else var_eq_mapping[object_size_v] + [c]
             else:
                 assert(False)
     return var_eq_mapping
@@ -277,9 +294,9 @@ def get_branch_label_mapping(branch_label_constraints):
 import time
 from copy import copy
 
-def slice_and_enumerate(cbmc_mapping, initial_constraints, target_var, ctx, use_bound_as_last_resort=False, debug=False):
-    # max_depthes = [2**20,3,0]
-    max_depthes = [3]
+def slice_and_enumerate(cbmc_mapping, initial_constraints, target_var, ctx, timeout=600, max_depthes=None, use_bound_as_last_resort=False, debug=False):
+    if max_depthes is None:
+        max_depthes = [3]
     if not use_bound_as_last_resort:
         max_depthes += [0]
     for max_depth in max_depthes:
@@ -297,9 +314,10 @@ def slice_and_enumerate(cbmc_mapping, initial_constraints, target_var, ctx, use_
             if depth > max_depth:
                 continue
             if v in cbmc_mapping:
-                v_eq = cbmc_mapping[v]
-                dep_constraints.append(v_eq)
-                to_visit |= {(child, depth+1)for child in (get_vars(v_eq) - visited)}
+                v_eqs = cbmc_mapping[v]
+                dep_constraints.extend(v_eqs)
+                invovled_vars = {v for eq in v_eqs for v in get_vars(eq)}
+                to_visit |= {(child, depth+1)for child in (invovled_vars - visited)}
             else:
                 # assert(str(v) == "pc_var")
                 pass
@@ -330,7 +348,7 @@ def slice_and_enumerate(cbmc_mapping, initial_constraints, target_var, ctx, use_
             this_sec_vars = {v for v in get_vars(c) if "sec" in str(v)}
             sec_vars.update(this_sec_vars)
 
-        all_models = enumerate_solution(dep_constraints, ctx, target_var, pub_vars, sec_vars, debug=debug)
+        all_models = enumerate_solution(dep_constraints, ctx, target_var, pub_vars, sec_vars, timeout, debug=debug)
         if all_models != None:
             print("Success {} max_depth: {}".format(str(target_var), max_depth), flush=True)
             return (all_models)
@@ -345,9 +363,10 @@ def slice_and_enumerate(cbmc_mapping, initial_constraints, target_var, ctx, use_
         print("USE BOUND TO GET MODELS {}".format(str(target_var)), flush=True)
         return [(m, []) for m in all_models]
     else:
+        print("Fail {}".format(str(target_var)), flush=True)
         assert(False)
 
-def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_mapping, target_var_name, ctx, debug=False):
+def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_mapping, target_var_name, ctx, largest_pointer_number, cbmc_script, debug=False):
     print("Start {}".format(target_var_name), flush=True)
     assert("Observation" in target_var_name or target_var_name.startswith("$"))
 
@@ -381,7 +400,7 @@ def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_m
     assert(is_and(obsv_c))
     pc_expr = obsv_c.children()[0]
     pc_var = Bool('pc_var', ctx=ctx)
-    pc_non_interference_test = slice_and_enumerate(cbmc_mapping, [pc_var == pc_expr], pc_var, ctx, use_bound_as_last_resort=False, debug=debug)
+    pc_non_interference_test = slice_and_enumerate(cbmc_mapping, [pc_var == pc_expr], pc_var, ctx, max_depthes=[2**20], use_bound_as_last_resort=False, debug=debug)
     pc_is_sensitive = len(pc_non_interference_test) > 0
 
     # get offset and object var
@@ -401,7 +420,12 @@ def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_m
     assert("cbmc_pointer_object" in str(object_var))
     assert("cbmc_pointer_offset" in str(offset_var))
 
-    object_vals = slice_and_enumerate(cbmc_mapping, [pc_expr, cbmc_mapping[object_var]], object_var, ctx, use_bound_as_last_resort=False, debug=debug)
+    object_val = recursively_find_object_id("|{}|".format(str(object_var)), cbmc_script)
+    if not object_val:
+        object_vals = slice_and_enumerate(cbmc_mapping, cbmc_mapping[object_var] + [pc_expr, object_var <= largest_pointer_number], object_var, ctx, timeout=120, max_depthes=[2**20, 3], use_bound_as_last_resort=False, debug=debug)
+        object_vals = [v for v in object_vals if v[0] >= 2]
+    else:
+        object_vals = [(object_val, [])]
 
     bounds_constraints = []
     input_assumption_constraints = []
@@ -424,8 +448,13 @@ def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_m
     need_offset_symbol = False
     if len(object_vals) != 0:
         for object_id, _ in object_vals:
-            constraints = [pc_expr, cbmc_mapping[offset_var], object_var == object_id] + input_assumption_constraints + bounds_constraints
-            offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, use_bound_as_last_resort=True, debug=debug)
+            constraints = cbmc_mapping[offset_var] + [pc_expr, object_var == object_id] + input_assumption_constraints + bounds_constraints
+            if pc_is_sensitive:
+                # if pc is sensitive, we need to enumerate all possible values because we can't symbolize, otherwise may out of bound
+                max_depthes = [0]
+            else:
+                max_depthes = [20, 3]
+            offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, max_depthes=max_depthes, use_bound_as_last_resort=True, debug=debug)
             if len(offset_vals) != 0:
                 object_offset_pairs.extend([(object_id, offset_val, pub_tuples) for offset_val, pub_tuples in offset_vals])
             else:
@@ -433,8 +462,13 @@ def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_m
                 object_offset_pairs.append((object_id, None, []))
     else:
         need_object_symbol = True
-        constraints = [pc_expr, cbmc_mapping[offset_var]] + input_assumption_constraints + bounds_constraints
-        offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, use_bound_as_last_resort=True, debug=debug)
+        constraints = cbmc_mapping[offset_var] + [pc_expr] + input_assumption_constraints + bounds_constraints
+        if pc_is_sensitive:
+            # if pc is sensitive, we need to enumerate all possible values because we can't symbolize, otherwise may out of bound
+            max_depthes = [0]
+        else:
+            max_depthes = [20, 3]
+        offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, max_depthes=[20, 3], use_bound_as_last_resort=True, debug=debug)
         if len(offset_vals) != 0:
             object_offset_pairs.extend([(None, offset_val, pub_tuples) for offset_val, pub_tuples in offset_vals])
         else:
@@ -445,23 +479,39 @@ def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_m
     object_name = None
     offset_name = None
     if need_object_symbol:
-        vs = get_vars(cbmc_mapping[object_var].children()[1])
+        assert(len(cbmc_mapping[object_var]) == 1)
+        vs = get_vars(cbmc_mapping[object_var][0].children()[1])
         if (len(vs) == 1):
-            object_name = str(vs.pop()).split("!")[0].split("::")[-1]
+            object_name = str(vs.pop()).split("::")[-1]
+            object_name = re.sub("!\d*@\d*#\d*", "", object_name)
+            object_name = re.sub("\[\[", "[", object_name)
+            object_name = re.sub("\]\]", "]", object_name)
+            object_name = re.sub("\.\.", "->", object_name)
         elif (len(vs) == 0):
-            sim = simplify(cbmc_mapping[object_var].children()[1])
+            sim = simplify(cbmc_mapping[object_var][0].children()[1])
             if is_const(sim):
                 object_name = sim.as_long()
     if need_offset_symbol:
-        offset_eq = cbmc_mapping[offset_var]
+        assert(len(cbmc_mapping[offset_var]) == 1)
+        offset_eq = cbmc_mapping[offset_var][0]
         vs = get_vars(offset_eq.children()[1])
         if len(vs) == 1:
-            offset_name = str(vs.pop()).split("!")[0].split("::")[-1]
-        elif len(vs) == 2: # the offset is composed of offset of pointer and offset in the expression
-            assert(is_app_of(offset_eq.children()[1], Z3_OP_BADD))
-            vs = get_vars(offset_eq.children()[1].children()[1])
-            assert(len(vs) == 1)
-            offset_name = str(vs.pop()).split("!")[0].split("::")[-1]
+            offset_name = str(vs.pop()).split("::")[-1]
+            offset_name = re.sub("!\d*@\d*#\d*", "", offset_name)
+            offset_name = re.sub("\[\[", "[", offset_name)
+            offset_name = re.sub("\]\]", "]", offset_name)
+            offset_name = re.sub("\.\.", ".", offset_name)
+        elif len(vs) >= 2: # the offset is composed of offset of pointer and offset in the expression or multiple variables
+            vs = get_vars(offset_eq.children()[1])
+            offset_name = str(offset_eq.children()[1]).replace("\n", "")
+            for v in list(vs):
+                v_str = str(v).split("!")[0].split("::")[-1]
+                offset_name = offset_name.replace(str(v), v_str)
+            # find all integers from offset_name
+            from ctypes import c_int
+            for i in sorted([int(i) for i in re.findall(r"\d+", offset_name)], reverse=True):
+                offset_name = offset_name.replace(str(i), str(c_int(i).value))
+            offset_name = offset_name.replace("*4", "")
         elif len(vs) == 0:
             sim = simplify(offset_eq.children()[1])
             if is_const(sim):
@@ -477,12 +527,13 @@ from joblib import Parallel, delayed
 import random, re
 
 def get_var_in_script(script):
-    pattern = "\|.*?\||array\.\\d*"
+    # pattern = "\|.*?\||array\.\\d*"
+    pattern = "declare-fun (.*?) "
     matches = re.findall(pattern, script)
     return set(matches)
 
 
-def wrapper(chunk, bounds_script, cbmc_script, obsv_script, branch_script):
+def wrapper(chunk, bounds_script, cbmc_script, obsv_script, branch_script, largest_pointer_number):
     result = []
 
     ctx = Context()
@@ -495,7 +546,7 @@ def wrapper(chunk, bounds_script, cbmc_script, obsv_script, branch_script):
     obsv_mapping = get_obsv_var_eq_mapping(obsv_constraints)
     branch_label_mapping = get_branch_label_mapping(branch_label_constraints)
     for o in chunk:
-        obsv_name_and_address_pairs = enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_mapping, o, ctx)
+        obsv_name_and_address_pairs = enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_mapping, o, ctx, largest_pointer_number, cbmc_script)
         result.append(obsv_name_and_address_pairs)
     return result
 
@@ -535,7 +586,7 @@ def get_ds_macro_def(config_dir, infos, have_avx2):
             info = [k for k in info.keys()]
 
         info = [i for i in info if i[0] != -1] # remove element from decoy path
-        info = sorted(info, key=lambda i: i[1])
+        info = sorted(info, key=lambda i: i[1] if type(i[1]) == int else -1)
 
         base_to_offsets = {}
         for i in info:
@@ -548,6 +599,7 @@ def get_ds_macro_def(config_dir, infos, have_avx2):
         ds_base_t_list_raw =[]
         ds_size = 0
         for base, offsets in base_to_offsets.items():
+            offsets = list(set(offsets))
             ds_size += len(offsets)
             if type(base) == int:
                 var_name = pointer_mapping[base][0]
@@ -558,15 +610,15 @@ def get_ds_macro_def(config_dir, infos, have_avx2):
 
             base_field = "((char*){}{})".format("" if is_array(var_type) else "&", var_name)
 
-            # decide whether striding linearly is more beneficial
-            linear = True
+            # # decide whether striding linearly is more beneficial
+            # linear = True
             offset_size = len(offsets)
-            for i in range(2, offset_size):
-                if offsets[i] - offsets[i-1] >= 256:
-                    linear = False
-                    break
-            if offset_size >= 2 and offsets[1] - offsets[0] >= 256:
-                linear = False
+            # for i in range(2, offset_size):
+            #     if offsets[i] - offsets[i-1] >= 256:
+            #         linear = False
+            #         break
+            # if offset_size >= 2 and offsets[1] - offsets[0] >= 256:
+            #     linear = False
 
             # 0: bulk; 1: simple; 2: gather
             compact = True
@@ -627,11 +679,17 @@ from alignment import align_ds
 from tqdm import tqdm
 def parallel_enumerate(config_dir, n_jobs=5):
     smt2_path = config_dir + "cbmc.smt2"
-    decls, bounds_script, cbmc_script, obsv_script, branch_script = split_script(smt2_path)
+    decls, bounds_script, cbmc_script, object_size_script, obsv_script, branch_script = split_script(smt2_path)
 
     # lambda constraints come from read syscall, they are complicated but they only express the idea that the array is a free variable
     # removing these constraints will make no difference
     cbmc_script = "\n".join([i for i in cbmc_script.split("\n") if "lambda" not in i])
+
+    # replace object_size.* with constants
+    object_size_mapping = get_object_size(object_size_script, cbmc_script)
+    bounds_script = "\n".join([i for i in bounds_script.split("\n") if "(declare-fun object_size." not in i])
+    for object_size_v, object_size in object_size_mapping.items():
+        bounds_script = bounds_script.replace(object_size_v + ")", "(_ bv"+str(object_size)+" 32))")
 
     list_of_vars = get_var_in_script("".join(decls))
     obsv_vars = [o.strip("|") for o in list_of_vars if "Observation_" in o]
@@ -645,7 +703,10 @@ def parallel_enumerate(config_dir, n_jobs=5):
     chunks = [obsv_vars[i:i + chunk_size] for i in range(0, len(obsv_vars), chunk_size)]
     print("chunk size is", chunk_size)
     print("#chunk is", len(chunks))
-    chunk_result = Parallel(n_jobs=n_jobs, backend="multiprocessing")(delayed(wrapper)(chunk, decls+bounds_script, decls+cbmc_script, decls+obsv_script, decls+branch_script) for chunk in tqdm(chunks))
+    with open(config_dir + "pointer_numbering.csv") as f:
+        line = f.readlines()[-1]
+        largest_pointer_number = int(line.split(",")[-1].strip())
+    chunk_result = Parallel(n_jobs=n_jobs, backend="multiprocessing")(delayed(wrapper)(chunk, decls+bounds_script, decls+cbmc_script, decls+obsv_script, decls+branch_script, largest_pointer_number) for chunk in tqdm(chunks))
     chunk_result = sum(chunk_result, [])
     with open(config_dir + "chunk_result.repr", "w") as f:
         f.write(repr(chunk_result))
@@ -727,15 +788,82 @@ def do_alignment(config_dir, align_only=False, have_avx2=True):
 
 
 # %%
-# parallel_enumerate("/home/cream/toy/toy/", 1)
+
+def recursively_find_object_id(starting_v, cbmc_script):
+    
+    try:
+        if "array." in starting_v:
+            r = "assert \(= \(select "+starting_v+"(.*?)\n"
+        else:
+            r = "assert \(= "+starting_v.replace("|", "\|").replace("$", "\$")+" (.*?)\n"
+        m = re.search(r, cbmc_script)
+        if len(m.groups()) == 0:
+            return None
+
+        rest = m.groups()[0]
+        r = "\(_ bv(\d*) 14\)"
+        m = re.search(r, rest)
+        if (m != None):
+            return int(m.groups()[0])
+
+        r = "\|.*?\||array\.\d*"
+        other_vs = re.findall(r, rest)
+        for v in other_vs:
+            r = recursively_find_object_id(v, cbmc_script)
+            if r is not None:
+                return r
+    except:
+        return None
+    return None
+
+# return two maps
+def get_object_size_mapping(object_size_script):
+    object_size_to_object_id_to_size = {}
+    pointer_to_object_size = {}
+    lines = object_size_script.split("\n")
+    for line in lines:
+        m = re.search("object_size\.\d*", line)
+        if m is None:
+            continue
+        object_size_v = m.group(0)
+
+        m = re.search("\|.*?\|", line)
+        pointer_v = m.group(0)
+        pointer_to_object_size[pointer_v] = object_size_v
+
+        m = re.search("\(_ bv(\d*) 14\)", line)
+        object_id = int(m.groups()[0])
+        m = re.search("\(_ bv(\d*) 32\)", line)
+        object_size = int(m.groups()[0])
+        if object_size_v not in object_size_to_object_id_to_size:
+            object_size_to_object_id_to_size[object_size_v] = {object_id: object_size}
+        else:
+            object_size_to_object_id_to_size[object_size_v][object_id] = object_size
+    return object_size_to_object_id_to_size, pointer_to_object_size
+
+def get_object_size(object_size_script, cbmc_script):
+    object_size_to_object_id_to_size, pointer_to_object_size = get_object_size_mapping(object_size_script)
+
+    object_size_v_to_object_size = {}
+    for pointer_v, object_size_v in pointer_to_object_size.items():
+        object_id = recursively_find_object_id(pointer_v, cbmc_script)
+        assert(object_id != None)
+        object_size = object_size_to_object_id_to_size[object_size_v][object_id]
+        object_size_v_to_object_size[object_size_v] = object_size
+    return object_size_v_to_object_size
 
 # %%
 if __name__ == "__main__":
     # smt2_path = "toy/secret_branch_secret_index/cbmc.smt2"
     # smt2_path = "toy/secret_and_public_branch/cbmc.smt2"
-    smt2_path = "issta2018-benchmarks-wu/examples/chronos/aes/cbmc.smt2"
+    # smt2_path = "/home/cream/src/DSA_github/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/fcrypt/cbmc.smt2"
     # smt2_path = "/home/cream/toy/toy/cbmc.smt2"
-    decls, bounds_script, cbmc_script, obsv_script, branch_script = split_script(smt2_path)
+    # smt2_path = "/home/cream/src/DSA_github/benchmarks/mitigation/play/alias/cbmc.smt2"
+    # smt2_path = "/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/cbmc.smt2"
+    # config_dir = "/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/"
+    config_dir = "/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/unroll_1/"
+    smt2_path = config_dir + "cbmc.smt2" 
+    decls, bounds_script, cbmc_script, object_size_script, obsv_script, branch_script = split_script(smt2_path)
     bounds_script = decls + bounds_script
     cbmc_script = decls + cbmc_script
     obsv_script = decls + obsv_script
@@ -746,6 +874,12 @@ if __name__ == "__main__":
     # removing these constraints will make no difference
     cbmc_script = "\n".join([i for i in cbmc_script.split("\n") if "lambda" not in i])
 
+    # replace object_size.* with constants
+    object_size_mapping = get_object_size(object_size_script, cbmc_script)
+    bounds_script = "\n".join([i for i in bounds_script.split("\n") if "(declare-fun object_size." not in i])
+    for object_size_v, object_size in object_size_mapping.items():
+        bounds_script = bounds_script.replace(object_size_v + ")", "(_ bv"+str(object_size)+" 32))")
+
     bounds_constraints = parse_smt2_string("".join(bounds_script), ctx=ctx)
     cbmc_constraints = parse_smt2_string("".join(cbmc_script), ctx=ctx)
     obsv_constraints = parse_smt2_string("".join(obsv_script), ctx=ctx)
@@ -754,7 +888,10 @@ if __name__ == "__main__":
     cbmc_mapping = get_cbmc_var_eq_mapping(cbmc_constraints)
     obsv_mapping = get_obsv_var_eq_mapping(obsv_constraints)
     branch_label_mapping = get_branch_label_mapping(branch_label_constraints)
-    e = enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_mapping, "Observation__448", ctx, debug=True)
+    with open(config_dir + "pointer_numbering.csv") as f:
+        line = f.readlines()[-1]
+        largest_pointer_number = int(line.split(",")[-1].strip())
+    e = enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_mapping, "Observation_$11$3$3$2$12$3$12$10$1$3$10$4$0$2$16$6$4$4$0$0_4069", ctx, largest_pointer_number, cbmc_script, debug=True)
     print(e)
 
 # %%

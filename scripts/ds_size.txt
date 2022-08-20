@@ -1,0 +1,172 @@
+{   'bearssl/aes_big_wrapper': {   (' Ssm0', ' 256', 'bearssl/aes_big_wrapper'): 64,
+                                   (' br_aes_S', ' 256', 'bearssl/aes_big_wrapper'): 32},
+    'bearssl/des_tab_wrapper': {   (' S1', ' 64', 'bearssl/des_tab_wrapper'): 64,
+                                   (' S2', ' 64', 'bearssl/des_tab_wrapper'): 64,
+                                   (' S3', ' 64', 'bearssl/des_tab_wrapper'): 64,
+                                   (' S4', ' 64', 'bearssl/des_tab_wrapper'): 64,
+                                   (' S5', ' 64', 'bearssl/des_tab_wrapper'): 64,
+                                   (' S6', ' 64', 'bearssl/des_tab_wrapper'): 64,
+                                   (' S7', ' 64', 'bearssl/des_tab_wrapper'): 64,
+                                   (' S8', ' 64', 'bearssl/des_tab_wrapper'): 64},
+    'binsec/tls1_cbc_remove_padding_lucky13_wrapper': {   (' main::1::main_rec_obj!0@1', ' 1', 'binsec/tls1_cbc_remove_padding_lucky13_wrapper'): 8,
+                                                          (' main::1::main_s3_obj!0@1', ' 1', 'binsec/tls1_cbc_remove_padding_lucky13_wrapper'): 2,
+                                                          (' main::1::main_s_obj!0@1', ' 1', 'binsec/tls1_cbc_remove_padding_lucky13_wrapper'): 2},
+    'chronos/aes': {   (' crypto_fl_tab', ' 256', 'chronos/aes'): 48,
+                       (' crypto_ft_tab', ' 256', 'chronos/aes'): 176},
+    'chronos/anubis': {   (' T0', ' 256', 'chronos/anubis'): 82,
+                          (' T1', ' 256', 'chronos/anubis'): 82,
+                          (' T2', ' 256', 'chronos/anubis'): 82,
+                          (' T3', ' 256', 'chronos/anubis'): 82,
+                          (' T4', ' 256', 'chronos/anubis'): 128,
+                          (' T5', ' 256', 'chronos/anubis'): 320},
+    'chronos/cast5': {   (' s1', ' 256', 'chronos/cast5'): 16,
+                         (' s2', ' 256', 'chronos/cast5'): 16,
+                         (' s3', ' 256', 'chronos/cast5'): 16,
+                         (' s4', ' 256', 'chronos/cast5'): 16,
+                         (' s5', ' 256', 'chronos/cast5'): 80,
+                         (' s6', ' 256', 'chronos/cast5'): 80,
+                         (' s7', ' 256', 'chronos/cast5'): 80,
+                         (' sb8', ' 256', 'chronos/cast5'): 80},
+    'chronos/cast6': {   (' s1', ' 256', 'chronos/cast6'): 80,
+                         (' s2', ' 256', 'chronos/cast6'): 80,
+                         (' s3', ' 256', 'chronos/cast6'): 80,
+                         (' s4', ' 256', 'chronos/cast6'): 80},
+    'chronos/des': {   (' S1', ' 64', 'chronos/des'): 16,
+                       (' S2', ' 64', 'chronos/des'): 16,
+                       (' S3', ' 64', 'chronos/des'): 16,
+                       (' S4', ' 64', 'chronos/des'): 16,
+                       (' S5', ' 64', 'chronos/des'): 16,
+                       (' S6', ' 64', 'chronos/des'): 16,
+                       (' S7', ' 64', 'chronos/des'): 16,
+                       (' S8', ' 64', 'chronos/des'): 16,
+                       (' pc1', ' 128', 'chronos/des'): 8, ## 256
+                       (' pc2', ' 255', 'chronos/des'): 32, ## 1024
+                       (' pc2', ' 256', 'chronos/des'): 96, ## 1024
+                       (' rs', ' 256', 'chronos/des'): 58},
+    'chronos/des3': {   (' S1', ' 64', 'chronos/des3'): 48,
+                        (' S2', ' 64', 'chronos/des3'): 48,
+                        (' S3', ' 64', 'chronos/des3'): 48,
+                        (' S4', ' 64', 'chronos/des3'): 48,
+                        (' S5', ' 64', 'chronos/des3'): 48,
+                        (' S6', ' 64', 'chronos/des3'): 48,
+                        (' S7', ' 64', 'chronos/des3'): 48,
+                        (' S8', ' 64', 'chronos/des3'): 48,
+                        (' pc1', ' 128', 'chronos/des3'): 24, ## 256
+                        (' pc2', ' 255', 'chronos/des3'): 64, ## 1024
+                        (' pc2', ' 256', 'chronos/des3'): 257, ## 1024
+                        (' rs', ' 256', 'chronos/des3'): 143},
+    'chronos/fcrypt': {   (' sbox0', ' 256', 'chronos/fcrypt'): 16,
+                          (' sbox1', ' 256', 'chronos/fcrypt'): 16,
+                          (' sbox2', ' 256', 'chronos/fcrypt'): 16,
+                          (' sbox3', ' 256', 'chronos/fcrypt'): 16},
+    'chronos/khazad': {   (' T0', ' 256', 'chronos/khazad'): 17,
+                          (' T0', ' 512', 'chronos/khazad'): 6, ???
+                          (' T1', ' 256', 'chronos/khazad'): 17,
+                          (' T1', ' 512', 'chronos/khazad'): 6,
+                          (' T2', ' 256', 'chronos/khazad'): 17,
+                          (' T2', ' 512', 'chronos/khazad'): 6,
+                          (' T3', ' 256', 'chronos/khazad'): 17,
+                          (' T3', ' 512', 'chronos/khazad'): 6,
+                          (' T4', ' 256', 'chronos/khazad'): 17,
+                          (' T4', ' 512', 'chronos/khazad'): 6,
+                          (' T5', ' 256', 'chronos/khazad'): 17,
+                          (' T5', ' 512', 'chronos/khazad'): 6,
+                          (' T6', ' 256', 'chronos/khazad'): 17,
+                          (' T6', ' 512', 'chronos/khazad'): 6,
+                          (' T7', ' 256', 'chronos/khazad'): 73,
+                          (' T7', ' 512', 'chronos/khazad'): 6},
+    'ghostrider/histogram': {(' out', ' 1000', 'ghostrider/histogram'): 2000},
+    'ghostrider/matmul': {},
+    'libg/camellia': {   (' camellia_sp0222', ' 256', 'libg/camellia'): 8,
+                         (' camellia_sp1110', ' 256', 'libg/camellia'): 8,
+                         (' camellia_sp3033', ' 256', 'libg/camellia'): 8,
+                         (' camellia_sp4404', ' 256', 'libg/camellia'): 8},
+    'libg/des': {   (' leftkey_swap', ' 16', 'libg/des'): 7,
+                    (' leftkey_swap', ' 8', 'libg/des'): 1, ## 16
+                    (' rightkey_swap', ' 16', 'libg/des'): 8,
+                    (' sbox1', ' 64', 'libg/des'): 16,
+                    (' sbox2', ' 64', 'libg/des'): 16,
+                    (' sbox3', ' 64', 'libg/des'): 16,
+                    (' sbox4', ' 64', 'libg/des'): 16,
+                    (' sbox5', ' 64', 'libg/des'): 16,
+                    (' sbox6', ' 64', 'libg/des'): 16,
+                    (' sbox7', ' 64', 'libg/des'): 16,
+                    (' sbox8', ' 64', 'libg/des'): 16},
+    'libg/seed': {   (' SS0', ' 256', 'libg/seed'): 80,
+                     (' SS1', ' 256', 'libg/seed'): 80,
+                     (' SS2', ' 256', 'libg/seed'): 80,
+                     (' SS3', ' 256', 'libg/seed'): 80},
+    'libg/twofish': {   (' exp_to_poly', ' 511', 'libg/twofish'): 4, ## 748
+                        (' exp_to_poly', ' 524', 'libg/twofish'): 4, ## 748
+                        (' exp_to_poly', ' 535', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 539', 'libg/twofish'): 4, ## 748
+                        (' exp_to_poly', ' 540', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 557', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 584', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 595', 'libg/twofish'): 4, ## 748
+                        (' exp_to_poly', ' 598', 'libg/twofish'): 4, ## 748
+                        (' exp_to_poly', ' 608', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 610', 'libg/twofish'): 4, ## 748
+                        (' exp_to_poly', ' 621', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 646', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 657', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 669', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 678', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 680', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 687', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 688', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 693', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 703', 'libg/twofish'): 6, ## 748
+                        (' exp_to_poly', ' 725', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 747', 'libg/twofish'): 2, ## 748
+                        (' exp_to_poly', ' 748', 'libg/twofish'): 2, ## 748
+                        (' main::1::main_ctx!0@1', ' 256', 'libg/twofish'): 128,
+                        (' mds', ' 256', 'libg/twofish'): 1216,
+                        (' poly_to_exp', ' 256', 'libg/twofish'): 16,
+                        (' q0', ' 256', 'libg/twofish'): 608,
+                        (' q1', ' 256', 'libg/twofish'): 608},
+    'src/AES': {   (' Td0', ' 256', 'src/AES'): 52,
+                   (' Td1', ' 256', 'src/AES'): 52,
+                   (' Td2', ' 256', 'src/AES'): 52,
+                   (' Td3', ' 256', 'src/AES'): 52,
+                   (' Te0', ' 256', 'src/AES'): 52,
+                   (' Te1', ' 256', 'src/AES'): 52,
+                   (' Te2', ' 256', 'src/AES'): 52,
+                   (' Te3', ' 256', 'src/AES'): 52,
+                   (' Te4', ' 256', 'src/AES'): 328},
+    'src/ARC4': {(' main::1::main_st!0@1', ' 32', 'src/ARC4'): 512}, ## 256
+    'src/Blowfish': {(' main::1::main_st!0@1', ' 256', 'src/Blowfish'): 4172},
+    'src/CAST': {   (' S1', ' 256', 'src/CAST'): 16,
+                    (' S2', ' 256', 'src/CAST'): 16,
+                    (' S3', ' 256', 'src/CAST'): 16,
+                    (' S4', ' 256', 'src/CAST'): 16,
+                    (' S5', ' 256', 'src/CAST'): 80,
+                    (' S6', ' 256', 'src/CAST'): 80,
+                    (' S7', ' 256', 'src/CAST'): 80,
+                    (' S8', ' 256', 'src/CAST'): 80},
+    'src/DES3': {   (' SP1', ' 64', 'src/DES3'): 48,
+                    (' SP2', ' 64', 'src/DES3'): 48,
+                    (' SP3', ' 64', 'src/DES3'): 48,
+                    (' SP4', ' 64', 'src/DES3'): 48,
+                    (' SP5', ' 64', 'src/DES3'): 48,
+                    (' SP6', ' 64', 'src/DES3'): 48,
+                    (' SP7', ' 64', 'src/DES3'): 48,
+                    (' SP8', ' 64', 'src/DES3'): 48,
+                    (' des_fp', ' 256', 'src/DES3'): 24,
+                    (' des_ip', ' 256', 'src/DES3'): 16},
+    'supercop/aes_core': {   (' Te0', ' 256', 'supercop/aes_core'): 46,
+                             (' Te1', ' 256', 'supercop/aes_core'): 46,
+                             (' Te2', ' 256', 'supercop/aes_core'): 46,
+                             (' Te3', ' 256', 'supercop/aes_core'): 46},
+    'supercop/cast-ssl': {   (' CAST_S_table0', ' 256', 'supercop/cast-ssl'): 16,
+                             (' CAST_S_table1', ' 256', 'supercop/cast-ssl'): 16,
+                             (' CAST_S_table2', ' 256', 'supercop/cast-ssl'): 16,
+                             (' CAST_S_table3', ' 256', 'supercop/cast-ssl'): 16,
+                             (' CAST_S_table4', ' 256', 'supercop/cast-ssl'): 32,
+                             (' CAST_S_table4', ' 512', 'supercop/cast-ssl'): 48,
+                             (' CAST_S_table5', ' 256', 'supercop/cast-ssl'): 33,
+                             (' CAST_S_table5', ' 512', 'supercop/cast-ssl'): 47,
+                             (' CAST_S_table6', ' 256', 'supercop/cast-ssl'): 29,
+                             (' CAST_S_table6', ' 512', 'supercop/cast-ssl'): 51,
+                             (' CAST_S_table7', ' 256', 'supercop/cast-ssl'): 35,
+                             (' CAST_S_table7', ' 512', 'supercop/cast-ssl'): 45}}

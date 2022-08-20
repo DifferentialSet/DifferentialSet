@@ -32,7 +32,7 @@ __attribute__((noinline)) uint64_t uint64_t_secure_load_impl(const uint64_t * pt
   __m256i res   = _mm256_setzero_si256();
   for (uint32_t i = 0; i < base_size; i++) {
     // strategy 0: bulk; 1: simple; 2: gather
-    if (__builtin_expect_with_probability(bases[i].strategy == 0, 1, 1)) {
+    if (bases[i].strategy == 0) {
       __m256i target    = _mm256_set1_epi64x((uint64_t)ptr & ~7);
       uint64_t first_candidate = (((uint64_t)bases[i].base+bases[i].begin_offset) & ~31);
       __m256i step    = _mm256_set1_epi64x(32);
@@ -81,7 +81,7 @@ __attribute__((noinline)) uint64_t uint64_t_secure_load_impl_onebase(const uint6
 
   __m256i res   = _mm256_setzero_si256();
   // strategy 0: bulk; 1: simple; 2: gather
-  if (__builtin_expect_with_probability(strategy == 0, 1, 1)) {
+  if (strategy == 0) {
     __m256i target    = _mm256_set1_epi64x((uint64_t)ptr & ~7);
     uint64_t first_candidate = (((uint64_t)base+begin_offset) & ~31);
     __m256i step    = _mm256_set1_epi64x(32);
@@ -133,7 +133,7 @@ __attribute__((noinline)) uint64_t uint64_t_secure_double_load_impl(const uint64
   __m256i res   = _mm256_setzero_si256();
   for (uint32_t i = 0; i < base_size; i++) {
     // strategy 0: bulk; 1: simple; 2: gather
-    if (__builtin_expect_with_probability(bases[i].strategy == 0, 1, 1)) {
+    if (bases[i].strategy == 0) {
       __m256i target    = _mm256_set1_epi64x((uint64_t)ptr & ~7);
       uint64_t first_candidate = (((uint64_t)bases[i].base+bases[i].begin_offset) & ~31);
       __m256i step    = _mm256_set1_epi64x(32);
@@ -188,7 +188,7 @@ __attribute__((noinline)) uint64_t uint64_t_secure_double_load_impl_onebase(cons
 
   __m256i res   = _mm256_setzero_si256();
   // strategy 0: bulk; 1: simple; 2: gather
-  if (__builtin_expect_with_probability(strategy == 0, 1, 1)) {
+  if (strategy == 0) {
     __m256i target    = _mm256_set1_epi64x((uint64_t)ptr & ~7);
     uint64_t first_candidate = (((uint64_t)base+begin_offset) & ~31);
     __m256i step    = _mm256_set1_epi64x(32);
@@ -257,7 +257,7 @@ SECURE_LOAD_SINGLE_SENSITIVE(uint8_t)
 #define SECURE_STORE_IMPL(type) __attribute__((noinline)) void type ## _secure_store_impl(const type value, type * ptr, const ds_base_t *bases, uint32_t base_size, uint32_t total_size) {\
 \
   for (uint32_t i = 0; i < base_size; i++) {\
-    if (__builtin_expect_with_probability(bases[i].strategy == 0, 1, 1)) {\
+    if (bases[i].strategy == 0) {\
       __m256i value_vec = _mm256_set1_epi64x((uint64_t)value << (8*((uint64_t)ptr & 7)));\
       __m256i target    = _mm256_set1_epi64x((uint64_t)ptr & ~7);\
       uint64_t first_candidate = (((uint64_t)bases[i].base+bases[i].begin_offset) & ~31);\
@@ -307,7 +307,7 @@ SECURE_STORE_SENSITIVE(uint16_t)
 SECURE_STORE_SENSITIVE(uint8_t)
 
 #define SECURE_STORE_IMPL_ONEBASE(type) __attribute__((noinline)) void type ## _secure_store_impl_onebase(const type value, type * ptr, void *base, uint64_t *offset, uint32_t ds_size, uint32_t strategy, uint32_t begin_offset, uint32_t end_offset, uint32_t base_size, uint32_t total_size){\
-    if (__builtin_expect_with_probability(strategy == 0, 1, 1)) {\
+    if (strategy == 0) {\
       __m256i value_vec = _mm256_set1_epi64x((uint64_t)value << (8*((uint64_t)ptr & 7)));\
       __m256i target    = _mm256_set1_epi64x((uint64_t)ptr & ~7);\
       uint64_t first_candidate = (((uint64_t)base+begin_offset) & ~31);\
