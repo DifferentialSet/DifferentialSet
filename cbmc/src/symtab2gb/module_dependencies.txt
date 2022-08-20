@@ -1,5 +1,0 @@
-util
-json-symtab-language
-langapi
-goto-programs
-ansi-c
