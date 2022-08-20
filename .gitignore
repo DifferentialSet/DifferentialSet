@@ -26,3 +26,7 @@ play/
 __pycache__/
 build/
 perf.*
+entrypoint.sh
+.vscode/launch.json
+.vscode/settings.json
+wolfssl/.git
