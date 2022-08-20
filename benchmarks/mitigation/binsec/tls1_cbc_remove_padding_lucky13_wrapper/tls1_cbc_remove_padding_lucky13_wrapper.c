@@ -1,7 +1,14 @@
-#include "../__libsym__/sym.h"
+// #include "../__libsym__/sym.h"
+#include <unistd.h>
 #include "tls1_cbc_remove_padding_lucky13.c"
 
 #define LEN 63
+
+#define CAT(x,y) x##y
+
+#define HIGH_INPUT(size, buf) read(STDIN_FILENO, buf, size)
+#define LOW_INPUT(size, buf) read(STDIN_FILENO, buf, size)
+
 
 unsigned long options_pub;              // public
 long s3_flags_pub;                      // public
