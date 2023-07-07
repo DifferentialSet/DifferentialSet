@@ -90,9 +90,10 @@ benchmark_paths += [benchmark_dir + "wolfssl/"]
 # benchmark_paths += ["/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/test1/"]
 
 
-import cpufeature
+import subprocess
 
-have_avx2 = cpufeature.CPUFeature.get("AVX2") or cpufeature.CPUFeature.get("OS_AVX2")
+info = subprocess.check_output("lscpu", shell=True).decode()
+avx_version = "512" if "avx512" in info else ("2" if "avx2" in info else None)
 
 import multiprocessing
 n_jobs = int(multiprocessing.cpu_count()) - 3
@@ -114,7 +115,7 @@ for benchmark_path in benchmark_paths:
 
     print("Building goto program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Building goto"):
-        subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-m32", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Capture memops and construct constraints: {}".format(benchmark_name))
     with time_context(metrics_collector, "Analysis"):
         subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
@@ -133,29 +134,28 @@ for benchmark_path in benchmark_paths:
         subprocess.run(["goto-instrument", "--dump-c", "instrumented", "instrumented.c"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Do alignment: {}".format(benchmark_name))
     with time_context(metrics_collector, "Do alignment"):
-        do_alignment(benchmark_path, align_only=False, have_avx2=have_avx2)
+        do_alignment(benchmark_path, align_only=False, avx_version=avx_version)
     print("Dump baseline to C: {}".format(benchmark_name))
     with time_context(metrics_collector, "Dump transform only"):
         subprocess.run(["goto-instrument", "--dump-c", "transform_only_dump", "transform_only.c"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Compile baseline: {}".format(benchmark_name))
     with time_context(metrics_collector, "Compile transform_only"):
         clean_up_code(benchmark_path + "transform_only.c")
-        subprocess.run([compiler, "-O3", "-flto", "transform_only.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "transform_only", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        subprocess.run([compiler, "-O3", "-flto", "transform_only.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "transform_only", "-mavx2", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Combining instrumented.c: {}".format(benchmark_name))
     with time_context(metrics_collector, "Combine instrumented.c"):
-        combine_components(benchmark_path)
+        combine_components(benchmark_path, avx_version)
     print("Compile mitigated program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Compile mitigated.c"):
         clean_up_code(benchmark_path + "mitigated.c")
-        subprocess.run([compiler, "-O3", "-flto", "mitigated.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "mitigated", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-
+        subprocess.run([compiler, "-O3", "-flto", "mitigated.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "mitigated", "-mavx2", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     wall_clock_time_end = time.time()
     print("Run mitigated program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Run mitigated"):
-        result_mitigated = subprocess.run(["taskset", "-c", "6", "perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./mitigated"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
+        result_mitigated = subprocess.run(["perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./mitigated"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
     print("Run baseline program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Run transform_only"):
-        result_baseline = subprocess.run(["taskset", "-c", "6", "perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./transform_only"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
+        result_baseline = subprocess.run(["perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./transform_only"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
 
     mitigated_cycle = int(result_mitigated.stderr.split(b",")[0])
     baseline_cycle = int(result_baseline.stderr.split(b",")[0])

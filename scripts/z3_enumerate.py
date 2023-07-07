@@ -550,7 +550,7 @@ def wrapper(chunk, bounds_script, cbmc_script, obsv_script, branch_script, large
         result.append(obsv_name_and_address_pairs)
     return result
 
-def get_ds_macro_def(config_dir, infos, have_avx2):
+def get_ds_macro_def(config_dir, infos, avx_version):
     pointer_mapping = get_pointer_to_name_and_type_map(config_dir)
     macro_def_string = ""
     ds_base_t_list_raw_out = {}
@@ -633,7 +633,7 @@ def get_ds_macro_def(config_dir, infos, have_avx2):
             else:
                 strategy = 2
 
-            if not have_avx2:
+            if not avx_version:
                 strategy = 1
             strategy_stats[strategy] += 1
 
@@ -716,7 +716,7 @@ def parallel_enumerate(config_dir, n_jobs=5):
         f.write(repr(chunk_result))
 
 # %%
-def do_alignment(config_dir, align_only=False, have_avx2=True):
+def do_alignment(config_dir, align_only=False, avx_version=None):
     with open(config_dir + "chunk_result.repr", "r") as f:
         chunk_result = eval(f.read())
     # merge result using greedy alignment algorithm
@@ -778,7 +778,7 @@ def do_alignment(config_dir, align_only=False, have_avx2=True):
     for obsv_ids, base_offset_pairs, _ in obsv_ids_to_base_offset_pairs_list:
         for obsv_id in obsv_ids:
             unpacked_dict[obsv_id] = base_offset_pairs
-    macro_defs, macro_defs_raw = get_ds_macro_def(config_dir, unpacked_dict, have_avx2)
+    macro_defs, macro_defs_raw = get_ds_macro_def(config_dir, unpacked_dict, avx_version)
 
     with open(config_dir + "ds_macros.c", "w") as f:
         f.write(macro_defs)
