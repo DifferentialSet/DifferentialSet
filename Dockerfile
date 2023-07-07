@@ -36,7 +36,7 @@ make -j && make install &&\
 ldconfig
 
 RUN pip3 install cpufeature
-RUN apt-get install -y vim
+RUN apt-get install -y vim clang
 
 COPY ./benchmarks/ /app/benchmarks
 COPY ./scripts/ /app/scripts
