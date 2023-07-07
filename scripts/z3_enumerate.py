@@ -693,7 +693,7 @@ def parallel_enumerate(config_dir, n_jobs=5):
 
     list_of_vars = get_var_in_script("".join(decls))
     obsv_vars = [o.strip("|") for o in list_of_vars if "Observation_" in o]
-    pc_vars = [o.strip("|") for o in list_of_vars if o.startswith("|$") and o.strip("|").replace("$", "").isnumeric()]
+    pc_vars = [o.strip("|") for o in list_of_vars if o.startswith("$") and o.replace("$", "").isnumeric()]
     obsv_vars += pc_vars
 
     chunk_size = len(obsv_vars) // (5*n_jobs) # each job will process 5 chunks
