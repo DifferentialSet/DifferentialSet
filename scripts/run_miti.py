@@ -32,48 +32,42 @@ my_env["PATH"] = "/home/cream/src/cbmc/aws_build/bin:/home/ubuntu/src/constantin
 
 benchmark_paths = []
 
-# if /app exists
-if os.path.exists("/app"):
-    root = "/app/benchmarks/mitigation/"
-else:
-    if os.getlogin() == "cream":
-        root = "/home/cream/src/DSA_github/benchmarks/mitigation/"
-    elif os.getlogin() == "ubuntu":
-        root = "/home/ubuntu/src/DSA_github/benchmarks/mitigation/"
-    else:
-        assert(0)
+benchmark_dir = "/app/benchmarks/mitigation/"
+if not os.path.exists(benchmark_dir):
+    benchmark_dir = "/home/congm/src/DifferentialSet/benchmarks/mitigation/"
 
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/aes/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/des/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/des3/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/anubis/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/cast5/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/cast6/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/fcrypt/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/chronos/khazad/"]
 
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/supercop/aes_core/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/supercop/cast-ssl/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/aes/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/des/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/des3/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/anubis/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/cast5/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/cast6/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/fcrypt/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/khazad/"]
 
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/libg/camellia/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/libg/des/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/libg/seed/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/libg/twofish/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/supercop/aes_core/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/supercop/cast-ssl/"]
 
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/ghostrider/histogram/"]
-benchmark_paths += [root + "issta2018-benchmarks-wu/examples/ghostrider/matmul/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/camellia/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/des/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/seed/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/twofish/"]
 
-benchmark_paths += [root + "pycrypto/src/AES/"]
-benchmark_paths += [root + "pycrypto/src/ARC4/"]
-benchmark_paths += [root + "pycrypto/src/Blowfish/"]
-benchmark_paths += [root + "pycrypto/src/CAST/"]
-benchmark_paths += [root + "pycrypto/src/DES3/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/ghostrider/histogram/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/ghostrider/matmul/"]
 
-benchmark_paths += [root + "binsec/bearssl/aes_big_wrapper/"]
-benchmark_paths += [root + "binsec/bearssl/des_tab_wrapper/"]
-benchmark_paths += [root + "binsec/tls1_cbc_remove_padding_lucky13_wrapper/"]
+benchmark_paths += [benchmark_dir + "pycrypto/src/AES/"]
+benchmark_paths += [benchmark_dir + "pycrypto/src/ARC4/"]
+benchmark_paths += [benchmark_dir + "pycrypto/src/Blowfish/"]
+benchmark_paths += [benchmark_dir + "pycrypto/src/CAST/"]
+benchmark_paths += [benchmark_dir + "pycrypto/src/DES3/"]
 
-benchmark_paths += [root + "wolfssl/"]
+benchmark_paths += [benchmark_dir + "binsec/bearssl/aes_big_wrapper/"]
+benchmark_paths += [benchmark_dir + "binsec/bearssl/des_tab_wrapper/"]
+benchmark_paths += [benchmark_dir + "binsec/tls1_cbc_remove_padding_lucky13_wrapper/"]
+
+benchmark_paths += [benchmark_dir + "wolfssl/"]
 
 # benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/tail_while/"]
 # benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/head_while/"]

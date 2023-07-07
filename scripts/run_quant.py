@@ -23,8 +23,9 @@ def time_context(collector, item_name):
 my_env = os.environ.copy()
 home_path = my_env['HOME']
 
-# benchmark_dir = "/app/benchmarks/quantification/"
-benchmark_dir = "/home/congm/src/DifferentialSet/benchmarks/quantification/"
+benchmark_dir = "/app/benchmarks/quantification/"
+if not os.path.exists(benchmark_dir):
+    benchmark_dir = "/home/congm/src/DifferentialSet/benchmarks/quantification/"
 
 benchmark_paths = []
 
@@ -77,7 +78,7 @@ for benchmark_path, compositional_multiplier in benchmark_paths:
     wall_clock_time_begin = time.time()
     print("Building goto program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Building goto"):
-        subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-m32", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Capture memops and construct constraints: {}".format(benchmark_name))
     with time_context(metrics_collector, "Analysis"):
         subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
