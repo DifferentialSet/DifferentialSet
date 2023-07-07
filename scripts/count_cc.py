@@ -97,6 +97,9 @@ def preprocess_one_dimacs(dimacs_path, target_var_prefixes):
     if not target_literals:
         return
 
+    # unique target literals
+    target_literals = list(set(target_literals))
+
     with open(dimacs_path, 'a') as f:
         f.write("c ind " + " ".join(target_literals) + " 0 \n")
 
