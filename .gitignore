@@ -30,3 +30,4 @@ entrypoint.sh
 .vscode/launch.json
 .vscode/settings.json
 wolfssl/.git
+.direnv/
