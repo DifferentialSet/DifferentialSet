@@ -1,27 +1,39 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y python3 python3-pip z3 gcc-multilib linux-tools-common linux-tools-generic linux-tools-`uname -r` g++ gcc flex bison make git curl patch cmake
+RUN apt-get update && apt-get install -y python3 python3-pip z3 gcc-multilib linux-tools-common linux-tools-generic g++ gcc flex bison make git curl patch cmake
 RUN pip3 install z3-solver joblib tqdm pycparser
 
 # Build and Install CBMC
 WORKDIR /app
 COPY ./cbmc/ /app/cbmc
-RUN cd /app/cbmc && mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE:STRING=Release && make -j goto-cc goto-instrument && make install
+RUN cd /app/cbmc && mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE:STRING=Release -DWITH_JBMC=OFF -Denable_cbmc_tests=OFF && make install -j goto-cc goto-instrument 
 
 # Build and Install ApproxMC
-RUN apt-get install -y zlib1g-dev libboost-program-options-dev libm4ri-dev libgmp3-dev
+RUN apt-get install -y zlib1g-dev libboost-program-options-dev libboost-serialization-dev libm4ri-dev libgmp3-dev
 RUN cd /app &&\
 git clone https://github.com/msoos/cryptominisat &&\
 cd cryptominisat &&\
+git checkout 5.11.11 &&\
 mkdir build && cd build &&\
 cmake -DCMAKE_BUILD_TYPE:STRING=Release .. &&\
-make -j && make install
+make -j && make install &&\
+ldconfig
+RUN cd /app &&\
+git clone https://github.com/meelgroup/arjun &&\
+cd arjun &&\
+git checkout 6c4115470d817f5c536c5b6a928921171387860a &&\
+mkdir build && cd build &&\
+cmake .. &&\
+make -j && make install &&\
+ldconfig
 RUN cd /app &&\
 git clone https://github.com/meelgroup/approxmc/ &&\
 cd approxmc &&\
+git checkout 1fd92719778126238319629ab005d7ac01919499 &&\
 mkdir build && cd build &&\
 cmake -DCMAKE_BUILD_TYPE:STRING=Release .. &&\
-make -j && make install
+make -j && make install &&\
+ldconfig
 
 RUN pip3 install cpufeature
 RUN apt-get install -y vim
@@ -34,4 +46,4 @@ RUN chmod +x run_miti.py && chmod +x run_quant.py
 
 COPY ./entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
-ENTRYPOINT ["/app/entrypoint.sh"]
+CMD /app/entrypoint.sh ; tail -f /dev/null

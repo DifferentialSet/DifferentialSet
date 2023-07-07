@@ -68,12 +68,16 @@ if("${sat_impl}" STREQUAL "minisat2")
     # once we upgrade to CMake 3.7 or higher we can specify multiple URLs as a
     # fall-back in case the first URL fails (the Makefile-based build retries up
     # to 2 times)
-    download_project(PROJ minisat2
-        URL http://ftp.debian.org/debian/pool/main/m/minisat2/minisat2_2.2.1.orig.tar.gz
-        PATCH_COMMAND patch -p1 -i ${CBMC_SOURCE_DIR}/../scripts/minisat-2.2.1-patch
-        COMMAND cmake -E copy ${CBMC_SOURCE_DIR}/../scripts/minisat2_CMakeLists.txt CMakeLists.txt
-        URL_MD5 27faa19ee0508660bd6fb7f894646d42
-    )
+    if(DEFINED minisat2_SOURCE_DIR)
+        message(STATUS "minisat2_SOURCE_DIR is set: $ENV{minisat2_SOURCE_DIR}")
+    else()
+        download_project(PROJ minisat2
+            URL http://ftp.debian.org/debian/pool/main/m/minisat2/minisat2_2.2.1.orig.tar.gz
+            PATCH_COMMAND patch -p1 -i ${CBMC_SOURCE_DIR}/../scripts/minisat-2.2.1-patch
+            COMMAND cmake -E copy ${CBMC_SOURCE_DIR}/../scripts/minisat2_CMakeLists.txt CMakeLists.txt
+            URL_MD5 27faa19ee0508660bd6fb7f894646d42
+        )
+    endif()
 
     add_subdirectory(${minisat2_SOURCE_DIR} ${minisat2_BINARY_DIR})
 
