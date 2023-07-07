@@ -156,7 +156,10 @@ def preprocess_dimacs(benchmark_path):
     #         f.write("c ind " + literals)
 
 def count(benchmark_path, my_env, count_data=False, count_inst=False, count_combined=True):
-    approxmc_path = "/app/approxmc/build/approxmc"
+    import shutil
+    approxmc_path = shutil.which("approxmc")
+    if approxmc_path is None:
+        approxmc_path = "/app/approxmc/build/approxmc"
     data_mc = 1; inst_mc = 1; combined_mc = 1
 
     if count_data:

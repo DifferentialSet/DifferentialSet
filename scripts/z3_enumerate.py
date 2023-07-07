@@ -704,8 +704,12 @@ def parallel_enumerate(config_dir, n_jobs=5):
     print("chunk size is", chunk_size)
     print("#chunk is", len(chunks))
     with open(config_dir + "pointer_numbering.csv") as f:
-        line = f.readlines()[-1]
-        largest_pointer_number = int(line.split(",")[-1].strip())
+        lines = f.readlines()
+        if len(lines) == 0:
+            largest_pointer_number = 0
+        else:
+            line = lines[-1]
+            largest_pointer_number = int(line.split(",")[-1].strip())
     chunk_result = Parallel(n_jobs=n_jobs, backend="multiprocessing")(delayed(wrapper)(chunk, decls+bounds_script, decls+cbmc_script, decls+obsv_script, decls+branch_script, largest_pointer_number) for chunk in tqdm(chunks))
     chunk_result = sum(chunk_result, [])
     with open(config_dir + "chunk_result.repr", "w") as f:
@@ -889,8 +893,12 @@ if __name__ == "__main__":
     obsv_mapping = get_obsv_var_eq_mapping(obsv_constraints)
     branch_label_mapping = get_branch_label_mapping(branch_label_constraints)
     with open(config_dir + "pointer_numbering.csv") as f:
-        line = f.readlines()[-1]
-        largest_pointer_number = int(line.split(",")[-1].strip())
+        lines = f.readlines()
+        if len(lines) == 0:
+            largest_pointer_number = 0
+        else:
+            line = f.readlines()[-1]
+            largest_pointer_number = int(line.split(",")[-1].strip())
     e = enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_mapping, "Observation_$11$3$3$2$12$3$12$10$1$3$10$4$0$2$16$6$4$4$0$0_4069", ctx, largest_pointer_number, cbmc_script, debug=True)
     print(e)
 
