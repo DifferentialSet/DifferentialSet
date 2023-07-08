@@ -1,12 +1,15 @@
-FROM ubuntu:20.04
+FROM debian:12
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y python3 python3-pip z3 gcc-multilib linux-tools-common linux-tools-generic g++ gcc flex bison make git curl patch cmake
-RUN pip3 install z3-solver joblib tqdm pycparser
+RUN apt-get update && apt-get install -y python3 python3-pip z3 gcc-multilib linux-perf g++-11 gcc-11 flex bison make git curl patch cmake
+RUN pip3 install --break-system-packages z3-solver joblib tqdm pycparser
 
 # Build and Install CBMC
 WORKDIR /app
 COPY ./cbmc/ /app/cbmc
-RUN cd /app/cbmc && mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE:STRING=Release -DWITH_JBMC=OFF -Denable_cbmc_tests=OFF && make install -j goto-cc goto-instrument 
+RUN cd /app/cbmc &&\
+mkdir build &&\
+cd build &&\
+CC=/usr/bin/gcc-11 CXX=/usr/bin/g++-11 cmake .. -DCMAKE_BUILD_TYPE:STRING=Release -DWITH_JBMC=OFF -Denable_cbmc_tests=OFF && make install -j goto-cc goto-instrument 
 
 # Build and Install ApproxMC
 RUN apt-get install -y zlib1g-dev libboost-program-options-dev libboost-serialization-dev libm4ri-dev libgmp3-dev
@@ -35,7 +38,6 @@ cmake -DCMAKE_BUILD_TYPE:STRING=Release .. &&\
 make -j && make install &&\
 ldconfig
 
-RUN pip3 install cpufeature
 RUN apt-get install -y vim clang
 
 COPY ./benchmarks/ /app/benchmarks
