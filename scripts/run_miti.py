@@ -93,7 +93,7 @@ benchmark_paths += [benchmark_dir + "wolfssl/"]
 import subprocess
 
 info = subprocess.check_output("lscpu", shell=True).decode()
-avx_version = "512" if "avx512" in info else ("2" if "avx" in info else None)
+avx_version = "512" if "avx512" in info else ("2" if "avx2" in info else None)
 
 import multiprocessing
 n_jobs = int(multiprocessing.cpu_count()) - 3
