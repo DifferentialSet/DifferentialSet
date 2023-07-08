@@ -26,6 +26,8 @@ home_path = my_env['HOME']
 benchmark_dir = "/app/benchmarks/quantification/"
 if not os.path.exists(benchmark_dir):
     benchmark_dir = "/home/congm/src/DifferentialSet/benchmarks/quantification/"
+    if not os.path.exists(benchmark_dir):
+        benchmark_dir = "/u1/c24ma/src/DifferentialSet/benchmarks/quantification/"
 
 benchmark_paths = []
 

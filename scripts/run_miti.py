@@ -32,9 +32,11 @@ my_env["PATH"] = "/home/cream/src/cbmc/aws_build/bin:/home/ubuntu/src/constantin
 
 benchmark_paths = []
 
-benchmark_dir = "/app/benchmarks/mitigation/"
+benchmark_dir = "/app/benchmarks/quantification/"
 if not os.path.exists(benchmark_dir):
-    benchmark_dir = "/home/congm/src/DifferentialSet/benchmarks/mitigation/"
+    benchmark_dir = "/home/congm/src/DifferentialSet/benchmarks/quantification/"
+    if not os.path.exists(benchmark_dir):
+        benchmark_dir = "/u1/c24ma/src/DifferentialSet/benchmarks/quantification/"
 
 
 benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/aes/"]
