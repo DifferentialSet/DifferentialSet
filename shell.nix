@@ -144,5 +144,6 @@ pkgs.mkShell {
     approxmc
     minisat2
     cbmc
+    pkgs.linuxKernel.packages.linux_5_15.perf
   ];
 }
