@@ -170,7 +170,7 @@ def count(benchmark_path, my_env, count_data=False, count_inst=False, count_comb
         content = open(dimacs_path, 'r').read()
         if "c ind" in content:
             try:
-                output = subprocess.run([approxmc_path, dimacs_path], capture_output=True, check=True, env=my_env, timeout=3600)
+                output = subprocess.run([approxmc_path, dimacs_path], capture_output=True, check=True, env=my_env, timeout=18000)
             except subprocess.TimeoutExpired:
                 data_mc = None
             if data_mc:
@@ -185,7 +185,7 @@ def count(benchmark_path, my_env, count_data=False, count_inst=False, count_comb
         content = open(dimacs_path, 'r').read()
         if "c ind" in content:
             try:
-                output = subprocess.run([approxmc_path, dimacs_path], capture_output=True, check=True, env=my_env, timeout=3600)
+                output = subprocess.run([approxmc_path, dimacs_path], capture_output=True, check=True, env=my_env, timeout=18000)
             except subprocess.TimeoutExpired:
                 inst_mc = None
             if inst_mc:
@@ -200,7 +200,7 @@ def count(benchmark_path, my_env, count_data=False, count_inst=False, count_comb
         content = open(dimacs_path, 'r').read()
         if "c ind" in content:
             try:
-                output = subprocess.run([approxmc_path, dimacs_path], capture_output=True, check=True, env=my_env, timeout=3600)
+                output = subprocess.run([approxmc_path, dimacs_path], capture_output=True, check=True, env=my_env, timeout=18000)
             except subprocess.TimeoutExpired:
                 combined_mc = None
             if combined_mc:
