@@ -98,9 +98,12 @@ for benchmark_path, compositional_multiplier in benchmark_paths:
     print("Counting CC: {}".format(benchmark_name))
     with time_context(metrics_collector, "Counting CC"):
         from count_cc import count
-        c = count(benchmark_path, my_env)
-        print(c)
-        metrics_collector["CC"] = c * compositional_multiplier
+        counts = count(benchmark_path, my_env)
+        if compositional_multiplier != 1:
+            metrics_collector["CC"] = ["log({}) * {}".format(c, compositional_multiplier) for c in counts if c]
+        else:
+            metrics_collector["CC"] = ["log({})".format(c) for c in counts if c]
+        print(metrics_collector["CC"])
     wall_clock_time_end = time.time()
 
     metrics_collector["Total Time"] = sum([v[0] + v[1] for k, v in metrics_collector.items() if k.endswith("TIME")])
