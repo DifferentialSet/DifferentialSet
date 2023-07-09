@@ -11,6 +11,9 @@ def clean_up_code(path):
         import re
         # remove typedef from CBMC since they conflicts with #include
         unwanted_strings = [
+"void * __builtin___memcpy_chk(void *, const void *, __CPROVER_size_t, __CPROVER_size_t);",
+"void *__builtin___memcpy_chk(void *, const void *, __CPROVER_size_t, __CPROVER_size_t);",
+"static void *__builtin___memcpy_chk__return_value;",
 "typedef unsigned long long int __dev_t;",
 "typedef unsigned int __nlink_t;",
 "typedef signed long long int __off64_t;",
@@ -85,6 +88,22 @@ extern void *memcpy(void *dst, const void *src, size_t n)
   }
 
   return dst;
+}""",
+"""
+static inline void * memcpy(void * restrict __dest, const void * restrict __src, size_t __len)
+{
+  void *return_value___builtin___memcpy_chk;
+  __builtin___memcpy_chk(__dest, __src, (__CPROVER_size_t)__len, 4294967295u);
+  return_value___builtin___memcpy_chk = nondet_0();
+  memcpy__return_value = return_value___builtin___memcpy_chk;
+}""",
+"""
+inline static void *memcpy(void * restrict __dest, const void * restrict __src, size_t __len)
+{
+  void *return_value___builtin___memcpy_chk;
+  __builtin___memcpy_chk(__dest, __src, (__CPROVER_size_t) __len, 4294967295u);
+  return_value___builtin___memcpy_chk = nondet_0();
+  memcpy__return_value = return_value___builtin___memcpy_chk;
 }""",
 "assert(0);",
 "assert(0 != 0);",
