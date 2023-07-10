@@ -55,7 +55,7 @@ void br_aes_big_encrypt(unsigned num_rounds, const uint32_t *skey, void *data);
 
 /* see bearssl_block.h */
 void
-br_aes_big_cbcenc_run(const br_aes_big_cbcenc_keys *ctx,
+br_aes_big_cbcenc_run(const br_aes_big_cbcenc_keys *ctx, uint32_t skey[60],
 	void *iv, void *data, size_t len)
 {
 	unsigned char *buf, *ivbuf;
@@ -68,7 +68,7 @@ br_aes_big_cbcenc_run(const br_aes_big_cbcenc_keys *ctx,
 		for (i = 0; i < 16; i ++) {
 			buf[i] ^= ivbuf[i];
 		}
-		br_aes_big_encrypt(ctx->num_rounds, ctx->skey, buf);
+		br_aes_big_encrypt(ctx->num_rounds, skey, buf);
 		memcpy(ivbuf, buf, 16);
 		buf += 16;
 		len -= 16;
@@ -239,14 +239,13 @@ int main(){
   br_aes_big_cbcenc_keys ctx;
   ctx.num_rounds = N_ROUND;
 
-  // CBMC do weird thing when reading a array inside a struct
-  // We remove read from source code, and add it back to mitigared.c and transform_only.c
-  // CBMC is still going to correctly treat ctx.skey as a free variable because
-  // it is an uninitialized variable, so the analysis is still sound
-//   read(0, ctx.skey, KEY_LEN);
+  // CBMC do weird thing when reading to a array inside a struct
+  // We rewrite the benchmark so that it reads the array directly
+  uint32_t skey[60];
+  read(0, skey, KEY_LEN);
   read(0, data, DATA_LEN);
 
-  br_aes_big_cbcenc_run(&ctx, iv, data, (size_t) DATA_LEN);
+  br_aes_big_cbcenc_run(&ctx, &skey, iv, data, (size_t) DATA_LEN);
   write(1, data, DATA_LEN);
   return 0;
 }
