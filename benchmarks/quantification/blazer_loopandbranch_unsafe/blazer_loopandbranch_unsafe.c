@@ -1,26 +1,26 @@
 int main() {
     // secret
-    unsigned taint;
+    unsigned taint_sec;
     // public
-    unsigned a;
+    unsigned a_pub;
 
-    unsigned i = a;
+    unsigned i = a_pub;
 
-    if (taint < 1) {
+    if (taint_sec < 1) {
         while (i > 0){
             i--;
         }
     } else {
-        taint = taint - 10;
+        taint_sec = taint_sec - 10;
 
-        if (taint >= 10) {
-            unsigned j = a;
+        if (taint_sec >= 10) {
+            unsigned j = a_pub;
             while (j > 0) {
                 j--;
             }
         } else {
-            if (a < 0) {
-                unsigned k = a;
+            if (a_pub < 0) {
+                unsigned k = a_pub;
                 while (k > 0) {
                     k--;
                 }

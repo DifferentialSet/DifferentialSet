@@ -37,8 +37,8 @@ int md5(char s[MAX_LENGTH], char out[MAX_LENGTH]) {
 
 int main() {
     // secret
-    char secret_username[MAX_LENGTH];
-    char secret_password[MAX_LENGTH];
+    char secret_username_sec[MAX_LENGTH];
+    char secret_password_sec[MAX_LENGTH];
 
     // public
     char public_username_pub[MAX_LENGTH];
@@ -46,10 +46,10 @@ int main() {
 
     bool outcome;
 
-    if (!strcmp(secret_username, public_username_pub)) {
+    if (!strcmp(secret_username_sec, public_username_pub)) {
         char md5_str[MAX_LENGTH];
         md5(public_password_pub, md5_str);
-        if (!strcmp(secret_password, md5_str)) {
+        if (!strcmp(secret_password_sec, md5_str)) {
             outcome = true;
         }
     }

@@ -2,7 +2,7 @@
 
 int main() {
     // secret
-    int exponent;
+    int exponent_sec;
     // public
     int base_pub, modulus_pub, width=WIDTH;
 
@@ -10,7 +10,7 @@ int main() {
 
     for (int i = 0; i < width; i++) {
         s = s * s % modulus_pub;
-        if (exponent & (1 << width - i - 1)) {
+        if (exponent_sec & (1 << width - i - 1)) {
             s = standardMultiply(s, base_pub) % modulus_pub;
         }
     }

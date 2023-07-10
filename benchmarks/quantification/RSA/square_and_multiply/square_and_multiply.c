@@ -24,12 +24,12 @@ void mpi_mul(uint32_t *b, uint32_t *r) {
 }
 
 int main() {
-    uint32_t e, r, m, b, i;
-    uint32_t *r_p = &r, *e_p = &e, *m_p = &m, *b_p = &b;
+    uint32_t e_sec, r, m, b, i;
+    uint32_t *r_p = &r, *e_p = &e_sec, *m_p = &m, *b_p = &b;
     for (i = 1; i > 0; i--) {
         mpi_sqr(r_p);
         mpi_mod(r_p, m_p);
-        if (e & (1 << i)) {
+        if (e_sec & (1 << i)) {
             mpi_mul(b_p, r_p);
             mpi_mod(r_p, m_p);
         }

@@ -2,7 +2,7 @@
 
 int main() {
     // secret
-    int b;
+    int b_sec;
     // public
     int a_pub, p_pub;
 
@@ -10,7 +10,7 @@ int main() {
     int n = WIDTH;
     for (int i = 0; i < n; i++) {
         m = m * m % p_pub;
-        if (b & (1 << i)) {
+        if (b_sec & (1 << i)) {
             m = m * a_pub % p_pub;
         }
     }

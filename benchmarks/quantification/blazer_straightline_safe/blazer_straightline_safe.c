@@ -1,10 +1,10 @@
 int main() {
 	//secret
-	unsigned b; 
+	unsigned b_sec; 
 	//public
-    unsigned a;
-    unsigned x = a, y = b;
-    if (a > 0 && b > 0) {
+    unsigned a_pub;
+    unsigned x = a_pub, y = b_sec;
+    if (a_pub > 0 && b_sec > 0) {
 	    x=1+y; y=2+x; x=3+y; y=4+x; x=5+y; y=6+x; x=7+y; y=8+x; x=9+y; y=10+x;
 	    x=1+y; y=2+x; x=3+y; y=4+x; x=5+y; y=6+x; x=7+y; y=8+x; x=9+y; y=10+x;
 	    x=1+y; y=2+x; x=3+y; y=4+x; x=5+y; y=6+x; x=7+y; y=8+x; x=9+y; y=10+x;
