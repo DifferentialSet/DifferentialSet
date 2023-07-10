@@ -97,18 +97,13 @@ def count(dimacs_path, my_env):
     approxmc_path = shutil.which("approxmc")
     if approxmc_path is None:
         approxmc_path = "/app/approxmc/build/approxmc"
-    mc = 1
 
     content = open(dimacs_path, 'r').read()
-    if "c ind" in content:
-        try:
-            output = subprocess.run([approxmc_path, dimacs_path], capture_output=True, check=True, env=my_env, timeout=18000)
-        except subprocess.TimeoutExpired:
-            mc = None
-        if mc:
-            last_line = output.stdout.decode('utf-8').split("\n")[-2]
-            assert(last_line.startswith("s mc"))
-            mc = int(last_line.split(" ")[-1])
+    assert("c ind" in content)
+    output = subprocess.run([approxmc_path, dimacs_path], capture_output=True, check=True, env=my_env, timeout=18000)
+    last_line = output.stdout.decode('utf-8').split("\n")[-2]
+    assert(last_line.startswith("s mc"))
+    mc = int(last_line.split(" ")[-1])
             
     return mc
 
