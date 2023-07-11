@@ -2,6 +2,32 @@
 let
   patchFile = ./cbmc/scripts/minisat-2.2.1-patch;
   newCMakeLists = ./cbmc/scripts/minisat2_CMakeLists.txt;
+
+  cacheaudit = pkgs.stdenv.mkDerivation rec {
+    pname = "cacheaudit";
+    version = "fine-trace";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "cacheaudit";
+      repo = pname;
+      rev = "fine-trace";
+      sha256 = "sha256-NJQ3NxzgsOgAaHFItGkeWqOFhjQK0KpMVxLkyHBmJlQ="; 
+    };
+
+    buildInputs = [ pkgs.ocaml-ng.ocamlPackages_4_02.ocaml ];
+
+    buildPhase = ''
+      make
+    '';
+
+    installPhase = ''
+      mkdir -p $out/bin
+      mv cacheaudit $out/bin
+    '';
+
+  };
+
+
   cryptominisat = pkgs.stdenv.mkDerivation rec {
     pname = "cryptominisat";
     version = "5.11.11";
@@ -128,15 +154,27 @@ let
     '';
   };
 
+  gcc49 = pkgs.stdenvNoCC.mkDerivation rec {
+    name = "gcc49";
+    buildInputs = [ pkgs.pkgsi686Linux.gcc48 pkgs.which ];
+    dontUnpack = true;
+    installPhase = ''
+      mkdir -p $out/bin
+      cp `which gcc` $out/bin/gcc4
+    '';
+  };
+
   my-python-packages = ps: with ps; [
     z3
     joblib 
     tqdm 
     pycparser
+    ipykernel
+    mypy
   ];
   my-python = pkgs.python3.withPackages my-python-packages;
 in
-pkgs.mkShell {
+(pkgs.mkShell.override { stdenv = pkgs.gcc49Stdenv; }) {
   buildInputs = [
     my-python
     cryptominisat
@@ -145,5 +183,7 @@ pkgs.mkShell {
     minisat2
     cbmc
     pkgs.linuxKernel.packages.linux_5_15.perf
+    cacheaudit
+    gcc49
   ];
 }
