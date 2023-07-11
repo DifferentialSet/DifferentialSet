@@ -33,6 +33,8 @@ def get_target_literals(dimacs_path: str, target_var_prefixes: List[str]):
         splits = c.split(" ")
         dup_clauses.append(" ".join([mirror_literal(l) for l in splits[:-1]]) + " 0\n")
     s = z3.Solver()
+    timeout_m = 60
+    s.set("timeout", timeout_m*1000)
     s.from_string("p cnf {} {}\n".format(literal_num*2, clause_num*2) + "\n".join(clauses + dup_clauses))
 
     from z3_enumerate import get_vars_dict
