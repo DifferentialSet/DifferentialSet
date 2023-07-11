@@ -35,12 +35,12 @@ def get_target_literals(dimacs_path: str, target_var_prefixes: List[str]):
     s = z3.Solver()
     s.from_string("p cnf {} {}\n".format(literal_num*2, clause_num*2) + "\n".join(clauses + dup_clauses))
 
-    from z3_enumerate import get_vars
+    from z3_enumerate import get_vars_dict
 
     vars_mapping = {}
     for assertion in s.assertions():
-        vs = get_vars(assertion)
-        vars_mapping.update({str(v).strip("k!"): v for v in vs})
+        vs = get_vars_dict(assertion)
+        vars_mapping.update(vs)
 
     for l in pub_literals:
         if l in vars_mapping and mirror_literal(l) in vars_mapping:

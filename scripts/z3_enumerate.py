@@ -31,6 +31,19 @@ def get_vars(f):
     collect(f)
     return {ele.n for ele in r}
 
+def get_vars_dict(f):
+    d = {}
+    def collect(f):
+      if is_const(f): 
+          decl = f.decl()
+          if decl.kind() == Z3_OP_UNINTERPRETED:
+              d[decl.name().strip("k!")] = f
+      else:
+          for c in f.children():
+              collect(c)
+    collect(f)
+    return d
+
 def get_var_str(f):
     r = set()
     def collect(f):
