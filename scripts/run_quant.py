@@ -23,11 +23,11 @@ def time_context(collector, item_name):
 my_env = os.environ.copy()
 home_path = my_env['HOME']
 
-benchmark_dir = "/app/benchmarks/quantification/"
+benchmark_dir = "./benchmarks/quantification/"
 if not os.path.exists(benchmark_dir):
-    benchmark_dir = "/home/congm/src/DifferentialSet/benchmarks/quantification/"
+    benchmark_dir = "../benchmarks/quantification/"
     if not os.path.exists(benchmark_dir):
-        benchmark_dir = "/u1/c24ma/src/DifferentialSet/benchmarks/quantification/"
+        assert(False)
 
 benchmark_paths = []
 

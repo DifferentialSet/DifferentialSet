@@ -32,17 +32,22 @@ def get_target_literals(dimacs_path: str, target_var_prefixes: List[str]):
     for c in clauses:
         splits = c.split(" ")
         dup_clauses.append(" ".join([mirror_literal(l) for l in splits[:-1]]) + " 0\n")
+    vacuous_clause = " ".join([str(i) for i in range(1, literal_num*2+1)]) + " 0\n"
     s = z3.Solver()
-    timeout_m = 60
-    s.set("timeout", timeout_m*1000)
+    timeout_s = 60
+    s.set("timeout", timeout_s*1000)
+    s.set("solver2_timeout", timeout_s*1000)
+    s.set("ignore_solver1", True)
     s.from_string("p cnf {} {}\n".format(literal_num*2, clause_num*2) + "\n".join(clauses + dup_clauses))
+    s.from_string("p cnf {} {}\n".format(literal_num*2, 1) + "\n" + vacuous_clause)
 
     from z3_enumerate import get_vars_dict
 
-    vars_mapping = {}
-    for assertion in s.assertions():
-        vs = get_vars_dict(assertion)
-        vars_mapping.update(vs)
+    # vars_mapping = {}
+    # for assertion in s.assertions():
+    #     vs = get_vars_dict(assertion)
+    #     vars_mapping.update(vs)
+    vars_mapping = get_vars_dict(s.assertions()[-1])
 
     for l in pub_literals:
         if l in vars_mapping and mirror_literal(l) in vars_mapping:
@@ -50,17 +55,21 @@ def get_target_literals(dimacs_path: str, target_var_prefixes: List[str]):
 
     num_interfering = 0
     comments_for_target_vars = [c.strip() for c in comments if any(prefix in c for prefix in target_var_prefixes)]
-    for c in comments_for_target_vars:
+    from tqdm import tqdm
+    for c in tqdm(comments_for_target_vars):
         target_var = c.split(" ")[1]
         target_literals = c.split(" ")[2:]
 
         target_literals = [l.strip("-") for l in target_literals]
 
         s.push()
+        neq_constraints = []
         for l in target_literals:
             if l in vars_mapping and mirror_literal(l) in vars_mapping:
-                s.add(vars_mapping[l] != vars_mapping[mirror_literal(l)])
-        if s.check() == z3.sat:
+                neq_constraints.append(vars_mapping[l] != vars_mapping[mirror_literal(l)])
+        s.add(z3.Or(neq_constraints))
+        result = s.check()
+        if result == z3.sat or result == z3.unknown:
             output.extend(target_literals)
             num_interfering += 1
         s.pop()
