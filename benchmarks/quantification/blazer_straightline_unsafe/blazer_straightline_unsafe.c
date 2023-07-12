@@ -21,7 +21,7 @@ int main() {
 	// }
 	if(a_pub>0) {
 		if(b_sec>0) {
-	    x = 2;
+			x = 2;
 		} else {
 			goto L;
 		}
