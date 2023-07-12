@@ -16,7 +16,6 @@ class AstRefKey:
         return str(self.n)
 
 def askey(n):
-    assert isinstance(n, AstRef)
     return AstRefKey(n)
 
 def get_vars(f):

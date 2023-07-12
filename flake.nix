@@ -144,7 +144,22 @@
         in {
           devShell = with pkgs; mkShell {
             buildInputs = [
-              (python3.withPackages (ps: with ps; [ z3 joblib tqdm pycparser ]))
+              (python3.withPackages (ps: with ps; [ z3 joblib tqdm pycparser ipdb
+                                                    (
+                                                    buildPythonPackage rec {
+                                                      pname = "pycryptosat";
+                                                      version = "5.11.11";
+                                                      src = fetchPypi {
+                                                        inherit pname version;
+                                                        sha256 = "sha256-VsmbDuPAVpKOebM+q5EXwLvcJoc9y74lLyCsjkCk5tY=";
+                                                      };
+                                                      propagatedBuildInputs = [
+                                                        # Specify dependencies
+                                                        pkgs.python3Packages.toml
+                                                      ];
+                                                    }
+                                                  )
+              ]))
               cryptominisat
               arjun
               approxmc

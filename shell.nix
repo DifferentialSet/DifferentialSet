@@ -171,6 +171,21 @@ let
     pycparser
     ipykernel
     mypy
+    ipdb
+    (
+    buildPythonPackage rec {
+      pname = "pycryptosat";
+      version = "5.11.11";
+      src = fetchPypi {
+        inherit pname version;
+        sha256 = "sha256-VsmbDuPAVpKOebM+q5EXwLvcJoc9y74lLyCsjkCk5tY=";
+      };
+      propagatedBuildInputs = [
+        # Specify dependencies
+        pkgs.python3Packages.toml
+      ];
+    }
+  )
   ];
   my-python = pkgs.python3.withPackages my-python-packages;
 in
@@ -185,5 +200,6 @@ in
     pkgs.linuxKernel.packages.linux_5_15.perf
     cacheaudit
     gcc49
+    pkgs.py-spy
   ];
 }

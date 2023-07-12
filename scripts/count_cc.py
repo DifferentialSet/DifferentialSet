@@ -2,6 +2,27 @@ import subprocess, os
 import z3
 from typing import List
 
+def get_target_literals_old(dimacs_path, target_var_prefixes):
+    target_literals = []
+    with open(dimacs_path, 'r') as f:
+        first_line = f.readline()
+        splits = first_line.split(" ")
+        clause_num = int(splits[3])
+        
+        for line in f.readlines()[clause_num:]:
+            if any([line.startswith('c {}'.format(prefix)) for prefix in target_var_prefixes]):
+                # if line.startswith("c label_alignment_") and line.count("$") >= 2:
+                #     # HACK: in our benchmarks, nested branches are non-interferent, therefore we exclude them
+                #     continue
+                target_literals.extend(line.strip().replace("-", "").replace("TRUE", "").replace("FALSE", "").split(" ", maxsplit=2)[-1].split(" "))
+
+        target_literals = [l for l in target_literals if l != ""]
+
+    # unique target literals
+    target_literals = list(set(target_literals))
+
+    return target_literals
+
 def get_target_literals(dimacs_path: str, target_var_prefixes: List[str]):
 
     output = []
@@ -53,6 +74,8 @@ def get_target_literals(dimacs_path: str, target_var_prefixes: List[str]):
         if l in vars_mapping and mirror_literal(l) in vars_mapping:
             s.add(vars_mapping[l] == vars_mapping[mirror_literal(l)])
 
+    assertions = s.assertions()
+
     num_interfering = 0
     comments_for_target_vars = [c.strip() for c in comments if any(prefix in c for prefix in target_var_prefixes)]
     from tqdm import tqdm
@@ -61,8 +84,9 @@ def get_target_literals(dimacs_path: str, target_var_prefixes: List[str]):
         target_literals = c.split(" ")[2:]
 
         target_literals = [l.strip("-") for l in target_literals]
-
-        s.push()
+        s = z3.Solver()
+        s.set("timeout", timeout_s*1000)
+        s.add(assertions)
         neq_constraints = []
         for l in target_literals:
             if l in vars_mapping and mirror_literal(l) in vars_mapping:
@@ -72,19 +96,66 @@ def get_target_literals(dimacs_path: str, target_var_prefixes: List[str]):
         if result == z3.sat or result == z3.unknown:
             output.extend(target_literals)
             num_interfering += 1
-        s.pop()
     # we call these observations interesting because they are interfered by secret values
     print("number of interesting observations: {}/{}".format(num_interfering, len(comments_for_target_vars)))
     
     return list(set(output))
 
-def preprocess_one_dimacs(dimacs_path, target_var_prefixes):
-    target_literals = get_target_literals(dimacs_path, target_var_prefixes)
+def get_target_literals_dimacs(dimacs_path: str, target_var_prefixes: List[str]):
 
-    with open(dimacs_path, 'a') as f:
-        f.write("c ind " + " ".join(target_literals) + " 0 \n")
+    output = []
 
-def preprocess_dimacs(benchmark_path):
+    f = open(dimacs_path, 'r')
+    first_line = f.readline()
+    splits = first_line.split(" ")
+    literal_num = int(splits[2])
+    clause_num = int(splits[3])
+
+    def mirror_literal(l: str) -> str:
+        return str(int(l) + literal_num) if int(l) > 0 else str(int(l) - literal_num)
+
+    lines = f.readlines()
+
+    comments = [c for c in lines if c[0] == 'c']
+    clauses = [c for c in lines if c[0] != 'c']
+    comments_on_public = [c for c in comments if "_pub!" in c]
+    pub_literals = [c.split(" ")[2:] for c in comments_on_public]
+    import itertools
+    pub_literals = list(itertools.chain.from_iterable(pub_literals))
+    pub_literals = [l.strip() for l in pub_literals]
+
+    dup_clauses = []
+    for c in clauses:
+        splits = c.split(" ")
+        dup_clauses.append(" ".join([mirror_literal(l) for l in splits[:-1]]) + " 0\n")
+    vacuous_clause = " ".join([str(i) for i in range(1, literal_num*2+1)]) + " 0\n"
+    
+    import pycryptosat
+
+    
+    from tqdm import tqdm
+    comments_for_target_vars = [c.strip() for c in comments if any(prefix in c for prefix in target_var_prefixes)]
+    def filter_comments(comment):
+        target_vars_literals = [l.strip("-") for l in comment.split(" ")[2:]]
+        s = pycryptosat.Solver()
+        for c in clauses + dup_clauses:
+            s.add_clause([int(l) for l in c.split(" ")[:-1]])
+        for l in pub_literals:
+            s.add_xor_clause([abs(int(l)), abs(int(mirror_literal(l)))], False)
+        for l in target_vars_literals:
+            s.add_xor_clause([abs(int(l)), abs(int(mirror_literal(l)))], True)
+        if s.is_satisfiable():
+            return target_vars_literals
+        return []
+    from joblib import Parallel, delayed
+    chunks = Parallel(n_jobs=6)(delayed(filter_comments)(c) for c in tqdm(comments_for_target_vars))
+    print("number of interesting vars: {}/{}".format(sum([len(c) != 0 for c in chunks]), len(comments_for_target_vars)))
+    
+    from functools import reduce
+    return list(set(reduce(lambda x, y: x + y, chunks, [])))
+
+
+def preprocess_dimacs(benchmark_path, new=True):
     # dimacs_path = benchmark_path + "data_cache_cbmc.dimacs"
     # preprocess_one_dimacs(dimacs_path, ["alignment_"])
 
@@ -92,7 +163,13 @@ def preprocess_dimacs(benchmark_path):
     # preprocess_one_dimacs(dimacs_path, ["label_alignment_"])
 
     dimacs_path = benchmark_path + "combined_cache_cbmc.dimacs"
-    preprocess_one_dimacs(dimacs_path, ["label_alignment_", "alignment_"])
+    if new:
+        target_literals = get_target_literals_dimacs(dimacs_path, ["label_alignment_", "alignment_"])
+    else:
+        target_literals = get_target_literals_old(dimacs_path, ["label_alignment_", "alignment_"])
+
+    with open(dimacs_path, 'a') as f:
+        f.write("c ind " + " ".join(target_literals) + " 0 \n")
 
 def get_secret_size(dimacs_path: str):
     size = 0
