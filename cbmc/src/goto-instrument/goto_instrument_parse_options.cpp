@@ -1311,6 +1311,14 @@ int goto_instrument_parse_optionst::doit()
             continue;
           }
 
+          // for each pair of branch, only consider the true branch
+          // this avoids double counting the case where both branches are not taken
+          size_t pos = branch_label.rfind("$");
+          std::string lastIntStr = branch_label.substr(pos + 1);
+          int lastInt = std::stoi(lastIntStr);
+          if (lastInt % 2 != 0)
+            continue;
+
           std::string label_alignment_name = "label_alignment_" + branch_label;
           auxiliary_symbolt label_alignment_var(label_alignment_name, bool_typet());
 
