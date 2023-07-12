@@ -129,7 +129,6 @@ def get_target_literals_dimacs(dimacs_path: str, n_jobs, target_var_prefixes: Li
     for c in clauses:
         splits = c.split(" ")
         dup_clauses.append(" ".join([mirror_literal(l) for l in splits[:-1]]) + " 0\n")
-    vacuous_clause = " ".join([str(i) for i in range(1, literal_num*2+1)]) + " 0\n"
     
     import pycryptosat
 
@@ -138,15 +137,18 @@ def get_target_literals_dimacs(dimacs_path: str, n_jobs, target_var_prefixes: Li
     comments_for_target_vars = [c.strip() for c in comments if any(prefix in c for prefix in target_var_prefixes)]
     def filter_comments(comment):
         target_vars_literals = [l.strip("-") for l in comment.split(" ")[2:]]
-        s = pycryptosat.Solver()
+        s = pycryptosat.Solver(time_limit=10)
         for c in clauses + dup_clauses:
             s.add_clause([int(l) for l in c.split(" ")[:-1]])
         for l in pub_literals:
             s.add_xor_clause([abs(int(l)), abs(int(mirror_literal(l)))], False)
         for l in target_vars_literals:
             s.add_xor_clause([abs(int(l)), abs(int(mirror_literal(l)))], True)
-        if s.is_satisfiable():
+        is_sat, _ = s.solve()
+        if is_sat or is_sat is None:
+            print("interfering")
             return target_vars_literals
+        print("non-interfering")
         return []
     from joblib import Parallel, delayed
     chunks = Parallel(n_jobs=n_jobs)(delayed(filter_comments)(c) for c in tqdm(comments_for_target_vars))
