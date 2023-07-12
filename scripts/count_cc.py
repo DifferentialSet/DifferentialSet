@@ -101,7 +101,7 @@ def get_target_literals(dimacs_path: str, target_var_prefixes: List[str]):
     
     return list(set(output))
 
-def get_target_literals_dimacs(dimacs_path: str, target_var_prefixes: List[str]):
+def get_target_literals_dimacs(dimacs_path: str, n_jobs, target_var_prefixes: List[str]):
 
     output = []
 
@@ -123,6 +123,7 @@ def get_target_literals_dimacs(dimacs_path: str, target_var_prefixes: List[str])
     import itertools
     pub_literals = list(itertools.chain.from_iterable(pub_literals))
     pub_literals = [l.strip() for l in pub_literals]
+    pub_literals = [l for l in pub_literals if l not in ["TRUE", "FALSE"]]
 
     dup_clauses = []
     for c in clauses:
@@ -148,14 +149,14 @@ def get_target_literals_dimacs(dimacs_path: str, target_var_prefixes: List[str])
             return target_vars_literals
         return []
     from joblib import Parallel, delayed
-    chunks = Parallel(n_jobs=6)(delayed(filter_comments)(c) for c in tqdm(comments_for_target_vars))
+    chunks = Parallel(n_jobs=n_jobs)(delayed(filter_comments)(c) for c in tqdm(comments_for_target_vars))
     print("number of interesting vars: {}/{}".format(sum([len(c) != 0 for c in chunks]), len(comments_for_target_vars)))
     
     from functools import reduce
     return list(set(reduce(lambda x, y: x + y, chunks, [])))
 
 
-def preprocess_dimacs(benchmark_path, new=True):
+def preprocess_dimacs(benchmark_path, n_jobs, new=True):
     # dimacs_path = benchmark_path + "data_cache_cbmc.dimacs"
     # preprocess_one_dimacs(dimacs_path, ["alignment_"])
 
@@ -164,7 +165,7 @@ def preprocess_dimacs(benchmark_path, new=True):
 
     dimacs_path = benchmark_path + "combined_cache_cbmc.dimacs"
     if new:
-        target_literals = get_target_literals_dimacs(dimacs_path, ["label_alignment_", "alignment_"])
+        target_literals = get_target_literals_dimacs(dimacs_path, n_jobs, ["label_alignment_", "alignment_"])
     else:
         target_literals = get_target_literals_old(dimacs_path, ["label_alignment_", "alignment_"])
 

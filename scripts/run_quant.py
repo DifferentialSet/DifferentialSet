@@ -78,24 +78,24 @@ for benchmark_path, compositional_multiplier in benchmark_paths:
     benchmark_collector[benchmark_full_name] = metrics_collector
 
     wall_clock_time_begin = time.time()
-    # print("Building goto program: {}".format(benchmark_name))
-    # with time_context(metrics_collector, "Building goto"):
-    #     subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    # print("Capture memops and construct constraints: {}".format(benchmark_name))
-    # with time_context(metrics_collector, "Analysis"):
-    #     subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    # print("Enumerate DS: {}".format(benchmark_name))
-    # with time_context(metrics_collector, "Enumerate DS"):
-    #     parallel_enumerate(benchmark_path, n_jobs=n_jobs)
+    print("Building goto program: {}".format(benchmark_name))
+    with time_context(metrics_collector, "Building goto"):
+        subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+    print("Capture memops and construct constraints: {}".format(benchmark_name))
+    with time_context(metrics_collector, "Analysis"):
+        subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+    print("Enumerate DS: {}".format(benchmark_name))
+    with time_context(metrics_collector, "Enumerate DS"):
+        parallel_enumerate(benchmark_path, n_jobs=n_jobs)
 
-    # print("Do alignment: {}".format(benchmark_name))
-    # with time_context(metrics_collector, "Do alignment"):
-    #     do_alignment(benchmark_path, align_only=True)
+    print("Do alignment: {}".format(benchmark_name))
+    with time_context(metrics_collector, "Do alignment"):
+        do_alignment(benchmark_path, align_only=True)
     print("Generate DIMACS for counting: {}".format(benchmark_name))
     with time_context(metrics_collector, "Generate DIMACS"):
         subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--to-dimacs", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
         from count_cc import preprocess_dimacs
-        preprocess_dimacs(benchmark_path, True)
+        preprocess_dimacs(benchmark_path, n_jobs)
 
     print("Counting CC: {}".format(benchmark_name))
     with time_context(metrics_collector, "Counting CC"):
