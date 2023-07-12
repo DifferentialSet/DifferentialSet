@@ -195,6 +195,3 @@ def count(dimacs_path, my_env):
     mc = int(last_line.split(" ")[-1])
             
     return mc
-
-# print(count("issta2018-benchmarks-wu/examples/case/", os.environ))
-# preprocess_one_dimacs("/home/cream/src/benchmark/quantification/blazer_array_safe/combined_cache_cbmc.dimacs", ["label_alignment_", "alignment_"])
