@@ -13,13 +13,13 @@
           
           cryptominisat = pkgs.stdenv.mkDerivation rec {
             pname = "cryptominisat";
-            version = "5.11.11";
+            version = "3be6e0f56ce55685e029afb93bfcc2d0800d8c1f";
 
             src = pkgs.fetchFromGitHub {
               owner = "msoos";
               repo = pname;
               rev = version;
-              sha256 = "sha256-TYuOgOOs1EsdNz7ctZMsArTlw3QzHjiPZVozuniiPcI=";
+              sha256 = "sha256-IxneAyYoZZx/G8sonhfmpQ+MtGxfSbDZkAGLk2nCBMY=";
             };
 
             buildInputs = [ pkgs.zlib.dev pkgs.boost.dev pkgs.cmake pkgs.m4ri pkgs.gmp.dev ];
@@ -46,8 +46,8 @@
             src = pkgs.fetchFromGitHub {
               owner = "meelgroup";
               repo = pname;
-              rev = "6c4115470d817f5c536c5b6a928921171387860a";
-              sha256 = "06vvxh36grf27kybk1b5p81fh2rwkkf651d72zcz7dqm685fdq6v"; 
+              rev = "4bd01d210f3121febcd5ba1190271d919c86041e";
+              sha256 = "sha256-nsWNVrXqym+q7B8McefrQ9ShFGp8QLYVY0dTNgZn4oU="; 
             };
 
             buildInputs = [ pkgs.zlib.dev pkgs.boost.dev pkgs.cmake pkgs.m4ri pkgs.gmp.dev cryptominisat ];
@@ -73,8 +73,8 @@
             src = pkgs.fetchFromGitHub {
               owner = "meelgroup";
               repo = pname;
-              rev = "1fd92719778126238319629ab005d7ac01919499";
-              sha256 = "1ig22x3k6qazplszm73mqmm5mn78h7zhh8494q2cdm072944fiy6"; 
+              rev = "4.1.3";
+              sha256 = "sha256-KoLZQVipBaxLggg9GJcncGXzCeygNt8YdmPmzn6W5F4="; 
             };
 
             buildInputs = [ pkgs.zlib.dev pkgs.boost.dev pkgs.cmake pkgs.m4ri pkgs.gmp.dev cryptominisat arjun ];
