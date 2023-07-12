@@ -10,6 +10,40 @@
       flake-utils.lib.eachDefaultSystem (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
+
+          cacheaudit = pkgs.stdenv.mkDerivation rec {
+            pname = "cacheaudit";
+            version = "fine-trace";
+
+            src = pkgs.fetchFromGitHub {
+              owner = "cacheaudit";
+              repo = pname;
+              rev = "fine-trace";
+              sha256 = "sha256-NJQ3NxzgsOgAaHFItGkeWqOFhjQK0KpMVxLkyHBmJlQ="; 
+            };
+
+            buildInputs = [ pkgs.ocaml-ng.ocamlPackages_4_02.ocaml ];
+
+            buildPhase = ''
+              make -j$(nproc)
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin
+              mv cacheaudit $out/bin
+            '';
+
+          };
+
+          gcc49 = pkgs.stdenvNoCC.mkDerivation rec {
+            name = "gcc49";
+            buildInputs = [ pkgs.pkgsi686Linux.gcc48 pkgs.which ];
+            dontUnpack = true;
+            installPhase = ''
+              mkdir -p $out/bin
+              cp `which gcc` $out/bin/gcc4
+            '';
+          };
           
           cryptominisat = pkgs.stdenv.mkDerivation rec {
             pname = "cryptominisat";
@@ -160,6 +194,8 @@
                                                     }
                                                   )
               ]))
+              gcc49
+              cacheaudit
               cryptominisat
               arjun
               approxmc
