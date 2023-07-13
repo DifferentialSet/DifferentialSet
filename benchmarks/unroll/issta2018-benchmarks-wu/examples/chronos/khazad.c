@@ -94,7 +94,7 @@ static ssize_t write__return_value;
 
 // main
 // file khazad.c line 836
-signed int main()
+signed int main(int argc, char** argv)
 {
   uint64_t khazad_crypt_state;
   signed int khazad_crypt_r;

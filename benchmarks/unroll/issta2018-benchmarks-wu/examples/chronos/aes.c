@@ -79,7 +79,7 @@ static const uint32_t rco_tab[10]={ 1u, 2u, 4u, 8u, 16u, 32u, 64u, 128u, 27u, 54
 
 // main
 // file aes.c line 1384
-signed int main()
+signed int main(int argc, char** argv)
 {
   uint8_t aes_encrypt_return_value_byte$190;
   uint8_t aes_encrypt_return_value_byte$189;

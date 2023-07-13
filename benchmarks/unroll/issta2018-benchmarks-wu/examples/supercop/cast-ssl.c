@@ -85,7 +85,7 @@ static ssize_t write__return_value;
 
 // main
 // file cast-ssl.c line 931
-signed int main()
+signed int main(int argc, char** argv)
 {
   uint64_t CAST_encrypt_d;
   uint64_t CAST_encrypt_c;

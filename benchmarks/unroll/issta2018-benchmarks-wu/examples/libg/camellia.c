@@ -58,7 +58,7 @@ static ssize_t write__return_value;
 
 // main
 // file camellia.c line 642
-signed int main()
+signed int main(int argc, char** argv)
 {
   const uint8_t *buf_get_be32_in;
   const void *buf_get_be32__buf;

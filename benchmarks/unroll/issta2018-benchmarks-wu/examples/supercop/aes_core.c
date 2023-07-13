@@ -104,7 +104,7 @@ static ssize_t write__return_value;
 
 // main
 // file aes_core.c line 1091
-signed int main()
+signed int main(int argc, char** argv)
 {
   uint32_t AES_encrypt_t3;
   uint32_t AES_encrypt_t2;

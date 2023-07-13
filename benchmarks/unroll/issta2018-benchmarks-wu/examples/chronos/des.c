@@ -100,7 +100,7 @@ static ssize_t write__return_value;
 
 // main
 // file des.c line 868
-signed int main()
+signed int main(int argc, char** argv)
 {
   signed int des_encrypt_i;
   uint32_t des_encrypt_B;

@@ -95,7 +95,7 @@ static ssize_t write__return_value;
 
 // main
 // file cast5.c line 780
-signed int main()
+signed int main(int argc, char** argv)
 {
   uint8_t *cast5_encrypt_Kr;
   uint32_t *cast5_encrypt_Km;

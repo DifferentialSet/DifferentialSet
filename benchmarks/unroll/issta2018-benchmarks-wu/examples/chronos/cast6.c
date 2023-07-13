@@ -116,7 +116,7 @@ static ssize_t write__return_value;
 
 // main
 // file cast6.c line 508
-signed int main()
+signed int main(int argc, char** argv)
 {
   uint32_t QBAR_I;
   uint32_t *QBAR_Km;
