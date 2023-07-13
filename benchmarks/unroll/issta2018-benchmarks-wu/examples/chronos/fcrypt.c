@@ -318,7 +318,7 @@ static ssize_t write__return_value;
 
 // main
 // file fcrypt.c line 395
-signed int main()
+signed int main(int argc, char** argv)
 {
   uint8_t *fcrypt_encrypt_c;
   uint32_t fcrypt_encrypt_l;

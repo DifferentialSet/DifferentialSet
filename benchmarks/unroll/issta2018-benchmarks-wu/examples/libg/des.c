@@ -112,7 +112,7 @@ static ssize_t write__return_value;
 
 // main
 // file des.c line 1481
-signed int main()
+signed int main(int argc, char** argv)
 {
   uint8_t *buf_put_be32_out;
   uint32_t buf_put_be32_val;

@@ -88,7 +88,7 @@ static ssize_t write__return_value;
 
 // main
 // file anubis.c line 716
-signed int main()
+signed int main(int argc, char** argv)
 {
   uint32_t anubis_crypt_inter[4];
   uint32_t anubis_crypt_state[4];

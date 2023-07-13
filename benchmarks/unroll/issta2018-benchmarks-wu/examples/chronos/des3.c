@@ -106,7 +106,7 @@ static ssize_t write__return_value;
 
 // main
 // file des3.c line 899
-signed int main()
+signed int main(int argc, char** argv)
 {
   signed int des3_ede_encrypt_i;
   uint32_t des3_ede_encrypt_B;
