@@ -1,6 +1,7 @@
 import subprocess, os
 import z3
 from typing import List
+from tqdm import tqdm
 
 def get_target_literals_old(dimacs_path, target_var_prefixes):
     target_literals = []
@@ -111,6 +112,11 @@ def get_target_literals_dimacs(dimacs_path: str, n_jobs, target_var_prefixes: Li
     literal_num = int(splits[2])
     clause_num = int(splits[3])
 
+    # if there are too many clauses, the optimization of
+    # removing non-interefering observations is not worth it
+    if clause_num > 1000000:
+        return get_target_literals_old(dimacs_path, target_var_prefixes)
+
     def mirror_literal(l: str) -> str:
         return str(int(l) + literal_num) if int(l) > 0 else str(int(l) - literal_num)
 
@@ -126,14 +132,12 @@ def get_target_literals_dimacs(dimacs_path: str, n_jobs, target_var_prefixes: Li
     pub_literals = [l for l in pub_literals if l not in ["TRUE", "FALSE"]]
 
     dup_clauses = []
-    for c in clauses:
+    for c in tqdm(clauses):
         splits = c.split(" ")
         dup_clauses.append(" ".join([mirror_literal(l) for l in splits[:-1]]) + " 0\n")
     
     import pycryptosat
-
     
-    from tqdm import tqdm
     comments_for_target_vars = [c.strip() for c in comments if any(prefix in c for prefix in target_var_prefixes)]
     def filter_comments(comment):
         target_vars_literals = [l.strip("-") for l in comment.split(" ")[2:]]
@@ -146,9 +150,7 @@ def get_target_literals_dimacs(dimacs_path: str, n_jobs, target_var_prefixes: Li
             s.add_xor_clause([abs(int(l)), abs(int(mirror_literal(l)))], True)
         is_sat, _ = s.solve()
         if is_sat or is_sat is None:
-            print("interfering")
             return target_vars_literals
-        print("non-interfering")
         return []
     from joblib import Parallel, delayed
     chunks = Parallel(n_jobs=n_jobs)(delayed(filter_comments)(c) for c in tqdm(comments_for_target_vars))

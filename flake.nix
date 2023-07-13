@@ -47,13 +47,13 @@
           
           cryptominisat = pkgs.stdenv.mkDerivation rec {
             pname = "cryptominisat";
-            version = "3be6e0f56ce55685e029afb93bfcc2d0800d8c1f";
+            version = "97663f9c302d3d1e142bc5a2088480ff7cf9f350";
 
             src = pkgs.fetchFromGitHub {
               owner = "msoos";
               repo = pname;
               rev = version;
-              sha256 = "sha256-IxneAyYoZZx/G8sonhfmpQ+MtGxfSbDZkAGLk2nCBMY=";
+              sha256 = "sha256-J2Fd86UUqyxf1Bdgce2WJOoTnGkE14LpjGsWzpqrRnQ=";
             };
 
             buildInputs = [ pkgs.zlib.dev pkgs.boost.dev pkgs.cmake pkgs.m4ri pkgs.gmp.dev ];
@@ -107,11 +107,11 @@
             src = pkgs.fetchFromGitHub {
               owner = "meelgroup";
               repo = pname;
-              rev = "4.1.3";
-              sha256 = "sha256-KoLZQVipBaxLggg9GJcncGXzCeygNt8YdmPmzn6W5F4="; 
+              rev = "4.0.2";
+              sha256 = "sha256-tZzwX6XlEKVSAIgdgciZ1VS3uMC196jkCqhJ2cv/7HQ="; 
             };
 
-            buildInputs = [ pkgs.zlib.dev pkgs.boost.dev pkgs.cmake pkgs.m4ri pkgs.gmp.dev cryptominisat arjun ];
+            buildInputs = [ pkgs.zlib.dev pkgs.boost.dev pkgs.cmake pkgs.m4ri pkgs.gmp.dev cryptominisat ];
 
             configurePhase = ''
               mkdir build
@@ -197,7 +197,6 @@
               gcc49
               cacheaudit
               cryptominisat
-              arjun
               approxmc
               minisat2
               cbmc
