@@ -1,0 +1,5 @@
+--- a/gold/errors.h
++++ b/gold/errors.h
+@@ -26 +26 @@
++#include <string>
+
