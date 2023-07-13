@@ -12,8 +12,8 @@ void branch_id(char *str) {}
 struct khazad_ctx;
 
 
-typedef unsigned long int size_t;
-typedef signed long int ssize_t;
+
+
 
 typedef unsigned long int uint64_t;
 

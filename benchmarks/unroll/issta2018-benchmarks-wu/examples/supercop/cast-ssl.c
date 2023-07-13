@@ -13,8 +13,8 @@ struct cast_key_st;
 
 
 typedef struct cast_key_st CAST_KEY;
-typedef unsigned long int size_t;
-typedef signed long int ssize_t;
+
+
 typedef unsigned long int uint64_t;
 
 

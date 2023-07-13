@@ -12,8 +12,8 @@ void branch_id(char *str) {}
 struct des3_ede_ctx;
 
 
-typedef unsigned long int size_t;
-typedef signed long int ssize_t;
+
+
 
 
 

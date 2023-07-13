@@ -7,8 +7,8 @@ void branch_id(char *str) {}
 #include <unistd.h>
 
 #define __CPROVER_bool int
-typedef unsigned long int size_t;
-typedef signed long int ssize_t;
+
+
 
 
 

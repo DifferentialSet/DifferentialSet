@@ -13,8 +13,8 @@ struct _des_ctx;
 
 
 typedef struct _des_ctx des_ctx;
-typedef unsigned long int size_t;
-typedef signed long int ssize_t;
+
+
 
 
 
