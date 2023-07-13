@@ -32,9 +32,9 @@ my_env["PATH"] = "/home/cream/src/cbmc/aws_build/bin:/home/ubuntu/src/constantin
 
 benchmark_paths = []
 
-benchmark_dir = "./benchmarks/quantification/"
+benchmark_dir = "./benchmarks/mitigation/"
 if not os.path.exists(benchmark_dir):
-    benchmark_dir = "../benchmarks/quantification/"
+    benchmark_dir = "../benchmarks/mitigation/"
     if not os.path.exists(benchmark_dir):
         assert(False)
 
