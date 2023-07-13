@@ -13,8 +13,8 @@ struct anonymous;
 
 
 typedef struct anonymous SEED_context;
-typedef unsigned long int size_t;
-typedef signed long int ssize_t;
+
+
 
 
 

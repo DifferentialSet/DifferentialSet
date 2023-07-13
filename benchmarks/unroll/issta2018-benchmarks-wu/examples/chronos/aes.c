@@ -1,20 +1,30 @@
+#include <stdint.h>
+#include <immintrin.h>
+#include <stdbool.h>
+#include <assert.h>
+
+void branch_id(char *str) {}
 #include <unistd.h>
 
+#define __CPROVER_bool int
 // tag-crypto_aes_ctx
 // file aes.c line 60
 struct crypto_aes_ctx;
 
 
-typedef unsigned int size_t;
-typedef signed int ssize_t;
-typedef unsigned int uint32_t;
-typedef unsigned char uint8_t;
 
+
+
+
+
+// __read_chk
+// file /usr/include/x86_64-linux-gnu/bits/unistd.h line 23
+extern ssize_t __read_chk(signed int, void *, size_t, size_t);
 // aes_decrypt
-// file aes.c line 1336
+// file aes.c line 1341
 void aes_decrypt(struct crypto_aes_ctx *ctx, uint8_t *out, const uint8_t *in);
 // aes_encrypt
-// file aes.c line 1274
+// file aes.c line 1279
 void aes_encrypt(struct crypto_aes_ctx *ctx, uint8_t *out, const uint8_t *in, const signed int key_len);
 // byte
 // file aes.c line 67
@@ -37,6 +47,15 @@ struct crypto_aes_ctx
 };
 
 
+// __read_chk__return_value
+// 
+static ssize_t __read_chk__return_value;
+// byte__return_value
+// 
+static uint8_t byte__return_value;
+// crypto_aes_expand_key__return_value
+// 
+static signed int crypto_aes_expand_key__return_value;
 // crypto_fl_tab
 // file aes.c line 343
 const uint32_t crypto_fl_tab[4][256]={ { 99u, 124u, 119u, 123u, 242u, 107u, 111u, 197u, 48u, 1u, 103u, 43u, 254u, 215u, 171u, 118u, 202u, 130u, 201u, 125u, 250u, 89u, 71u, 240u, 173u, 212u, 162u, 175u, 156u, 164u, 114u, 192u, 183u, 253u, 147u, 38u, 54u, 63u, 247u, 204u, 52u, 165u, 229u, 241u, 113u, 216u, 49u, 21u, 4u, 199u, 35u, 195u, 24u, 150u, 5u, 154u, 7u, 18u, 128u, 226u, 235u, 39u, 178u, 117u, 9u, 131u, 44u, 26u, 27u, 110u, 90u, 160u, 82u, 59u, 214u, 179u, 41u, 227u, 47u, 132u, 83u, 209u, 0u, 237u, 32u, 252u, 177u, 91u, 106u, 203u, 190u, 57u, 74u, 76u, 88u, 207u, 208u, 239u, 170u, 251u, 67u, 77u, 51u, 133u, 69u, 249u, 2u, 127u, 80u, 60u, 159u, 168u, 81u, 163u, 64u, 143u, 146u, 157u, 56u, 245u, 188u, 182u, 218u, 33u, 16u, 255u, 243u, 210u, 205u, 12u, 19u, 236u, 95u, 151u, 68u, 23u, 196u, 167u, 126u, 61u, 100u, 93u, 25u, 115u, 96u, 129u, 79u, 220u, 34u, 42u, 144u, 136u, 70u, 238u, 184u, 20u, 222u, 94u, 11u, 219u, 224u, 50u, 58u, 10u, 73u, 6u, 36u, 92u, 194u, 211u, 172u, 98u, 145u, 149u, 228u, 121u, 231u, 200u, 55u, 109u, 141u, 213u, 78u, 169u, 108u, 86u, 244u, 234u, 101u, 122u, 174u, 8u, 186u, 120u, 37u, 46u, 28u, 166u, 180u, 198u, 232u, 221u, 116u, 31u, 75u, 189u, 139u, 138u, 112u, 62u, 181u, 102u, 72u, 3u, 246u, 14u, 97u, 53u, 87u, 185u, 134u, 193u, 29u, 158u, 225u, 248u, 152u, 17u, 105u, 217u, 142u, 148u, 155u, 30u, 135u, 233u, 206u, 85u, 40u, 223u, 140u, 161u, 137u, 13u, 191u, 230u, 66u, 104u, 65u, 153u, 45u, 15u, 176u, 84u, 187u, 22u }, 
@@ -61,24 +80,37 @@ const uint32_t crypto_it_tab[4][256]={ { 1353184337u, 1399144830u, 0xC3A4171Au, 
     { 0xA7F45150u, 1698790995u, 0xA4171AC3u, 1579629206u, 1806384075u, 1167925233u, 1492823211u, 65227667u, 0xFA302055u, 1836494326u, 1993115793u, 1275262245u, 0xD7E54FFCu, 0xCB2AC5D7u, 1144333952u, 0xA362B58Fu, 1521606217u, 465184103u, 250234264u, 0xC0FE5DE1u, 1966064386u, 0xF04C8112u, 0x97468DA3u, 0xF9D36BC6u, 1603208167u, 0x9C921595u, 2054012907u, 1498584538u, 0x83BED42Du, 561273043u, 1776306473u, 0xC8C98E44u, 0x89C2756Au, 2039411832u, 1045993835u, 1907959773u, 1340194486u, 0xAD88F017u, 0xAC20C966u, 986611124u, 1256153880u, 823846274u, 860985184u, 2136171077u, 2003087840u, 0xAE6BBB84u, 0xA081FE1Cu, 722008468u, 1749577816u, 0xFD458F19u, 1826526343u, 0xF87B52B7u, 0xD373AB23u, 38499042u, 0x8F1FE357u, 0xAB55662Au, 686535175u, 0xC2B52F03u, 2076542618u, 137876389u, 0x872830F2u, 0xA5BF23B2u, 1778582202u, 0x8216ED5Cu, 483363371u, 0xB479A792u, 0xF207F3F0u, 0xE2694EA1u, 0xF4DA65CDu, 0xBE0506D5u, 1647628575u, 0xFEA6C48Au, 1395537053u, 1442030240u, 0xE18A0532u, 0xEBF6A475u, 0xEC830B39u, 0xEF6040AAu, 0x9F715E06u, 275692881u, 0x8A213EF9u, 115185213u, 88006062u, 0xBDE64D46u, 0x8D5491B5u, 1573155077u, 0xD406046Fu, 357589247u, 0xFB981924u, 0xE9BDD697u, 1128303052u, 0x9ED96777u, 1122545853u, 0x8B890788u, 1528424248u, 0xEEC879DBu, 175939911u, 256015593u, 512030921u, 0u, 0x86800983u, 0xED2B3248u, 1880170156u, 1918528590u, 0xFF0EFDFBu, 948244310u, 0xD5AE3D1Eu, 959264295u, 0xD90F0A64u, 0xA65C6821u, 1415289809u, 775300154u, 1728711857u, 0xE757930Fu, 0x96EEB4D2u, 0x919B1B9Eu, 0xC5C0804Fu, 551313826u, 1266113129u, 437394454u, 0xBA93E20Au, 715178213u, 0xE0223C43u, 387650077u, 218697227u, 0xC78BF2ADu, 0xA8B62DB9u, 0xA91E14C8u, 435246981u, 125153100u, 0xDD99EEBBu, 1618977789u, 637663135u, 0xF5725CBCu, 996558021u, 2130402100u, 692292470u, 0xC623CBDCu, 0xFCEDB668u, 0xF1E4B863u, 0xDC31D7CAu, 0x85634210u, 580326208u, 298222624u, 608863613u, 1035719416u, 855223825u, 0xA129C76Du, 798891339u, 817028339u, 1384517100u, 0xE3C177D0u, 380840812u, 0xB970A999u, 1217663482u, 1693009698u, 0x8CFCA8C4u, 1072734234u, 746411736u, 0x903322EFu, 1313441735u, 0xD138D9C1u, 0xA2CA8CFEu, 198481974u, 0x81F5A6CFu, 0xDE7AA528u, 0x8EB7DA26u, 0xBFAD3FA4u, 0x9D3A2CE4u, 0x9278500Du, 0xCC5F6A9Bu, 1182684258u, 328070850u, 0xB8D890E8u, 0xF7392E5Eu, 0xAFC382F5u, 0x805D9FBEu, 0x93D0697Cu, 768962473u, 304467891u, 0x99ACC83Bu, 2098729127u, 1671227502u, 0xBB3BDB7Bu, 2015808777u, 408514292u, 0xB79AEC01u, 0x9A4F83A8u, 1855317605u, 0xE6FFAA7Eu, 0xCFBC2108u, 0xE815EFE6u, 0x9BE7BAD9u, 913263310u, 161475284u, 2091919830u, 0xB2A431AFu, 591342129u, 0x94A5C630u, 1721906624u, 0xBC4E7437u, 0xCA82FCA6u, 0xD090E0B0u, 0xD8A73315u, 0x9804F14Au, 0xDAEC41F7u, 1355644686u, 0xF691172Fu, 0xD64D768Du, 0xB0EF434Du, 1303039060u, 76997855u, 0xB5D19EE3u, 0x886A4C1Bu, 523026872u, 1365591679u, 0xEA5E9D04u, 898367837u, 1955068531u, 1091304238u, 493335386u, 0xD2DB9252u, 1443948851u, 1205234963u, 1641519756u, 211892090u, 351820174u, 1007938441u, 665439982u, 0xC961B735u, 0xE51CE1EDu, 0xB1477A3Cu, 0xDFD29C59u, 1945261375u, 0xCE141879u, 935818175u, 0xCDF753EAu, 0xAAFD5F5Bu, 1866325780u, 0xDB447886u, 0xF3AFCA81u, 0xC468B93Eu, 874788908u, 1084473951u, 0xC31D1672u, 635616268u, 1228679307u, 0x950DFF41u, 27801969u, 0xB30C08DEu, 0xE4B4D89Cu, 0xC1566490u, 0x84CB7B61u, 0xB632D570u, 1550600308u, 1471729730u }, 
     { 0xF45150A7u, 1098797925u, 387629988u, 658151006u, 0xAB3BCB6Bu, 0x9D1FF145u, 0xFAACAB58u, 0xE34B9303u, 807425530u, 1991112301u, 0xCC889176u, 49620300u, 0xE54FFCD7u, 717608907u, 891715652u, 1656065955u, 0xB1DE495Au, 0xBA25671Bu, 0xEA45980Eu, 0xFE5DE1C0u, 801309301u, 1283527408u, 1183687575u, 0xD36BC6F9u, 0x8F03E75Fu, 0x9215959Cu, 1841294202u, 1385552473u, 0xBED42D83u, 1951978273u, 0xE0492969u, 0xC98E44C8u, 0xC2756A89u, 0x8EF47879u, 1486449470u, 0xB927DD71u, 0xE1BEB64Fu, 0x88F017ADu, 550069932u, 0xCE7DB43Au, 0xDF63184Au, 451248689u, 1368875059u, 1398949247u, 1689378935u, 1807451310u, 0x81FE1CA0u, 150574123u, 1215322216u, 1167006205u, 0xDE94876Cu, 2069018616u, 1940595667u, 1265820162u, 534992783u, 1432758955u, 0xEBB20728u, 0xB52F03C2u, 0xC5869A7Bu, 936617224u, 674296455u, 0xBF23B2A5u, 50510442u, 384654466u, 0xCF8A2B1Cu, 2041025204u, 133427442u, 1766760930u, 0xDA65CDF4u, 84334014u, 886120290u, 0xA6C48AFEu, 775200083u, 0xF3A2A055u, 0x8A0532E1u, 0xF6A475EBu, 0x830B39ECu, 1614850799u, 1901987487u, 1857900816u, 557775242u, 0xDD963D06u, 1054715397u, 0xE64D46BDu, 1418835341u, 0xC471055Du, 100954068u, 1348534037u, 0x981924FBu, 0xBDD697E9u, 1082772547u, 0xD967779Eu, 0xE8B0BD42u, 0x8907888Bu, 434583643u, 0xC879DBEEu, 2090944266u, 1115482383u, 0x84F8C91Eu, 0u, 0x80098386u, 724715757u, 287222896u, 1517047410u, 251526143u, 0x850F5638u, 0xAE3D1ED5u, 758523705u, 252339417u, 1550328230u, 1536938324u, 908343854u, 168604007u, 1469255655u, 0xEEB4D296u, 0x9B1B9E91u, 0xC0804FC5u, 0xDC61A220u, 2002413899u, 303830554u, 0x93E20ABAu, 0xA0C0E52Au, 574374880u, 454171927u, 151915277u, 0x8BF2ADC7u, 0xB62DB9A8u, 504678569u, 0xF1578519u, 1974422535u, 0x99EEBBDDu, 2141453664u, 33005350u, 1918680309u, 1715782971u, 0xFB5B347Eu, 1133213225u, 600562886u, 0xEDB668FCu, 0xE4B863F1u, 836225756u, 1665273989u, 0x97134022u, 0xC6842011u, 1250262308u, 0xBBD2F83Du, 0xF9AE1132u, 700935585u, 0x9E1D4B2Fu, 0xB2DCF330u, 0x860DEC52u, 0xC177D0E3u, 0xB32B6C16u, 1890163129u, 0x9411FA48u, 0xE9472264u, 0xFCA8C48Cu, 0xF0A01A3Fu, 2102843436u, 857927568u, 1233635150u, 953795025u, 0xCA8CFEA2u, 0xD498360Bu, 0xF5A6CF81u, 2057644254u, 0xB7DA268Eu, 0xAD3FA4BFu, 976020637u, 2018512274u, 1600822220u, 2119459398u, 0x8DF6C213u, 0xD890E8B8u, 959340279u, 0xC382F5AFu, 1570750080u, 0xD0697C93u, 0xD56FA92Du, 634368786u, 0xACC83B99u, 403744637u, 0x9CE86E63u, 1004239803u, 650971512u, 1500443672u, 0x9AEC01B7u, 1334028442u, 0x95E6656Eu, 0xFFAA7EE6u, 0xBC2108CFu, 368043752u, 0xE7BAD99Bu, 1867173430u, 0x9FEAD409u, 0xB029D67Cu, 0xA431AFB2u, 1059729699u, 0xA5C63094u, 0xA235C066u, 1316239292u, 0x82FCA6CAu, 0x90E0B0D0u, 0xA73315D8u, 82922136u, 0xEC41F7DAu, 0xCD7F0E50u, 0x91172FF6u, 1299615190u, 0xEF434DB0u, 0xAACC544Du, 0x96E4DF04u, 0xD19EE3B5u, 1783372680u, 750893087u, 1699118929u, 1587348714u, 0x8C015D35u, 0x87FA7374u, 201010753u, 1739807261u, 0xDB9252D2u, 283718486u, 0xD66D1347u, 0xD79A8C61u, 0xA1377A0Cu, 0xF8598E14u, 334203196u, 0xA9CEEE27u, 1639396809u, 484568549u, 1199193265u, 0xD29C59DFu, 0xF2553F73u, 337148366u, 0xC773BF37u, 0xF753EACDu, 0xFD5F5BAAu, 1038029935u, 1148749531u, 0xAFCA81F3u, 1756970692u, 607661108u, 0xA3C25F40u, 488010435u, 0xE2BC0C25u, 1009290057u, 234832277u, 0xA8397101u, 201907891u, 0xB4D89CE4u, 1449431233u, 0xCB7B6184u, 852848822u, 1816687708u, 0xB8D04257u }, 
     { 1364240372u, 2119394625u, 449029143u, 982933031u, 1003187115u, 535905693u, 0xACAB58FAu, 1267925987u, 542505520u, 0xADF66D76u, 0x889176CCu, 0xF5254C02u, 1341970405u, 0xC5D7CB2Au, 645940277u, 0xB58FA362u, 0xDE495AB1u, 627514298u, 1167593194u, 1575076094u, 0xC302752Fu, 0x8112F04Cu, 0x8DA39746u, 1808202195u, 65494927u, 362126482u, 0xBFEB7A6Du, 0x95DA5952u, 0xD42D83BEu, 1490231668u, 1227450848u, 0x8E44C8C9u, 1969916354u, 0xF478798Eu, 0x996B3E58u, 668823993u, 0xBEB64FE1u, 0xF017AD88u, 0xC966AC20u, 2108963534u, 1662536415u, 0xE582311Au, 0x97603351u, 1648721747u, 0xB1E07764u, 0xBB84AE6Bu, 0xFE1CA081u, 0xF9942B08u, 1884842056u, 0x8F19FD45u, 0x94876CDEu, 1387788411u, 0xAB23D373u, 1927414347u, 0xE3578F1Fu, 1714072405u, 0xB20728EBu, 788775605u, 0x869A7BC5u, 0xD3A50837u, 821200680u, 598910399u, 45771267u, 0xED5C8216u, 0x8A2B1CCFu, 0xA792B479u, 0xF3F0F207u, 1319232105u, 1707996378u, 114671109u, 0xD11F6234u, 0xC48AFEA6u, 882725678u, 0xA2A055F3u, 87220618u, 0xA475EBF6u, 188345475u, 1084944224u, 1577492337u, 0xBD51106Eu, 1056541217u, 0x963D06DDu, 0xDDAE053Eu, 1296481766u, 0x91B58D54u, 1896177092u, 74437638u, 1627329872u, 421854104u, 0xD697E9BDu, 0x89CC4340u, 1735892697u, 0xB0BD42E8u, 126389129u, 0xE7385B19u, 2044456648u, 0xA1470A7Cu, 2095648578u, 0xF8C91E84u, 0u, 159614592u, 843640107u, 514617361u, 1817080410u, 0xFDFBFF0Eu, 257308805u, 1025430958u, 908540205u, 174381327u, 1747035740u, 0x9BD1545Bu, 607792694u, 212952842u, 0x930FE757u, 0xB4D296EEu, 463376795u, 0x804FC5C0u, 1638015196u, 1516850039u, 471210514u, 0xE20ABA93u, 0xC0E52AA0u, 1011081250u, 303896347u, 235605257u, 0xF2ADC78Bu, 767142070u, 348694814u, 1468340721u, 0xAF4C0775u, 0xEEBBDD99u, 0xA3FD607Fu, 0xF79F2601u, 1555887474u, 1153776486u, 1530167035u, 0x8B762943u, 0xCBDCC623u, 0xB668FCEDu, 0xB863F1E4u, 0xD7CADC31u, 1108378979u, 322970263u, 0x842011C6u, 0x857D244Au, 0xD2F83DBBu, 0xAE1132F9u, 0xC76DA129u, 491466654u, 0xDCF330B2u, 233591430u, 2010178497u, 728503987u, 0xA999B970u, 301615252u, 1193436393u, 0xA8C48CFCu, 0xA01A3FF0u, 1457007741u, 586125363u, 0x87C74E49u, 0xD9C1D138u, 0x8CFEA2CAu, 0x98360BD4u, 0xA6CF81F5u, 0xA528DE7Au, 0xDA268EB7u, 1067761581u, 753179962u, 1343066744u, 1788595295u, 1415726718u, 0xF6C2138Du, 0x90E8B8D8u, 777975609u, 0x82F5AFC3u, 0x9FBE805Du, 1769771984u, 1873358293u, 0xCFB31225u, 0xC83B99ACu, 279411992u, 0xE86E639Cu, 0xDB7BBB3Bu, 0xCD097826u, 1861490777u, 0xEC01B79Au, 0x83A89A4Fu, 0xE6656E95u, 0xAA7EE6FFu, 554225596u, 0xEFE6E815u, 0xBAD99BE7u, 1255028335u, 0xEAD4099Fu, 701922480u, 833598116u, 707863359u, 0xC63094A5u, 901801634u, 1949809742u, 0xFCA6CA82u, 0xE0B0D090u, 857069735u, 0xF14A9804u, 1106762476u, 2131644621u, 389019281u, 1989006925u, 1129165039u, 0xCC544DAAu, 0xE4DF0496u, 0x9EE3B5D1u, 1276872810u, 0xC1B81F2Cu, 1182749029u, 0x9D04EA5Eu, 22885772u, 0xFA737487u, 0xFB2E410Bu, 0xB35A1D67u, 0x9252D2DBu, 0xE9335610u, 1829980118u, 0x9A8C61D7u, 930745505u, 1502483704u, 0xEB893C13u, 0xCEEE27A9u, 0xB735C961u, 0xE1EDE51Cu, 2050797895u, 0x9C59DFD2u, 1430221810u, 410635796u, 1941911495u, 1407897079u, 1599843069u, 0xDF146F3Du, 2022103876u, 0xCA81F3AFu, 0xB93EC468u, 942421028u, 0xC25F40A3u, 376619805u, 0xBC0C25E2u, 680216892u, 0xFF41950Du, 963707304u, 148812556u, 0xD89CE4B4u, 1687208278u, 2069988555u, 0xD570B632u, 1215585388u, 0xD04257B8u } };
-// in
-// file aes.c line 1369
-static uint8_t in[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+// ctx
+// file aes.c line 1376
+struct crypto_aes_ctx ctx={ .key_enc={ 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u }, .key_dec={ 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u },
+    .key_length=0u };
 // in_key
-// file aes.c line 1368
-static uint8_t in_key[32]={ 65, 225, 3, 70, 133, 247, 232, 184, 124, 97, 113, 130, 29, 219, 56, 131, 46, 15, 76, 42, 84, 44, 7, 240, 75, 74, 7, 149, 208, 0, 232, 112 };
-// mock_stdout
-// file aes.c line 1377
-extern char mock_stdout[1u];
+// file aes.c line 1373
+static uint8_t in_key[32]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+// in_pub
+// file aes.c line 1374
+static uint8_t in_pub[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+// main__return_value
+// 
+static signed int main__return_value;
 // out
-// file aes.c line 1370
+// file aes.c line 1375
 static uint8_t out[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 // rco_tab
 // file aes.c line 77
 static const uint32_t rco_tab[10]={ 1u, 2u, 4u, 8u, 16u, 32u, 64u, 128u, 27u, 54u };
+// read__return_value
+// 
+static ssize_t read__return_value;
+// ror32__return_value
+// 
+static uint32_t ror32__return_value;
+// write__return_value
+// 
+static ssize_t write__return_value;
 
 // main
-// file aes.c line 1384
+// file aes.c line 1378
 signed int main(int argc, char** argv)
 {
   uint8_t aes_encrypt_return_value_byte$190;
@@ -293,11 +325,6 @@ signed int main(int argc, char** argv)
   uint8_t crypto_aes_expand_key_return_value_byte;
   unsigned int ror32_shift;
   uint32_t ror32_word;
-  uint32_t crypto_aes_expand_key_tmp_assign$3;
-  uint32_t crypto_aes_expand_key_tmp_assign$2;
-  uint32_t crypto_aes_expand_key_tmp_assign$1;
-  uint32_t crypto_aes_expand_key_tmp_assign$0;
-  uint32_t crypto_aes_expand_key_tmp_assign;
   uint32_t crypto_aes_expand_key_j;
   uint32_t crypto_aes_expand_key_w;
   uint32_t crypto_aes_expand_key_v;
@@ -308,13 +335,12 @@ signed int main(int argc, char** argv)
   unsigned int crypto_aes_expand_key_key_len;
   struct crypto_aes_ctx *crypto_aes_expand_key_ctx;
   const uint8_t *crypto_aes_expand_key_in_key;
-  struct crypto_aes_ctx main_ctx;
-  read(0, (void *)in_key, 32u);
-  read(0, (void *)in, 64u);
+  read(0, (void *)in_key, 32ul);
+  read(0, (void *)in_pub, 64ul);
   /* begin function crypto_aes_expand_key */
   ;
   crypto_aes_expand_key_in_key = in_key;
-  crypto_aes_expand_key_ctx = &main_ctx;
+  crypto_aes_expand_key_ctx = &ctx;
   crypto_aes_expand_key_key_len = 24u;
   crypto_aes_expand_key_key = (const uint32_t *)crypto_aes_expand_key_in_key;
   if(!(crypto_aes_expand_key_key_len == 24u))
@@ -323,22 +349,17 @@ signed int main(int argc, char** argv)
   else
   {
     crypto_aes_expand_key_ctx->key_length = crypto_aes_expand_key_key_len;
-    crypto_aes_expand_key_tmp_assign = crypto_aes_expand_key_key[0];
-    crypto_aes_expand_key_ctx->key_enc[0] = crypto_aes_expand_key_tmp_assign;
-    crypto_aes_expand_key_ctx->key_dec[(signed int)(crypto_aes_expand_key_key_len + 24u)] = crypto_aes_expand_key_tmp_assign;
-    crypto_aes_expand_key_tmp_assign$0 = crypto_aes_expand_key_key[1];
-    crypto_aes_expand_key_ctx->key_enc[1] = crypto_aes_expand_key_tmp_assign$0;
-    crypto_aes_expand_key_ctx->key_dec[(signed int)(crypto_aes_expand_key_key_len + 25u)] = crypto_aes_expand_key_tmp_assign$0;
-    crypto_aes_expand_key_tmp_assign$1 = crypto_aes_expand_key_key[2];
-    crypto_aes_expand_key_ctx->key_enc[2] = crypto_aes_expand_key_tmp_assign$1;
-    crypto_aes_expand_key_ctx->key_dec[(signed int)(crypto_aes_expand_key_key_len + 26u)] = crypto_aes_expand_key_tmp_assign$1;
-    crypto_aes_expand_key_tmp_assign$2 = crypto_aes_expand_key_key[3];
-    crypto_aes_expand_key_ctx->key_enc[3] = crypto_aes_expand_key_tmp_assign$2;
-    crypto_aes_expand_key_ctx->key_dec[(signed int)(crypto_aes_expand_key_key_len + 27u)] = crypto_aes_expand_key_tmp_assign$2;
+    crypto_aes_expand_key_ctx->key_dec[(signed int)(crypto_aes_expand_key_key_len + 24u)] = crypto_aes_expand_key_key[0];
+    crypto_aes_expand_key_ctx->key_enc[0] = crypto_aes_expand_key_key[0];
+    crypto_aes_expand_key_ctx->key_dec[(signed int)(crypto_aes_expand_key_key_len + 25u)] = crypto_aes_expand_key_key[1];
+    crypto_aes_expand_key_ctx->key_enc[1] = crypto_aes_expand_key_key[1];
+    crypto_aes_expand_key_ctx->key_dec[(signed int)(crypto_aes_expand_key_key_len + 26u)] = crypto_aes_expand_key_key[2];
+    crypto_aes_expand_key_ctx->key_enc[2] = crypto_aes_expand_key_key[2];
+    crypto_aes_expand_key_ctx->key_dec[(signed int)(crypto_aes_expand_key_key_len + 27u)] = crypto_aes_expand_key_key[3];
+    crypto_aes_expand_key_ctx->key_enc[3] = crypto_aes_expand_key_key[3];
     crypto_aes_expand_key_ctx->key_enc[4] = crypto_aes_expand_key_key[4];
-    crypto_aes_expand_key_tmp_assign$3 = crypto_aes_expand_key_key[5];
-    crypto_aes_expand_key_ctx->key_enc[5] = crypto_aes_expand_key_tmp_assign$3;
-    crypto_aes_expand_key_t = crypto_aes_expand_key_tmp_assign$3;
+    crypto_aes_expand_key_t = crypto_aes_expand_key_key[5];
+    crypto_aes_expand_key_ctx->key_enc[5] = crypto_aes_expand_key_key[5];
     crypto_aes_expand_key_i = 0u;
     /* begin function ror32 */
     ;
@@ -2019,9 +2040,9 @@ signed int main(int argc, char** argv)
   ;
   /* begin function aes_encrypt */
   ;
-  aes_encrypt_ctx = &main_ctx;
+  aes_encrypt_ctx = &ctx;
   aes_encrypt_out = out;
-  aes_encrypt_in = in;
+  aes_encrypt_in = in_pub;
   aes_encrypt_key_len = 24;
   aes_encrypt_src = (const uint32_t *)aes_encrypt_in;
   aes_encrypt_dst = (uint32_t *)aes_encrypt_out;
@@ -3439,7 +3460,7 @@ signed int main(int argc, char** argv)
   aes_encrypt_dst[3] = aes_encrypt_b0[3];
   /* end function aes_encrypt */
   ;
-  write(1, (void *)out, 64u);
-  return 0;
+  write(1, (const void *)out, 64ul);
+  main__return_value = 0;
 }
 
