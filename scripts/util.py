@@ -34,6 +34,8 @@ typedef struct __pthread_internal_slist
 {
   struct __pthread_internal_slist *__next;
 } __pthread_slist_t;""",
+"typedef unsigned long int size_t;",
+"typedef signed long int ssize_t;",
 "typedef unsigned short int __uint16_t;",
 "typedef unsigned int __uint32_t;",
 "typedef unsigned long long int __uint64_t;",

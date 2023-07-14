@@ -1,0 +1,12 @@
+PING www.google.com (142.251.41.36) 56(84) bytes of data.
+64 bytes from yyz12s08-in-f4.1e100.net (142.251.41.36): icmp_seq=1 ttl=109 time=4.65 ms
+64 bytes from yyz12s08-in-f4.1e100.net (142.251.41.36): icmp_seq=2 ttl=109 time=4.77 ms
+
+--- www.google.com ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 4.650/4.710/4.771/0.060 ms
+wolfSSL error: can't load client private key file, check file and run from wolfSSL home dir
+-e 
+
+Client connection failed
+FAIL scripts/google.test (exit status: 1)

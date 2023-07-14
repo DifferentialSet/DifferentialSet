@@ -3201,9 +3201,6 @@ int wc_ecc_mulmod(mp_int* k, ecc_point *G, ecc_point *R, mp_int* a,
 
 #endif /* !WOLFSSL_ATECC508A */
 
-int pointer_index = 0;
-void *pointer_list[100];
-
 /**
  * use a heap hint when creating new ecc_point
  * return an allocated point on success or NULL on failure
@@ -3218,7 +3215,6 @@ ecc_point* wc_ecc_new_point_h(void* heap)
    if (p == NULL) {
       return NULL;
    }
-   pointer_list[++pointer_index] = p;
    XMEMSET(p, 0, sizeof(ecc_point));
 
 #ifndef ALT_ECC_SIZE

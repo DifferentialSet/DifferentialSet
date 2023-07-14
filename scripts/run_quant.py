@@ -32,36 +32,36 @@ if not os.path.exists(benchmark_dir):
 benchmark_paths = []
 
 # Blazer benchmarks
-# benchmark_paths += [(benchmark_dir + "blazer_array_safe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_array_unsafe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_loopandbranch_safe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_loopandbranch_unsafe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_sanity_safe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_sanity_unsafe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_straightline_safe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_straightline_unsafe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_unixlogin_safe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_unixlogin_unsafe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_array_safe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_array_unsafe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_loopandbranch_safe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_loopandbranch_unsafe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_sanity_safe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_sanity_unsafe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_straightline_safe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_straightline_unsafe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_unixlogin_safe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_unixlogin_unsafe/", 1)]
 benchmark_paths += [(benchmark_dir + "blazer_modpow1_safe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_modpow1_unsafe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_modpow2_safe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_modpow2_unsafe/", 32)] # compositional
-# benchmark_paths += [(benchmark_dir + "blazer_passwordEq_safe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_passwordEq_unsafe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_k96_safe/", 32)] # compositional
-# benchmark_paths += [(benchmark_dir + "blazer_k96_unsafe/", 32)] # compositional
-# benchmark_paths += [(benchmark_dir + "blazer_gpt14_safe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_gpt14_unsafe/", 32)] # compositional
-# benchmark_paths += [(benchmark_dir + "blazer_login_safe/", 1)]
-# benchmark_paths += [(benchmark_dir + "blazer_login_unsafe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_modpow1_unsafe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_modpow2_safe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_modpow2_unsafe/", 32)] # compositional
+benchmark_paths += [(benchmark_dir + "blazer_passwordEq_safe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_passwordEq_unsafe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_k96_safe/", 32)] # compositional
+benchmark_paths += [(benchmark_dir + "blazer_k96_unsafe/", 32)] # compositional
+benchmark_paths += [(benchmark_dir + "blazer_gpt14_safe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_gpt14_unsafe/", 32)] # compositional
+benchmark_paths += [(benchmark_dir + "blazer_login_safe/", 1)]
+benchmark_paths += [(benchmark_dir + "blazer_login_unsafe/", 1)]
 
 # # RSA benchmarks
-# benchmark_paths += [(benchmark_dir + "RSA/square_and_multiply/", 1)]
-# benchmark_paths += [(benchmark_dir + "RSA/square_and_always_multiply/", 1)]
-# benchmark_paths += [(benchmark_dir + "RSA/windowed_modular_exp_libgcrypt_161/", 1)]
-# benchmark_paths += [(benchmark_dir + "RSA/windowed_modular_exp_libgcrypt_163/", 1)]
-# benchmark_paths += [(benchmark_dir + "RSA/scatter_gather_openssl_1.0.2f/", 1)]
-# benchmark_paths += [(benchmark_dir + "RSA/defensive_gather/", 1)]
+benchmark_paths += [(benchmark_dir + "RSA/square_and_multiply/", 1)]
+benchmark_paths += [(benchmark_dir + "RSA/square_and_always_multiply/", 1)]
+benchmark_paths += [(benchmark_dir + "RSA/windowed_modular_exp_libgcrypt_161/", 1)]
+benchmark_paths += [(benchmark_dir + "RSA/windowed_modular_exp_libgcrypt_163/", 1)]
+benchmark_paths += [(benchmark_dir + "RSA/scatter_gather_openssl_1.0.2f/", 1)]
+benchmark_paths += [(benchmark_dir + "RSA/defensive_gather/", 1)]
 
 import multiprocessing
 n_jobs = multiprocessing.cpu_count() - 1
@@ -93,7 +93,7 @@ for benchmark_path, compositional_multiplier in benchmark_paths:
         do_alignment(benchmark_path, align_only=True)
     print("Generate DIMACS for counting: {}".format(benchmark_name))
     with time_context(metrics_collector, "Generate DIMACS"):
-        subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--to-dimacs", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        # subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--to-dimacs", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
         from count_cc import preprocess_dimacs
         preprocess_dimacs(benchmark_path, n_jobs)
 

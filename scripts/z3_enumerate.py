@@ -1,4 +1,5 @@
 # %%
+from tqdm import tqdm
 from unittest import skip
 from z3 import *
 import json
@@ -61,33 +62,7 @@ def get_var_str(f):
 # %%
 import time
 
-def get_interfering_public_vars(constraints, ctx, target_var, pub_vars, sec_vars, timeout):
-    interefering_public_vars = []
-    for pub_v in pub_vars:
-        solver = Solver(ctx=ctx)
-        solver.set("timeout", timeout*1000)
-        var_renaming_mapping = {}
-        for c in constraints:
-            renamed_c = c
-            for v in get_vars(c):
-                assert(is_const(v))
-                if v in var_renaming_mapping:
-                    renamed_v = var_renaming_mapping[v]
-                else:
-                    renamed_v = Const(str(v)+"_dup", v.sort())
-                    var_renaming_mapping[v] = renamed_v
-                renamed_c = substitute(renamed_c, (v, renamed_v))
-            solver.add(c)
-            solver.add(renamed_c)
-        solver.add(target_var != var_renaming_mapping[target_var])
-        solver.add([v == var_renaming_mapping[v] for v in sec_vars if v in var_renaming_mapping])
-        solver.add([v == var_renaming_mapping[v] for v in pub_vars - {pub_v} if v in var_renaming_mapping])
-
-        if solver.check() == sat:
-            interefering_public_vars.append(pub_v)
-    return interefering_public_vars
-
-def enumerate_solution(constraints, ctx, target_var, pub_vars, sec_vars, timeout=600, debug=False):
+def enumerate_solution(constraints, ctx, target_var, pub_vars, sec_vars, timeout, debug=False):
 
     total_timeout = 600
 
@@ -260,8 +235,8 @@ def get_cbmc_var_eq_mapping(cbmc_constraints):
         # var_eq_mapping[c.children()[0]] = c
         if (is_eq(c)):
             if "Store" in str(c):
-                vars = get_vars(c)
-                for arr in [v for v in vars if "array" in str(v)]:
+                vars_dict = get_vars_dict(c)
+                for arr in [v for k, v in vars_dict.items() if "array" in k]:
                     add_or_create(var_eq_mapping, arr, c)
                     # var_eq_mapping[arr] = [c] if arr not in var_eq_mapping else var_eq_mapping[arr] + [c]
             if ("array" in str(c.children()[0]) and "[" in str(c.children()[0])):
@@ -271,8 +246,8 @@ def get_cbmc_var_eq_mapping(cbmc_constraints):
             add_or_create(var_eq_mapping, c.children()[0], c)
             # var_eq_mapping[c.children()[0]] = [c] if c.children()[0] not in var_eq_mapping else var_eq_mapping[c.children()[0]] + [c]
         else:
-            vs = list(get_vars(c))
-            object_size_vs = [v for v in vs if str(v).startswith("object_size")]
+            vars_dict = get_vars_dict(c)
+            object_size_vs = [v for k, v in vars_dict.items() if k.startswith("object_size")]
             if len(object_size_vs) == 1:
                 object_size_v = object_size_vs[0]
                 if object_size_v in var_eq_mapping:
@@ -465,8 +440,8 @@ def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_m
                 # if pc is sensitive, we need to enumerate all possible values because we can't symbolize, otherwise may out of bound
                 max_depthes = [0]
             else:
-                max_depthes = [20, 3]
-            offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, max_depthes=max_depthes, use_bound_as_last_resort=True, debug=debug)
+                max_depthes = [10, 3]
+            offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, max_depthes=max_depthes, timeout=3, use_bound_as_last_resort=True, debug=debug)
             if len(offset_vals) != 0:
                 object_offset_pairs.extend([(object_id, offset_val, pub_tuples) for offset_val, pub_tuples in offset_vals])
             else:
@@ -479,8 +454,8 @@ def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_m
             # if pc is sensitive, we need to enumerate all possible values because we can't symbolize, otherwise may out of bound
             max_depthes = [0]
         else:
-            max_depthes = [20, 3]
-        offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, max_depthes=[20, 3], use_bound_as_last_resort=True, debug=debug)
+            max_depthes = [10, 3]
+        offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, max_depthes=max_depthes, timeout=3, use_bound_as_last_resort=True, debug=debug)
         if len(offset_vals) != 0:
             object_offset_pairs.extend([(None, offset_val, pub_tuples) for offset_val, pub_tuples in offset_vals])
         else:
@@ -548,6 +523,7 @@ def get_var_in_script(script):
 def wrapper(chunk, bounds_script, cbmc_script, obsv_script, branch_script, largest_pointer_number):
     result = []
 
+    print("Start building z3 context", flush=True)
     ctx = Context()
     bounds_constraints = parse_smt2_string("".join(bounds_script), ctx=ctx)
     cbmc_constraints = parse_smt2_string("".join(cbmc_script), ctx=ctx)
@@ -557,6 +533,7 @@ def wrapper(chunk, bounds_script, cbmc_script, obsv_script, branch_script, large
     cbmc_mapping = get_cbmc_var_eq_mapping(cbmc_constraints)
     obsv_mapping = get_obsv_var_eq_mapping(obsv_constraints)
     branch_label_mapping = get_branch_label_mapping(branch_label_constraints)
+    print("Finish building z3 context", flush=True)
     for o in chunk:
         obsv_name_and_address_pairs = enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_mapping, o, ctx, largest_pointer_number, cbmc_script)
         result.append(obsv_name_and_address_pairs)
@@ -579,19 +556,6 @@ def get_ds_macro_def(config_dir, infos, avx_version):
             ds_macro_name = "obsv_ds_" + obsv.split("_", 1)[1]
             ds_bases_size_macro_name = "obsv_ds_bases_size_" + obsv.split("_", 1)[1]
             ds_size_macro_name = "obsv_ds_size_" + obsv.split("_", 1)[1]
-
-
-
-        # pub_to_obsv_mapping = {}
-        # for obsv_tup, pub_tuples in info.items():
-        #     # Assume only one public input interfere with the observation
-        #     assert(all(len(t) == 1 for t in pub_tuples))
-
-        #     for t in pub_tuples:
-        #         pub_to_obsv_mapping.setdefault(t[0], []).append(obsv_tup)
-
-        # if not pub_to_obsv_mapping:
-        #     pub_to_obsv_mapping[""] = info.keys()
 
 
         if isinstance(info, dict):
@@ -688,7 +652,7 @@ def get_ds_macro_def(config_dir, infos, avx_version):
     return macro_def_string, ds_base_t_list_raw_out
 
 from alignment import align_ds
-from tqdm import tqdm
+
 def parallel_enumerate(config_dir, n_jobs=5):
     smt2_path = config_dir + "cbmc.smt2"
     decls, bounds_script, cbmc_script, object_size_script, obsv_script, branch_script = split_script(smt2_path)
@@ -708,7 +672,7 @@ def parallel_enumerate(config_dir, n_jobs=5):
     pc_vars = [o.strip("|") for o in list_of_vars if o.startswith("$") and o.replace("$", "").isnumeric()]
     obsv_vars += pc_vars
 
-    chunk_size = len(obsv_vars) // (5*n_jobs) # each job will process 5 chunks
+    chunk_size = len(obsv_vars) // (3*n_jobs) # each job will process 3 chunks(3 units of overhead)
     if (chunk_size == 0):
         chunk_size = 1
     random.shuffle(obsv_vars)

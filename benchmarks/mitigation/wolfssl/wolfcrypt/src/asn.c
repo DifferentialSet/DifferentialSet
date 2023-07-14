@@ -2804,7 +2804,7 @@ int wc_CreatePKCS8Key(byte* out, word32* outSz, byte* key, word32 keySz,
 
         /*  version Version
          *  no header information just INTEGER */
-        // sz = SetMyVersion(PKCS8v0, out + keyIdx, 0);
+        sz = SetMyVersion(PKCS8v0, out + keyIdx, 0);
         tmpSz += sz; keyIdx += sz;
 
         /*  privateKeyAlgorithm PrivateKeyAlgorithmIdentifier */
@@ -15725,7 +15725,7 @@ static int wc_BuildEccKeyDer(ecc_key* key, byte* output, word32 inLen,
     }
 
     /* make headers */
-    // verSz = SetMyVersion(1, ver, FALSE);
+    verSz = SetMyVersion(1, ver, FALSE);
     seqSz = SetSequence(verSz + prvidx + pubidx + curveidx, seq);
 
     totalSz = prvidx + pubidx + curveidx + verSz + seqSz;

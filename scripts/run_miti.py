@@ -24,11 +24,6 @@ def time_context(collector, item_name):
         print("CPU time: {}".format((child_cpu_time, self_cpu_time)))
 
 my_env = os.environ.copy()
-home_path = "/app/benchmarks/mitigation"
-# my_env["PATH"] = "/home/cream/src/DSA_github/cbmc/build_rel/bin:" + my_env["PATH"]
-# my_env["PATH"] = "/home/cream/src/cbmc/build_5.62_rel/bin:" + my_env["PATH"]
-my_env["PATH"] = "/home/cream/src/cbmc/aws_build/bin:/home/ubuntu/src/constantine/src/llvm-9/bin/bin:" + my_env["PATH"]
-# my_env["PATH"] = "/home/ubuntu/src/cbmc/aws_build/bin:" + my_env["PATH"]
 
 benchmark_paths = []
 
@@ -69,28 +64,7 @@ benchmark_paths += [benchmark_dir + "binsec/bearssl/aes_big_wrapper/"]
 benchmark_paths += [benchmark_dir + "binsec/bearssl/des_tab_wrapper/"]
 benchmark_paths += [benchmark_dir + "binsec/tls1_cbc_remove_padding_lucky13_wrapper/"]
 
-benchmark_paths += [benchmark_dir + "wolfssl/"]
-
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/tail_while/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/head_while/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/strlen/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/memset/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/complex/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/alias/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/two_alias/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/object_size/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/condition/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/loop_with_memop/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/play/branch/"]
-# benchmark_paths += ["/home/ubuntu/src/DSA_github/benchmarks/mitigation/play/store/"]
-# benchmark_paths += ["/home/ubuntu/src/DSA_github/benchmarks/mitigation/play/pub_index/"]
-# benchmark_paths += ["/home/ubuntu/src/DSA_github/benchmarks/mitigation/play/offset_multi_vars/"]
-# benchmark_paths += ["/home/cream/src/DSA_github/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/fcrypt/"]
-# benchmark_paths += ["/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/"]
-# benchmark_paths += ["/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/unroll_1/"]
-# benchmark_paths += ["/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/test0/"]
-# benchmark_paths += ["/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/test1/"]
-
+benchmark_paths += [benchmark_dir + "wolfssl/unroll_1/"]
 
 import subprocess
 
@@ -117,7 +91,11 @@ for benchmark_path in benchmark_paths:
 
     print("Building goto program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Building goto"):
-        subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        if "wolfssl" in benchmark_path:
+            cmd = "goto-cc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -DHAVE_CONFIG_H -DBUILDING_WOLFSSL -DBUILDING_WOLFSSL -DWOLFSSL_TLS13 -DHAVE_TLS_EXTENSIONS -DHAVE_SUPPORTED_CURVES -D_POSIX_THREADS -fvisibility=hidden -DHAVE_THREAD_LS -DNDEBUG -DTFM_NO_ASM -DWOLFSSL_NO_ASM -pthread -DWC_NO_HARDEN -DHAVE_AESGCM -DWOLFSSL_SHA512 -DWOLFSSL_SHA384 -DHAVE_HKDF -DNO_DSA -DHAVE_ECC -DTFM_ECC256 -DECC_SHAMIR -DNO_WOLFSSL_MEMORY -DWC_RSA_PSS -DNO_DH -DWOLFSSL_BASE64_ENCODE -DNO_RC4 -DNO_HC128 -DNO_RABBIT -DWOLFSSL_SHA224 -DWOLFSSL_SHA3 -DWOLFSSL_SHAKE256 -DHAVE_POLY1305 -DHAVE_ONE_TIME_AUTH -DNO_CHACHA_ASM -DHAVE_CHACHA -DHAVE_HASHDRBG -DHAVE_TLS_EXTENSIONS -DHAVE_SUPPORTED_CURVES -DHAVE_EXTENDED_MASTER -DNO_RC4 -DHAVE_ENCRYPT_THEN_MAC -DNO_PSK -DNO_MD4 -DNO_PWDBASED -DUSE_FAST_MATH -DWOLFSSL_X86_64_BUILD -DWC_NO_ASYNC_THREADING -DHAVE_DH_DEFAULT_PARAMS -DNO_DES3 -Wall -Wno-unused -O2 -DHAVE___UINT128_T=1 -DWOLFSSL_DEBUG_MATH -DFP_MAX_BITS=256 -Wno-error -g -Wno-pragmas -Wall -Wno-strict-aliasing -Wextra -Wunknown-pragmas --param=ssp-buffer-size=1 -Waddress -Warray-bounds -Wbad-function-cast -Wchar-subscripts -Wcomment -Wfloat-equal -Wformat-security -Wformat=2 -Wmaybe-uninitialized -Wmissing-field-initializers -Wmissing-noreturn -Wmissing-prototypes -Wnested-externs -Wnormalized=id -Woverride-init -Wpointer-arith -Wpointer-sign -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-overflow=1 -Wstrict-prototypes -Wswitch-enum -Wundef -Wunused -Wunused-result -Wunused-variable -Wwrite-strings -fwrapv -fno-unroll-loops -I .. ../wolfcrypt/src/*.c ../IDE/MDK5-ARM/Src/ssl-dummy.c unroll_1.c -o main"
+            subprocess.run(cmd, capture_output=True, cwd=benchmark_path, env=my_env, shell=True, check=True)
+        else:
+            subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Capture memops and construct constraints: {}".format(benchmark_name))
     with time_context(metrics_collector, "Analysis"):
         subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
