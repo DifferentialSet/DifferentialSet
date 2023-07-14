@@ -62,32 +62,6 @@ def get_var_str(f):
 # %%
 import time
 
-def get_interfering_public_vars(constraints, ctx, target_var, pub_vars, sec_vars, timeout):
-    interefering_public_vars = []
-    for pub_v in pub_vars:
-        solver = Solver(ctx=ctx)
-        solver.set("timeout", timeout*1000)
-        var_renaming_mapping = {}
-        for c in constraints:
-            renamed_c = c
-            for v in get_vars(c):
-                assert(is_const(v))
-                if v in var_renaming_mapping:
-                    renamed_v = var_renaming_mapping[v]
-                else:
-                    renamed_v = Const(str(v)+"_dup", v.sort())
-                    var_renaming_mapping[v] = renamed_v
-                renamed_c = substitute(renamed_c, (v, renamed_v))
-            solver.add(c)
-            solver.add(renamed_c)
-        solver.add(target_var != var_renaming_mapping[target_var])
-        solver.add([v == var_renaming_mapping[v] for v in sec_vars if v in var_renaming_mapping])
-        solver.add([v == var_renaming_mapping[v] for v in pub_vars - {pub_v} if v in var_renaming_mapping])
-
-        if solver.check() == sat:
-            interefering_public_vars.append(pub_v)
-    return interefering_public_vars
-
 def enumerate_solution(constraints, ctx, target_var, pub_vars, sec_vars, timeout, debug=False):
 
     total_timeout = 600
@@ -582,19 +556,6 @@ def get_ds_macro_def(config_dir, infos, avx_version):
             ds_macro_name = "obsv_ds_" + obsv.split("_", 1)[1]
             ds_bases_size_macro_name = "obsv_ds_bases_size_" + obsv.split("_", 1)[1]
             ds_size_macro_name = "obsv_ds_size_" + obsv.split("_", 1)[1]
-
-
-
-        # pub_to_obsv_mapping = {}
-        # for obsv_tup, pub_tuples in info.items():
-        #     # Assume only one public input interfere with the observation
-        #     assert(all(len(t) == 1 for t in pub_tuples))
-
-        #     for t in pub_tuples:
-        #         pub_to_obsv_mapping.setdefault(t[0], []).append(obsv_tup)
-
-        # if not pub_to_obsv_mapping:
-        #     pub_to_obsv_mapping[""] = info.keys()
 
 
         if isinstance(info, dict):
