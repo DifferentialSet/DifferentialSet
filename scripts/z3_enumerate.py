@@ -466,7 +466,7 @@ def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_m
                 # if pc is sensitive, we need to enumerate all possible values because we can't symbolize, otherwise may out of bound
                 max_depthes = [0]
             else:
-                max_depthes = [20, 3]
+                max_depthes = [10, 3]
             offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, max_depthes=max_depthes, timeout=3, use_bound_as_last_resort=True, debug=debug)
             if len(offset_vals) != 0:
                 object_offset_pairs.extend([(object_id, offset_val, pub_tuples) for offset_val, pub_tuples in offset_vals])
@@ -480,8 +480,8 @@ def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_m
             # if pc is sensitive, we need to enumerate all possible values because we can't symbolize, otherwise may out of bound
             max_depthes = [0]
         else:
-            max_depthes = [20, 3]
-        offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, max_depthes=[10, 3], timeout=3, use_bound_as_last_resort=True, debug=debug)
+            max_depthes = [10, 3]
+        offset_vals = slice_and_enumerate(cbmc_mapping, constraints, offset_var, ctx, max_depthes=max_depthes, timeout=3, use_bound_as_last_resort=True, debug=debug)
         if len(offset_vals) != 0:
             object_offset_pairs.extend([(None, offset_val, pub_tuples) for offset_val, pub_tuples in offset_vals])
         else:
