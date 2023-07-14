@@ -61,7 +61,7 @@
             configurePhase = ''
               mkdir build
               cd build
-              cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=$out ..
+              cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=$out -DLARGEMEM=ON ..
             '';
 
             buildPhase = ''
