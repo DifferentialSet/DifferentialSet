@@ -15,6 +15,7 @@ mitigated.c
 pointer_numbering.csv
 sensitive_ds_info.csv
 transform_only.c
+transform_only
 transform_only_dump
 mitigated
 out
