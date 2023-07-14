@@ -55,7 +55,7 @@ benchmark_paths += [(benchmark_dir + "blazer_gpt14_unsafe/", 32)] # compositiona
 benchmark_paths += [(benchmark_dir + "blazer_login_safe/", 1)]
 benchmark_paths += [(benchmark_dir + "blazer_login_unsafe/", 1)]
 
-# # RSA benchmarks
+# # # RSA benchmarks
 benchmark_paths += [(benchmark_dir + "RSA/square_and_multiply/", 1)]
 benchmark_paths += [(benchmark_dir + "RSA/square_and_always_multiply/", 1)]
 benchmark_paths += [(benchmark_dir + "RSA/windowed_modular_exp_libgcrypt_161/", 1)]
@@ -101,10 +101,18 @@ for benchmark_path, compositional_multiplier in benchmark_paths:
     with time_context(metrics_collector, "Counting CC"):
         from count_cc import count, get_secret_size
         dimacs_path = benchmark_path + "combined_cache_cbmc.dimacs"
-        count = count(dimacs_path, my_env)
+        f = open(dimacs_path, 'r')
+        # get last line
+        last_line = f.readlines()[-1]
+        if "c ind  0" in last_line:
+            count = 0
+        else:
+            count = count(dimacs_path, my_env)
         secret_size = get_secret_size(dimacs_path)
         import math
-        if secret_size < math.log(count, 2) * compositional_multiplier:
+        if count == 0:
+            metrics_collector["CC"] = "0"
+        elif secret_size < math.log(count, 2) * compositional_multiplier:
             metrics_collector["CC"] = "{}".format(secret_size)
         elif compositional_multiplier != 1:
             metrics_collector["CC"] = "log({}) * {}".format(count, compositional_multiplier)
@@ -118,7 +126,9 @@ for benchmark_path, compositional_multiplier in benchmark_paths:
     with open(benchmark_path+"/{}".format(metrics_file), "a") as f:
         f.write(json.dumps(metrics_collector))
         f.write("\n")
+print(json.dumps(benchmark_collector, indent=4))
+
 
 with open("./{}".format(metrics_file), "a") as f:
-    f.write(json.dumps(benchmark_collector))
+    f.write(json.dumps(benchmark_collector, indent=4))
     f.write("\n")
