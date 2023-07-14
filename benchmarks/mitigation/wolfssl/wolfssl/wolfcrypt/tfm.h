@@ -420,14 +420,15 @@ MP_API void fp_forcezero (fp_int * a);
 MP_API void fp_free(fp_int* a);
 
 /* zero/one/even/odd/neg/word ? */
-#define fp_iszero(a) ((a)->used == 0)
+#define fp_iszero(a) (((a)->used == 0) ? FP_YES : FP_NO)
 #define fp_isone(a) \
-    (((a)->used == 1) && ((a)->dp[0] == 1))
-#define fp_iseven(a) ((a)->used > 0 && (((a)->dp[0] & 1) == 0))
-#define fp_isodd(a)  ((a)->used > 0  && (((a)->dp[0] & 1) == 1))
-#define fp_isneg(a)  ((a)->sign != 0)
+    ((((a)->used == 1) && ((a)->dp[0] == 1)) ? FP_YES : FP_NO)
+#define fp_iseven(a) (((a)->used > 0 && (((a)->dp[0] & 1) == 0)) ? FP_YES : FP_NO)
+#define fp_isodd(a)  (((a)->used > 0  && (((a)->dp[0] & 1) == 1)) ? FP_YES : FP_NO)
+#define fp_isneg(a)  (((a)->sign != 0) ? FP_YES : FP_NO)
 #define fp_isword(a, w) \
-    ((((a)->used == 1) && ((a)->dp[0] == w)) || ((w == 0) && ((a)->used == 0)))
+    ((((a)->used == 1) && ((a)->dp[0] == w)) || ((w == 0) && ((a)->used == 0)) \
+                                                               ? FP_YES : FP_NO)
 
 /* set to a small digit */
 void fp_set(fp_int *a, fp_digit b);
@@ -443,7 +444,7 @@ void fp_copy(fp_int *a, fp_int *b);
 void fp_init_copy(fp_int *a, fp_int *b);
 
 /* clamp digits */
-#define fp_clamp(a)   { while ((a)->used && (a)->dp[(a)->used-1] == 0) --((a)->used); if (!(a)->used) (a)->sign = FP_ZPOS; }
+#define fp_clamp(a)   { while ((a)->used && (a)->dp[(a)->used-1] == 0) --((a)->used); (a)->sign = (a)->used ? (a)->sign : FP_ZPOS; }
 #define mp_clamp(a)   fp_clamp(a)
 #define mp_grow(a,s)  MP_OKAY
 

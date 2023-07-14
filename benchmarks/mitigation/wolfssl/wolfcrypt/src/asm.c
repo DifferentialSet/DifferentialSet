@@ -1710,7 +1710,7 @@ __asm__(                          \
    c0 = c1 = c2 = 0;
 
 #define COMBA_FORWARD \
-   { c0 = c1; c1 = c2; c2 = 0; }
+   do { c0 = c1; c1 = c2; c2 = 0; } while (0);
 
 #define COMBA_STORE(x) \
    x = c0;
@@ -1721,13 +1721,13 @@ __asm__(                          \
 #define COMBA_FINI
 
 #define MULADD(i, j)                                                                                                                                  \
-   { fp_word t;                                      \
+   do { fp_word t;                                      \
    t = (fp_word)c0 + ((fp_word)i) * ((fp_word)j);       \
    c0 = (fp_digit)t;                                    \
    t = (fp_word)c1 + (t >> DIGIT_BIT);                  \
    c1 = (fp_digit)t;                                    \
    c2 += (fp_digit)(t >> DIGIT_BIT);                    \
-   }
+   } while (0);
 
 #endif
 
