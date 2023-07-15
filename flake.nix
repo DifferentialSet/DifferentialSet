@@ -204,6 +204,7 @@
               pkgs.py-spy
               pkgs.jupyter
               pkgs.util-linux
+              pkgs.vim
             ];
           };
         });
