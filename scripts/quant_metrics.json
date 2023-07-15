@@ -1,0 +1,966 @@
+{"quantification/blazer_array_safe": {"Building goto TIME": [0.03, 0.0], "Analysis TIME": [0.16, 0.0], "Enumerate DS TIME": [148.71, 0.19], "Do alignment TIME": [0.0, 0.01], "Generate DIMACS TIME": [0.22, 3.32], "CC": "log(2)", "Counting CC TIME": [0.18, 0.03], "Total Time": 152.85, "Wall Clock Time": 8.846636533737183}, "quantification/blazer_array_unsafe": {"Building goto TIME": [0.04, 0.0], "Analysis TIME": [0.1, 0.0], "Enumerate DS TIME": [44.42, 0.12], "Do alignment TIME": [0.0, 0.0], "Generate DIMACS TIME": [0.1, 0.29], "CC": "log(2)", "Counting CC TIME": [0.02, 0.01], "Total Time": 45.1, "Wall Clock Time": 1.8483667373657227}, "quantification/blazer_loopandbranch_safe": {"Building goto TIME": [0.04, 0.0], "Analysis TIME": [0.07, 0.0], "Enumerate DS TIME": [0.81, 0.07], "Do alignment TIME": [0.0, 0.0], "Generate DIMACS TIME": [0.11, 0.22], "CC": "log(3)", "Counting CC TIME": [6.4, 0.01], "Total Time": 7.73, "Wall Clock Time": 7.554687976837158}, "quantification/blazer_loopandbranch_unsafe": {"Building goto TIME": [0.05, 0.0], "Analysis TIME": [0.09, 0.0], "Enumerate DS TIME": [0.86, 0.09], "Do alignment TIME": [0.0, 0.0], "Generate DIMACS TIME": [0.09, 0.27], "CC": "log(3)", "Counting CC TIME": [6.55, 0.02], "Total Time": 8.02, "Wall Clock Time": 7.833331823348999}, "quantification/blazer_sanity_safe": {"Building goto TIME": [0.04, 0.0], "Analysis TIME": [0.06, 0.0], "Enumerate DS TIME": [0.49, 0.11], "Do alignment TIME": [0.0, 0.0], "Generate DIMACS TIME": [0.1, 0.23], "CC": "log(2)", "Counting CC TIME": [7.1, 0.02], "Total Time": 8.149999999999999, "Wall Clock Time": 8.355498790740967}, "quantification/blazer_sanity_unsafe": {"Building goto TIME": [0.05, 0.0], "Analysis TIME": [0.05, 0.0], "Enumerate DS TIME": [0.37, 0.07], "Do alignment TIME": [0.0, 0.0], "Generate DIMACS TIME": [0.08, 0.15], "CC": "log(2)", "Counting CC TIME": [2.29, 0.01], "Total Time": 3.07, "Wall Clock Time": 3.2132251262664795}, "quantification/blazer_straightline_safe": {"Building goto TIME": [0.03, 0.0], "Analysis TIME": [0.03, 0.0], "Enumerate DS TIME": [0.36, 0.06], "Do alignment TIME": [0.0, 0.0], "Generate DIMACS TIME": [0.05, 0.07], "CC": "log(2)", "Counting CC TIME": [0.52, 0.0], "Total Time": 1.12, "Wall Clock Time": 1.2771706581115723}, "quantification/blazer_straightline_unsafe": {"Building goto TIME": [0.05, 0.0], "Analysis TIME": [0.07, 0.0], "Enumerate DS TIME": [0.84, 0.07], "Do alignment TIME": [0.0, 0.0], "Generate DIMACS TIME": [0.11, 0.26], "CC": "log(2)", "Counting CC TIME": [2.96, 0.02], "Total Time": 4.38, "Wall Clock Time": 4.3876402378082275}, "quantification/blazer_unixlogin_safe": {"Building goto TIME": [0.02, 0.0], "Analysis TIME": [0.2, 0.01], "Enumerate DS TIME": [491.75, 1.17], "Do alignment TIME": [0.0, 0.01], "Generate DIMACS TIME": [0.19, 0.42], "CC": "log(3)", "Counting CC TIME": [0.02, 0.0], "Total Time": 493.79, "Wall Clock Time": 8.920613050460815}, "quantification/blazer_unixlogin_unsafe": {"Building goto TIME": [0.04, 0.0], "Analysis TIME": [0.11, 0.01], "Enumerate DS TIME": [180.37, 0.47], "Do alignment TIME": [0.0, 0.0], "Generate DIMACS TIME": [0.14, 0.38], "CC": "log(3)", "Counting CC TIME": [0.02, 0.01], "Total Time": 181.55, "Wall Clock Time": 4.35354208946228}}
+{
+    "quantification/blazer_array_safe": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.16,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            148.06,
+            0.23
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.27,
+            3.7
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            0.18,
+            0.04
+        ],
+        "Total Time": 152.67999999999998,
+        "Wall Clock Time": 9.103868007659912
+    },
+    "quantification/blazer_array_unsafe": {
+        "Building goto TIME": [
+            0.05,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.1,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            44.57,
+            0.13
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.09,
+            0.32
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            0.01,
+            0.01
+        ],
+        "Total Time": 45.28,
+        "Wall Clock Time": 1.9149200916290283
+    }
+}
+{
+    "RSA/scatter_gather_openssl_1.0.2f": {
+        "Building goto TIME": [
+            0.03,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.48,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            1707.77,
+            1.6
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.14
+        ],
+        "Generate DIMACS TIME": [
+            107.85,
+            5.59
+        ],
+        "CC": "log(9)",
+        "Counting CC TIME": [
+            713.5,
+            9.3
+        ],
+        "Total Time": 2546.26,
+        "Wall Clock Time": 898.0530986785889
+    },
+    "RSA/defensive_gather": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            3.39,
+            0.01
+        ],
+        "Enumerate DS TIME": [
+            13793.15,
+            4.17
+        ],
+        "Do alignment TIME": [
+            0.0,
+            2.18
+        ],
+        "Generate DIMACS TIME": [
+            5.12,
+            760.44
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            2.5,
+            0.15
+        ],
+        "Total Time": 14571.15,
+        "Wall Clock Time": 1100.2419571876526
+    }
+}
+{
+    "RSA/windowed_modular_exp_libgcrypt_163": {
+        "Building goto TIME": [
+            0.05,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.16,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            291.91,
+            0.61
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.19,
+            2.54
+        ],
+        "CC": "0",
+        "Counting CC TIME": [
+            0.0,
+            0.02
+        ],
+        "Total Time": 295.48,
+        "Wall Clock Time": 8.788455963134766
+    }
+}
+{
+    "quantification/blazer_array_safe": {
+        "Building goto TIME": [
+            0.06,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.17,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            145.94,
+            0.16
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.23,
+            3.63
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            0.19,
+            0.04
+        ],
+        "Total Time": 150.42,
+        "Wall Clock Time": 8.993988513946533
+    },
+    "quantification/blazer_array_unsafe": {
+        "Building goto TIME": [
+            0.02,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.1,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            47.67,
+            0.12
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.09,
+            0.27
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            0.01,
+            0.0
+        ],
+        "Total Time": 48.279999999999994,
+        "Wall Clock Time": 1.7770156860351562
+    },
+    "quantification/blazer_loopandbranch_safe": {
+        "Building goto TIME": [
+            0.03,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.05,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            0.78,
+            0.07
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.13,
+            0.22
+        ],
+        "CC": "log(3)",
+        "Counting CC TIME": [
+            6.82,
+            0.03
+        ],
+        "Total Time": 8.13,
+        "Wall Clock Time": 7.947925329208374
+    },
+    "quantification/blazer_loopandbranch_unsafe": {
+        "Building goto TIME": [
+            0.03,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.06,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            0.82,
+            0.08
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.11,
+            0.22
+        ],
+        "CC": "log(3)",
+        "Counting CC TIME": [
+            7.0,
+            0.02
+        ],
+        "Total Time": 8.34,
+        "Wall Clock Time": 8.16730785369873
+    },
+    "quantification/blazer_sanity_safe": {
+        "Building goto TIME": [
+            0.03,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.07,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            0.54,
+            0.06
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.11,
+            0.21
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            7.66,
+            0.02
+        ],
+        "Total Time": 8.7,
+        "Wall Clock Time": 8.812817096710205
+    },
+    "quantification/blazer_sanity_unsafe": {
+        "Building goto TIME": [
+            0.03,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.05,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            0.33,
+            0.05
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.09,
+            0.14
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            2.53,
+            0.01
+        ],
+        "Total Time": 3.2299999999999995,
+        "Wall Clock Time": 3.385002374649048
+    },
+    "quantification/blazer_straightline_safe": {
+        "Building goto TIME": [
+            0.06,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.05,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            0.39,
+            0.06
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.07,
+            0.09
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            0.56,
+            0.01
+        ],
+        "Total Time": 1.29,
+        "Wall Clock Time": 1.3065149784088135
+    },
+    "quantification/blazer_straightline_unsafe": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.06,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            0.82,
+            0.07
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.13,
+            0.29
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            3.52,
+            0.02
+        ],
+        "Total Time": 4.95,
+        "Wall Clock Time": 4.896618843078613
+    },
+    "quantification/blazer_unixlogin_safe": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.21,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            471.11,
+            0.64
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.01
+        ],
+        "Generate DIMACS TIME": [
+            0.2,
+            0.29
+        ],
+        "CC": "log(3)",
+        "Counting CC TIME": [
+            0.01,
+            0.01
+        ],
+        "Total Time": 472.52,
+        "Wall Clock Time": 8.829905986785889
+    },
+    "quantification/blazer_unixlogin_unsafe": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.14,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            172.41,
+            0.38
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.13,
+            0.34
+        ],
+        "CC": "log(3)",
+        "Counting CC TIME": [
+            0.02,
+            0.01
+        ],
+        "Total Time": 173.47,
+        "Wall Clock Time": 4.228867769241333
+    },
+    "quantification/blazer_modpow1_safe": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            1.48,
+            0.02
+        ],
+        "Enumerate DS TIME": [
+            3556.04,
+            1.71
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.03
+        ],
+        "Generate DIMACS TIME": [
+            3.35,
+            0.3
+        ],
+        "CC": "log(4294967296)",
+        "Counting CC TIME": [
+            222.27,
+            0.52
+        ],
+        "Total Time": 3785.76,
+        "Wall Clock Time": 288.51626992225647
+    },
+    "quantification/blazer_modpow1_unsafe": {
+        "Building goto TIME": [
+            0.05,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.87,
+            0.03
+        ],
+        "Enumerate DS TIME": [
+            1627.75,
+            0.96
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.01
+        ],
+        "Generate DIMACS TIME": [
+            2.19,
+            0.22
+        ],
+        "CC": "log(4294967296)",
+        "Counting CC TIME": [
+            162.09,
+            0.42
+        ],
+        "Total Time": 1794.5900000000001,
+        "Wall Clock Time": 193.57907104492188
+    },
+    "quantification/blazer_modpow2_safe": {
+        "Building goto TIME": [
+            0.05,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.07,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            25.43,
+            0.06
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            2.15,
+            0.23
+        ],
+        "CC": "log(4294967296)",
+        "Counting CC TIME": [
+            254.89,
+            0.66
+        ],
+        "Total Time": 283.53999999999996,
+        "Wall Clock Time": 261.55952501296997
+    },
+    "quantification/blazer_modpow2_unsafe": {
+        "Building goto TIME": [
+            0.05,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.08,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            0.35,
+            0.07
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.14,
+            0.36
+        ],
+        "CC": "log(2) * 32",
+        "Counting CC TIME": [
+            3.5,
+            0.03
+        ],
+        "Total Time": 4.58,
+        "Wall Clock Time": 5.14220118522644
+    },
+    "quantification/blazer_passwordEq_safe": {
+        "Building goto TIME": [
+            0.05,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.07,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            20.71,
+            0.09
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.06,
+            0.24
+        ],
+        "CC": "log(65536)",
+        "Counting CC TIME": [
+            0.12,
+            0.01
+        ],
+        "Total Time": 21.35,
+        "Wall Clock Time": 1.5358343124389648
+    },
+    "quantification/blazer_passwordEq_unsafe": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.05,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            25.59,
+            0.1
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.06,
+            0.21
+        ],
+        "CC": "log(17)",
+        "Counting CC TIME": [
+            0.02,
+            0.0
+        ],
+        "Total Time": 26.07,
+        "Wall Clock Time": 1.4249207973480225
+    },
+    "quantification/blazer_k96_safe": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.07,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            57.97,
+            0.18
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.13,
+            0.33
+        ],
+        "CC": "log(2) * 32",
+        "Counting CC TIME": [
+            2.52,
+            0.04
+        ],
+        "Total Time": 61.28,
+        "Wall Clock Time": 5.1043312549591064
+    },
+    "quantification/blazer_k96_unsafe": {
+        "Building goto TIME": [
+            0.06,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.08,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            70.47,
+            0.19
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.12,
+            0.94
+        ],
+        "CC": "32",
+        "Counting CC TIME": [
+            12.85,
+            0.02
+        ],
+        "Total Time": 84.73,
+        "Wall Clock Time": 16.415711164474487
+    },
+    "quantification/blazer_gpt14_safe": {
+        "Building goto TIME": [
+            0.03,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.07,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            16.91,
+            0.07
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            1.4,
+            0.19
+        ],
+        "CC": "log(4294967296)",
+        "Counting CC TIME": [
+            170.41,
+            0.47
+        ],
+        "Total Time": 189.55,
+        "Wall Clock Time": 174.38036489486694
+    },
+    "quantification/blazer_gpt14_unsafe": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.04,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            2.98,
+            0.06
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.08,
+            0.11
+        ],
+        "CC": "log(2) * 32",
+        "Counting CC TIME": [
+            0.68,
+            0.01
+        ],
+        "Total Time": 4.0,
+        "Wall Clock Time": 1.6167371273040771
+    },
+    "quantification/blazer_login_safe": {
+        "Building goto TIME": [
+            0.03,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.07,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            30.27,
+            0.14
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.07,
+            0.19
+        ],
+        "CC": "log(65536)",
+        "Counting CC TIME": [
+            0.12,
+            0.01
+        ],
+        "Total Time": 30.900000000000002,
+        "Wall Clock Time": 1.9007549285888672
+    },
+    "quantification/blazer_login_unsafe": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.08,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            45.4,
+            0.15
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.08,
+            0.52
+        ],
+        "CC": "log(17)",
+        "Counting CC TIME": [
+            0.66,
+            0.02
+        ],
+        "Total Time": 46.949999999999996,
+        "Wall Clock Time": 3.168813943862915
+    },
+    "RSA/square_and_multiply": {
+        "Building goto TIME": [
+            0.05,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.06,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            0.92,
+            0.07
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.07,
+            0.14
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            0.1,
+            0.01
+        ],
+        "Total Time": 1.4200000000000002,
+        "Wall Clock Time": 1.1422619819641113
+    },
+    "RSA/square_and_always_multiply": {
+        "Building goto TIME": [
+            0.06,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.05,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            0.92,
+            0.07
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.07,
+            0.21
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            0.09,
+            0.01
+        ],
+        "Total Time": 1.4800000000000002,
+        "Wall Clock Time": 1.1628916263580322
+    },
+    "RSA/windowed_modular_exp_libgcrypt_161": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.03,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            0.52,
+            0.04
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.04,
+            0.07
+        ],
+        "CC": "log(3)",
+        "Counting CC TIME": [
+            0.03,
+            0.01
+        ],
+        "Total Time": 0.7800000000000001,
+        "Wall Clock Time": 0.7922251224517822
+    },
+    "RSA/windowed_modular_exp_libgcrypt_163": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.16,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            277.07,
+            0.31
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.0
+        ],
+        "Generate DIMACS TIME": [
+            0.17,
+            2.36
+        ],
+        "CC": "0",
+        "Counting CC TIME": [
+            0.0,
+            0.02
+        ],
+        "Total Time": 280.12999999999994,
+        "Wall Clock Time": 8.237812519073486
+    },
+    "RSA/scatter_gather_openssl_1.0.2f": {
+        "Building goto TIME": [
+            0.03,
+            0.0
+        ],
+        "Analysis TIME": [
+            0.45,
+            0.0
+        ],
+        "Enumerate DS TIME": [
+            1585.0,
+            0.71
+        ],
+        "Do alignment TIME": [
+            0.0,
+            0.14
+        ],
+        "Generate DIMACS TIME": [
+            107.39,
+            5.44
+        ],
+        "CC": "log(9)",
+        "Counting CC TIME": [
+            767.96,
+            14.26
+        ],
+        "Total Time": 2481.38,
+        "Wall Clock Time": 914.8231971263885
+    },
+    "RSA/defensive_gather": {
+        "Building goto TIME": [
+            0.04,
+            0.0
+        ],
+        "Analysis TIME": [
+            3.29,
+            0.01
+        ],
+        "Enumerate DS TIME": [
+            11898.95,
+            2.93
+        ],
+        "Do alignment TIME": [
+            0.0,
+            2.12
+        ],
+        "Generate DIMACS TIME": [
+            4.21,
+            749.17
+        ],
+        "CC": "log(2)",
+        "Counting CC TIME": [
+            2.52,
+            0.16
+        ],
+        "Total Time": 12663.400000000001,
+        "Wall Clock Time": 1108.86891579628
+    }
+}
