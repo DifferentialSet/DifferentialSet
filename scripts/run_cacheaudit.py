@@ -91,3 +91,9 @@ for benchmark_path, compositional_multiplier in benchmark_paths:
 # beautifyl print
 import json
 print(json.dumps(benchmark_collector, indent=4))
+
+metrics_file = "cacheaudit_metrics.json"
+
+with open("./{}".format(metrics_file), "a") as f:
+    f.write(json.dumps(benchmark_collector, indent=4))
+    f.write("\n")
