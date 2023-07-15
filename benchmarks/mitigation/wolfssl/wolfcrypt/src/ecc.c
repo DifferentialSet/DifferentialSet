@@ -2820,20 +2820,21 @@ static int ecc_point_to_mont(ecc_point* p, ecc_point* r, mp_int* modulus,
        err = mp_montgomery_calc_normalization(mu, modulus);
 
        if (err == MP_OKAY) {
-           if (mp_cmp_d(mu, 1) == MP_EQ) {
-               err = mp_copy(p->x, r->x);
-               if (err == MP_OKAY)
-                   err = mp_copy(p->y, r->y);
-               if (err == MP_OKAY)
-                   err = mp_copy(p->z, r->z);
-           }
-           else {
+        // Our tool can't handle copy, so remove this optimization.
+        //    if (mp_cmp_d(mu, 1) == MP_EQ) {
+        //        err = mp_copy(p->x, r->x);
+        //        if (err == MP_OKAY)
+        //            err = mp_copy(p->y, r->y);
+        //        if (err == MP_OKAY)
+        //            err = mp_copy(p->z, r->z);
+        //    }
+        //    else {
                err = mp_mulmod(p->x, mu, modulus, r->x);
                if (err == MP_OKAY)
                    err = mp_mulmod(p->y, mu, modulus, r->y);
                if (err == MP_OKAY)
                    err = mp_mulmod(p->z, mu, modulus, r->z);
-           }
+        //    }
        }
 
        mp_clear(mu);
@@ -2924,7 +2925,7 @@ int wc_ecc_mulmod_ex(mp_int* k, ecc_point *G, ecc_point *R, mp_int* a,
 
    /* init variables */
    tG = NULL;
-   XMEMSET(M, 0, sizeof(M));
+//    XMEMSET(M, 0, sizeof(M));
 
 #ifdef WOLFSSL_SMALL_STACK_CACHE
    err = ecc_key_tmp_init(&key, heap);
@@ -2973,10 +2974,10 @@ int wc_ecc_mulmod_ex(mp_int* k, ecc_point *G, ecc_point *R, mp_int* a,
 exit:
 
    /* done */
-   wc_ecc_del_point_h(tG, heap);
-   for (i = 0; i < M_POINTS; i++) {
-       wc_ecc_del_point_h(M[i], heap);
-   }
+//    wc_ecc_del_point_h(tG, heap);
+//    for (i = 0; i < M_POINTS; i++) {
+//        wc_ecc_del_point_h(M[i], heap);
+//    }
 #ifdef WOLFSSL_SMALL_STACK_CACHE
    R->key = NULL;
    ecc_key_tmp_final(&key, heap);

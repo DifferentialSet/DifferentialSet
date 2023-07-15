@@ -274,109 +274,10 @@ int fp_mul(fp_int *A, fp_int *B, fp_int *C)
     /* fail if we are out of range */
     if (y + yy > FP_SIZE) {
        ret = FP_VAL;
-       goto clean;
+    } else {
+      ret = fp_mul_comba(A,B,C);
     }
 
-    /* pick a comba (unrolled 4/8/16/32 x or rolled) based on the size
-       of the largest input.  We also want to avoid doing excess mults if the
-       inputs are not close to the next power of two.  That is, for example,
-       if say y=17 then we would do (32-17)^2 = 225 unneeded multiplications
-    */
-
-#if defined(TFM_MUL3) && FP_SIZE >= 6
-        if (y <= 3) {
-           ret = fp_mul_comba3(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL4) && FP_SIZE >= 8
-        if (y == 4) {
-           ret = fp_mul_comba4(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL6) && FP_SIZE >= 12
-        if (y <= 6) {
-           ret = fp_mul_comba6(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL7) && FP_SIZE >= 14
-        if (y == 7) {
-           ret = fp_mul_comba7(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL8) && FP_SIZE >= 16
-        if (y == 8) {
-           ret = fp_mul_comba8(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL9) && FP_SIZE >= 18
-        if (y == 9) {
-           ret = fp_mul_comba9(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL12) && FP_SIZE >= 24
-        if (y <= 12) {
-           ret = fp_mul_comba12(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL17) && FP_SIZE >= 34
-        if (y <= 17) {
-           ret = fp_mul_comba17(A,B,C);
-           goto clean;
-        }
-#endif
-
-#if defined(TFM_SMALL_SET) && FP_SIZE >= 32
-        if (y <= 16) {
-           ret = fp_mul_comba_small(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL20) && FP_SIZE >= 40
-        if (y <= 20) {
-           ret = fp_mul_comba20(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL24) && FP_SIZE >= 48
-        if (yy >= 16 && y <= 24) {
-           ret = fp_mul_comba24(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL28) && FP_SIZE >= 56
-        if (yy >= 20 && y <= 28) {
-           ret = fp_mul_comba28(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL32) && FP_SIZE >= 64
-        if (yy >= 24 && y <= 32) {
-           ret = fp_mul_comba32(A,B,C);
-           goto clean;
-        }
-#endif
-#if defined(TFM_MUL48) && FP_SIZE >= 96
-        if (yy >= 40 && y <= 48) {
-          ret = fp_mul_comba48(A,B,C);
-          goto clean;
-        }
-#endif
-#if defined(TFM_MUL64) && FP_SIZE >= 128
-        if (yy >= 56 && y <= 64) {
-           ret = fp_mul_comba64(A,B,C);
-           goto clean;
-        }
-#endif
-        ret = fp_mul_comba(A,B,C);
-
-clean:
     /* zero any excess digits on the destination that we didn't write to */
     for (y = C->used; y >= 0 && y < oldused; y++) {
         C->dp[y] = 0;
@@ -2942,102 +2843,10 @@ int fp_sqr(fp_int *A, fp_int *B)
     /* call generic if we're out of range */
     if (y + y > FP_SIZE) {
        err = fp_sqr_comba(A, B);
-       goto clean;
+    } else {
+       err = fp_sqr_comba(A, B);
     }
 
-#if defined(TFM_SQR3) && FP_SIZE >= 6
-        if (y <= 3) {
-           err = fp_sqr_comba3(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR4) && FP_SIZE >= 8
-        if (y == 4) {
-           err = fp_sqr_comba4(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR6) && FP_SIZE >= 12
-        if (y <= 6) {
-           err = fp_sqr_comba6(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR7) && FP_SIZE >= 14
-        if (y == 7) {
-           err = fp_sqr_comba7(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR8) && FP_SIZE >= 16
-        if (y == 8) {
-           err = fp_sqr_comba8(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR9) && FP_SIZE >= 18
-        if (y == 9) {
-           err = fp_sqr_comba9(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR12) && FP_SIZE >= 24
-        if (y <= 12) {
-           err = fp_sqr_comba12(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR17) && FP_SIZE >= 34
-        if (y <= 17) {
-           err = fp_sqr_comba17(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SMALL_SET)
-        if (y <= 16) {
-           err = fp_sqr_comba_small(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR20) && FP_SIZE >= 40
-        if (y <= 20) {
-           err = fp_sqr_comba20(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR24) && FP_SIZE >= 48
-        if (y <= 24) {
-           err = fp_sqr_comba24(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR28) && FP_SIZE >= 56
-        if (y <= 28) {
-           err = fp_sqr_comba28(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR32) && FP_SIZE >= 64
-        if (y <= 32) {
-           err = fp_sqr_comba32(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR48) && FP_SIZE >= 96
-        if (y <= 48) {
-           err = fp_sqr_comba48(A,B);
-           goto clean;
-        }
-#endif
-#if defined(TFM_SQR64) && FP_SIZE >= 128
-        if (y <= 64) {
-           err = fp_sqr_comba64(A,B);
-           goto clean;
-        }
-#endif
-       err = fp_sqr_comba(A, B);
-
-clean:
   /* zero any excess digits on the destination that we didn't write to */
   for (y = B->used; y >= 0 && y < oldused; y++) {
     B->dp[y] = 0;
@@ -4009,7 +3818,8 @@ void fp_clear(fp_int *a)
 #else
     size = FP_SIZE;
 #endif
-    XMEMSET(a->dp, 0, size * sizeof(fp_digit));
+    fp_digit* adp = a->dp;
+    XMEMSET(adp, 0, size * sizeof(fp_digit));
     fp_free(a);
 }
 
@@ -4277,8 +4087,9 @@ void fp_copy(fp_int *a, fp_int *b)
             oldused = b->used;
             b->used = a->used;
             b->sign = a->sign;
-
-            XMEMCPY(b->dp, a->dp, a->used * sizeof(fp_digit));
+            fp_digit* bdp = b->dp;
+            fp_digit* adp = a->dp;
+            XMEMCPY(bdp, adp,  a->used * sizeof(fp_digit));
 
             /* zero any excess digits on the destination that we didn't write to */
             for (x = b->used; x >= 0 && x < oldused; x++) {
@@ -4292,7 +4103,9 @@ void fp_copy(fp_int *a, fp_int *b)
         /* all dp's are same size, so do straight copy */
         b->used = a->used;
         b->sign = a->sign;
-        XMEMCPY(b->dp, a->dp, FP_SIZE * sizeof(fp_digit));
+        fp_digit* bdp = b->dp;
+        fp_digit* adp = a->dp;
+        XMEMCPY(bdp, adp, FP_SIZE * sizeof(fp_digit));
 #endif
     }
 }

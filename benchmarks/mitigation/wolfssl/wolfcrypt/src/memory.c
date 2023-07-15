@@ -119,6 +119,9 @@ int wolfSSL_GetAllocators(wolfSSL_Malloc_cb*  mf,
     return 0;
 }
 
+static byte pools[42][1024];
+static int pool_idx = 0;
+
 #ifndef WOLFSSL_STATIC_MEMORY
 #ifdef WOLFSSL_DEBUG_MEMORY
 void* wolfSSL_Malloc(size_t size, const char* func, unsigned int line)
@@ -126,56 +129,7 @@ void* wolfSSL_Malloc(size_t size, const char* func, unsigned int line)
 void* wolfSSL_Malloc(size_t size)
 #endif
 {
-    void* res = 0;
-
-    if (malloc_function) {
-    #ifdef WOLFSSL_DEBUG_MEMORY
-        res = malloc_function(size, func, line);
-    #else
-        res = malloc_function(size);
-    #endif
-    }
-    else {
-    #ifndef WOLFSSL_NO_MALLOC
-        res = malloc(size);
-    #else
-        WOLFSSL_MSG("No malloc available");
-    #endif
-    }
-
-#ifdef WOLFSSL_DEBUG_MEMORY
-#if defined(WOLFSSL_DEBUG_MEMORY_PRINT) && !defined(WOLFSSL_TRACK_MEMORY)
-    printf("Alloc: %p -> %u at %s:%d\n", res, (word32)size, func, line);
-#else
-    (void)func;
-    (void)line;
-#endif
-#endif
-
-#ifdef WOLFSSL_MALLOC_CHECK
-    if (res == NULL)
-        WOLFSSL_MSG("wolfSSL_malloc failed");
-#endif
-
-#ifdef WOLFSSL_FORCE_MALLOC_FAIL_TEST
-    if (res && --gMemFailCount == 0) {
-        printf("\n---FORCED MEM FAIL TEST---\n");
-        if (free_function) {
-        #ifdef WOLFSSL_DEBUG_MEMORY
-            free_function(res, func, line);
-        #else
-            free_function(res);
-        #endif
-        }
-        else {
-            free(res); /* clear */
-        }
-        gMemFailCount = gMemFailCountSeed; /* reset */
-        return NULL;
-    }
-#endif
-
-    return res;
+    return &pools[pool_idx++];
 }
 
 #ifdef WOLFSSL_DEBUG_MEMORY
@@ -184,29 +138,7 @@ void wolfSSL_Free(void *ptr, const char* func, unsigned int line)
 void wolfSSL_Free(void *ptr)
 #endif
 {
-#ifdef WOLFSSL_DEBUG_MEMORY
-#if defined(WOLFSSL_DEBUG_MEMORY_PRINT) && !defined(WOLFSSL_TRACK_MEMORY)
-    printf("Free: %p at %s:%d\n", ptr, func, line);
-#else
-    (void)func;
-    (void)line;
-#endif
-#endif
 
-    if (free_function) {
-    #ifdef WOLFSSL_DEBUG_MEMORY
-        free_function(ptr, func, line);
-    #else
-        free_function(ptr);
-    #endif
-    }
-    else {
-    #ifndef WOLFSSL_NO_MALLOC
-        free(ptr);
-    #else
-        WOLFSSL_MSG("No free available");
-    #endif
-    }
 }
 
 #ifdef WOLFSSL_DEBUG_MEMORY
@@ -215,24 +147,6 @@ void* wolfSSL_Realloc(void *ptr, size_t size, const char* func, unsigned int lin
 void* wolfSSL_Realloc(void *ptr, size_t size)
 #endif
 {
-    void* res = 0;
-
-    if (realloc_function) {
-    #ifdef WOLFSSL_DEBUG_MEMORY
-        res = realloc_function(ptr, size, func, line);
-    #else
-        res = realloc_function(ptr, size);
-    #endif
-    }
-    else {
-    #ifndef WOLFSSL_NO_MALLOC
-        res = realloc(ptr, size);
-    #else
-        WOLFSSL_MSG("No realloc available");
-    #endif
-    }
-
-    return res;
 }
 #endif /* WOLFSSL_STATIC_MEMORY */
 
