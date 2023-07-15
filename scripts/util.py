@@ -1,16 +1,16 @@
 def clean_up_code(path):
     with open(path, "r") as f:
         code = f.read()
-    with open(path, "w") as f:
-        branch_id_impl = "\nvoid branch_id(char *str) {}\n"
-        if branch_id_impl not in code:
-            code = branch_id_impl + code
 
-        included_header = "#include <stdint.h>\n#include <immintrin.h>\n#include <stdbool.h>\n#include <assert.h>\n"
-        code = included_header + code
-        import re
-        # remove typedef from CBMC since they conflicts with #include
-        unwanted_strings = [
+    branch_id_impl = "\nvoid branch_id(char *str) {}\n"
+    if branch_id_impl not in code:
+        code = branch_id_impl + code
+
+    included_header = "#include <stdint.h>\n#include <immintrin.h>\n#include <stdbool.h>\n#include <assert.h>\n"
+    code = included_header + code
+    import re
+    # remove typedef from CBMC since they conflicts with #include
+    unwanted_strings = [
 "void * __builtin___memcpy_chk(void *, const void *, __CPROVER_size_t, __CPROVER_size_t);",
 "void *__builtin___memcpy_chk(void *, const void *, __CPROVER_size_t, __CPROVER_size_t);",
 "static void *__builtin___memcpy_chk__return_value;",
@@ -20,19 +20,19 @@ def clean_up_code(path):
 """
 typedef struct __pthread_internal_slist
 {
-  // __next
-  struct __pthread_internal_slist *__next;
+// __next
+struct __pthread_internal_slist *__next;
 } __pthread_slist_t;""",
 "typedef union anonymous$2 pthread_mutexattr_t;",
 """
 typedef struct __pthread_internal_slist
 {
-  struct __pthread_internal_slist *__next;
+struct __pthread_internal_slist *__next;
 } __pthread_slist_t;""",
 """
 typedef struct __pthread_internal_slist
 {
-  struct __pthread_internal_slist *__next;
+struct __pthread_internal_slist *__next;
 } __pthread_slist_t;""",
 "typedef unsigned long int size_t;",
 "typedef signed long int ssize_t;",
@@ -62,92 +62,94 @@ typedef struct __pthread_internal_slist
 """
 extern void *memcpy(void *dst, const void *src, size_t n)
 {
-  __CPROVER_HIDE:
-  ;
+__CPROVER_HIDE:
+;
 
-  if (n >= 1u)
-  {
-    const unsigned int src_n$array_size = (unsigned int) ((signed int) n);
-    char src_n[src_n$array_size];
-    ARRAY_COPY((const void *) src_n, (const void *) ((char *) src));
-    ARRAY_REPLACE((const void *) ((char *) dst), (const void *) src_n);
-  }
-  return dst;
+if (n >= 1u)
+{
+const unsigned int src_n$array_size = (unsigned int) ((signed int) n);
+char src_n[src_n$array_size];
+ARRAY_COPY((const void *) src_n, (const void *) ((char *) src));
+ARRAY_REPLACE((const void *) ((char *) dst), (const void *) src_n);
+}
+return dst;
 }
 """,
 """
 extern void *memcpy(void *dst, const void *src, size_t n)
 {
-  __CPROVER_HIDE:
-  ;
+__CPROVER_HIDE:
+;
 
-  if (n >= 1u)
-  {
-    const unsigned int src_n$array_size = (unsigned int) ((signed int) n);
-    char src_n[src_n$array_size];
-    ARRAY_COPY((const void *) src_n, (const void *) ((char *) src));
-    ARRAY_REPLACE((const void *) ((char *) dst), (const void *) src_n);
-  }
+if (n >= 1u)
+{
+const unsigned int src_n$array_size = (unsigned int) ((signed int) n);
+char src_n[src_n$array_size];
+ARRAY_COPY((const void *) src_n, (const void *) ((char *) src));
+ARRAY_REPLACE((const void *) ((char *) dst), (const void *) src_n);
+}
 
-  return dst;
+return dst;
 }""",
 """
 static inline void * memcpy(void * restrict __dest, const void * restrict __src, size_t __len)
 {
-  void *return_value___builtin___memcpy_chk;
-  __builtin___memcpy_chk(__dest, __src, (__CPROVER_size_t)__len, 4294967295u);
-  return_value___builtin___memcpy_chk = nondet_0();
-  memcpy__return_value = return_value___builtin___memcpy_chk;
+void *return_value___builtin___memcpy_chk;
+__builtin___memcpy_chk(__dest, __src, (__CPROVER_size_t)__len, 4294967295u);
+return_value___builtin___memcpy_chk = nondet_0();
+memcpy__return_value = return_value___builtin___memcpy_chk;
 }""",
 """
 inline static void *memcpy(void * restrict __dest, const void * restrict __src, size_t __len)
 {
-  void *return_value___builtin___memcpy_chk;
-  __builtin___memcpy_chk(__dest, __src, (__CPROVER_size_t) __len, 4294967295u);
-  return_value___builtin___memcpy_chk = nondet_0();
-  memcpy__return_value = return_value___builtin___memcpy_chk;
+void *return_value___builtin___memcpy_chk;
+__builtin___memcpy_chk(__dest, __src, (__CPROVER_size_t) __len, 4294967295u);
+return_value___builtin___memcpy_chk = nondet_0();
+memcpy__return_value = return_value___builtin___memcpy_chk;
 }""",
 "assert(0);",
 "assert(0 != 0);",
 "main__return_value = nondet_signed_int();"
-        ]
+    ]
 
-        code = code.replace("nondet_signed_int()", "0")
+    code = code.replace("nondet_signed_int()", "0")
+    code = code.replace("typedef static signed int", "typedef signed int")
 
-        unwanted_regexs = [
-          ".*?\= \n",
-          "typedef union anonymous\$?\d* pthread_mutexattr_t;",
-        ]
-        for unwanted_string in unwanted_strings:
-            code = code.replace(unwanted_string, "")
+    unwanted_regexs = [
+      # ".*?\= \n",
+      "typedef union anonymous\$?\d* pthread_mutexattr_t;",
+    ]
+    for unwanted_string in unwanted_strings:
+        code = code.replace(unwanted_string, "")
+    
+    for unwanted_regex in unwanted_regexs:
+        code, _ = re.subn(unwanted_regex, "", code)
+    
 
-        for unwanted_regex in unwanted_regexs:
-            code, _ = re.subn(unwanted_regex, "", code)
-
-        # remove assumptions
-        code = re.sub(r"__CPROVER_assume\(.*?;\n", "", code)
-
-
-        # transform malloc call
-        lines = code.split("\n")
-        for i in range(len(lines)):
-          if "malloc(" in lines[i]:
-            assert("return_value_malloc" in lines[i+1])
-            lhs = lines[i+1].split("=")[0].strip()
-            lines[i] = lhs + " = " + lines[i]
-            lines[i+1] = ""
-          if "strlen(" in lines[i]:
-            assert("return_value_strlen" in lines[i+1])
-            lhs = lines[i+1].split("=")[0].strip()
-            lines[i] = lhs + " = " + lines[i]
-            lines[i+1] = ""
-          m = re.search("&dynamic_object(\d+)", lines[i])
-          if m:
-            lines[i] = lines[i].replace(m.group(0), "pointer_list[" + m.group(1) + "]")
-          m = re.search(" dynamic_object(\d+)#\d*.", lines[i])
-          if m:
-            lines[i] = lines[i].replace(m.group(0), "((ecc_point*)pointer_list[{}])->".format(m.group(1)))
-        code = "\n".join(lines)
+    # remove assumptions
+    code = re.sub(r"__CPROVER_assume\(.*?;\n", "", code)
 
 
-        f.write(code)
+    # transform malloc call
+    lines = code.split("\n")
+    for i in range(len(lines)):
+      if "malloc(" in lines[i]:
+        assert("return_value_malloc" in lines[i+1])
+        lhs = lines[i+1].split("=")[0].strip()
+        lines[i] = lhs + " = " + lines[i]
+        lines[i+1] = ""
+      if "strlen(" in lines[i]:
+        assert("return_value_strlen" in lines[i+1])
+        lhs = lines[i+1].split("=")[0].strip()
+        lines[i] = lhs + " = " + lines[i]
+        lines[i+1] = ""
+      m = re.search("&dynamic_object(\d+)", lines[i])
+      if m:
+        lines[i] = lines[i].replace(m.group(0), "pointer_list[" + m.group(1) + "]")
+      m = re.search(" dynamic_object(\d+)#\d*.", lines[i])
+      if m:
+        lines[i] = lines[i].replace(m.group(0), "((ecc_point*)pointer_list[{}])->".format(m.group(1)))
+    code = "\n".join(lines)
+
+    with open(path, "w") as f:
+      f.write(code)

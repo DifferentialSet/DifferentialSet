@@ -72,7 +72,7 @@ info = subprocess.check_output("lscpu", shell=True).decode()
 avx_version = "512" if "avx512" in info else ("2" if "avx2" in info else None)
 
 import multiprocessing
-n_jobs = int(multiprocessing.cpu_count()) - 3
+n_jobs = int(multiprocessing.cpu_count()) - 1
 # compiler = "gcc"
 compiler = "clang"
 
@@ -92,7 +92,7 @@ for benchmark_path in benchmark_paths:
     print("Building goto program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Building goto"):
         if "wolfssl" in benchmark_path:
-            cmd = "goto-cc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -DHAVE_CONFIG_H -DBUILDING_WOLFSSL -DBUILDING_WOLFSSL -DWOLFSSL_TLS13 -DHAVE_TLS_EXTENSIONS -DHAVE_SUPPORTED_CURVES -D_POSIX_THREADS -fvisibility=hidden -DHAVE_THREAD_LS -DNDEBUG -DTFM_NO_ASM -DWOLFSSL_NO_ASM -pthread -DWC_NO_HARDEN -DHAVE_AESGCM -DWOLFSSL_SHA512 -DWOLFSSL_SHA384 -DHAVE_HKDF -DNO_DSA -DHAVE_ECC -DTFM_ECC256 -DECC_SHAMIR -DNO_WOLFSSL_MEMORY -DWC_RSA_PSS -DNO_DH -DWOLFSSL_BASE64_ENCODE -DNO_RC4 -DNO_HC128 -DNO_RABBIT -DWOLFSSL_SHA224 -DWOLFSSL_SHA3 -DWOLFSSL_SHAKE256 -DHAVE_POLY1305 -DHAVE_ONE_TIME_AUTH -DNO_CHACHA_ASM -DHAVE_CHACHA -DHAVE_HASHDRBG -DHAVE_TLS_EXTENSIONS -DHAVE_SUPPORTED_CURVES -DHAVE_EXTENDED_MASTER -DNO_RC4 -DHAVE_ENCRYPT_THEN_MAC -DNO_PSK -DNO_MD4 -DNO_PWDBASED -DUSE_FAST_MATH -DWOLFSSL_X86_64_BUILD -DWC_NO_ASYNC_THREADING -DHAVE_DH_DEFAULT_PARAMS -DNO_DES3 -Wall -Wno-unused -O2 -DHAVE___UINT128_T=1 -DWOLFSSL_DEBUG_MATH -DFP_MAX_BITS=256 -Wno-error -g -Wno-pragmas -Wall -Wno-strict-aliasing -Wextra -Wunknown-pragmas --param=ssp-buffer-size=1 -Waddress -Warray-bounds -Wbad-function-cast -Wchar-subscripts -Wcomment -Wfloat-equal -Wformat-security -Wformat=2 -Wmaybe-uninitialized -Wmissing-field-initializers -Wmissing-noreturn -Wmissing-prototypes -Wnested-externs -Wnormalized=id -Woverride-init -Wpointer-arith -Wpointer-sign -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-overflow=1 -Wstrict-prototypes -Wswitch-enum -Wundef -Wunused -Wunused-result -Wunused-variable -Wwrite-strings -fwrapv -fno-unroll-loops -I .. ../wolfcrypt/src/*.c ../IDE/MDK5-ARM/Src/ssl-dummy.c unroll_1.c -o main"
+            cmd = "goto-cc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -DHAVE_CONFIG_H -D_POSIX_THREADS -fvisibility=hidden -DHAVE_THREAD_LS -DTFM_NO_ASM -DWOLFSSL_NO_ASM -pthread -DWC_NO_HARDEN -DHAVE_AESGCM -DHAVE_HKDF -DNO_DSA -DHAVE_ECC -DTFM_ECC256 -DECC_SHAMIR -DNO_DH -DNO_RC4 -DNO_HC128 -DNO_RABBIT -DNO_CHACHA_ASM -DNO_RC4 -DNO_PSK -DNO_MD4 -DNO_PWDBASED -DUSE_FAST_MATH -DWC_NO_ASYNC_THREADING -DHAVE_DH_DEFAULT_PARAMS -DNO_DES3 -DHAVE___UINT128_T=1 -DFP_MAX_BITS=256 -I .. ../wolfcrypt/src/*.c ../IDE/MDK5-ARM/Src/ssl-dummy.c unroll_1.c -o main"
             subprocess.run(cmd, capture_output=True, cwd=benchmark_path, env=my_env, shell=True, check=True)
         else:
             subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
@@ -121,14 +121,14 @@ for benchmark_path in benchmark_paths:
     print("Compile baseline: {}".format(benchmark_name))
     with time_context(metrics_collector, "Compile transform_only"):
         clean_up_code(benchmark_path + "transform_only.c")
-        subprocess.run([compiler, "-O3", "-flto", "transform_only.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "transform_only", "-mavx2", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        subprocess.run([compiler, "-O3", "-flto", "transform_only.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "transform_only", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Combining instrumented.c: {}".format(benchmark_name))
     with time_context(metrics_collector, "Combine instrumented.c"):
         combine_components(benchmark_path, avx_version)
     print("Compile mitigated program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Compile mitigated.c"):
         clean_up_code(benchmark_path + "mitigated.c")
-        subprocess.run([compiler, "-O3", "-flto", "mitigated.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "mitigated", "-mavx2", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        subprocess.run([compiler, "-O3", "-flto", "mitigated.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "mitigated", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     wall_clock_time_end = time.time()
     print("Run mitigated program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Run mitigated"):
