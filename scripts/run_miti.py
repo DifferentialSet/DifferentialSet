@@ -70,6 +70,11 @@ import subprocess
 
 info = subprocess.check_output("lscpu", shell=True).decode()
 avx_version = "512" if "avx512" in info else ("2" if "avx2" in info else None)
+assert(avx_version is not None)
+if avx_version == "512":
+    arch = ["-mavx512bw"]
+else:
+    arch = ["-mavx2"]
 
 import multiprocessing
 n_jobs = int(multiprocessing.cpu_count()) - 1
@@ -121,14 +126,14 @@ for benchmark_path in benchmark_paths:
     print("Compile baseline: {}".format(benchmark_name))
     with time_context(metrics_collector, "Compile transform_only"):
         clean_up_code(benchmark_path + "transform_only.c")
-        subprocess.run([compiler, "-O3", "-flto", "transform_only.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "transform_only", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        subprocess.run([compiler, "-O3", "-flto", "transform_only.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "transform_only"] + arch, capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Combining instrumented.c: {}".format(benchmark_name))
     with time_context(metrics_collector, "Combine instrumented.c"):
         combine_components(benchmark_path, avx_version)
     print("Compile mitigated program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Compile mitigated.c"):
         clean_up_code(benchmark_path + "mitigated.c")
-        subprocess.run([compiler, "-O3", "-flto", "mitigated.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "mitigated", "-march=native"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        subprocess.run([compiler, "-O3", "-flto", "mitigated.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "mitigated"] + arch, capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     wall_clock_time_end = time.time()
     print("Run mitigated program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Run mitigated"):
