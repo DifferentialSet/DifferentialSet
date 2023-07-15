@@ -203,6 +203,7 @@
               pkgs.linuxKernel.packages.linux_5_15.perf
               pkgs.py-spy
               pkgs.jupyter
+              pkgs.util-linux
             ];
           };
         });
