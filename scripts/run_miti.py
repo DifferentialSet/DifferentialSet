@@ -64,7 +64,7 @@ benchmark_paths += [benchmark_dir + "binsec/bearssl/aes_big_wrapper/"]
 benchmark_paths += [benchmark_dir + "binsec/bearssl/des_tab_wrapper/"]
 benchmark_paths += [benchmark_dir + "binsec/tls1_cbc_remove_padding_lucky13_wrapper/"]
 
-benchmark_paths += [benchmark_dir + "wolfssl/unroll_1/"]
+benchmark_paths += [benchmark_dir + "wolfssl/wolfssl_unroll1/"]
 
 import subprocess
 
@@ -92,7 +92,7 @@ for benchmark_path in benchmark_paths:
     print("Building goto program: {}".format(benchmark_name))
     with time_context(metrics_collector, "Building goto"):
         if "wolfssl" in benchmark_path:
-            cmd = "goto-cc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -DHAVE_CONFIG_H -D_POSIX_THREADS -fvisibility=hidden -DHAVE_THREAD_LS -DTFM_NO_ASM -DWOLFSSL_NO_ASM -pthread -DWC_NO_HARDEN -DHAVE_AESGCM -DHAVE_HKDF -DNO_DSA -DHAVE_ECC -DTFM_ECC256 -DECC_SHAMIR -DNO_DH -DNO_RC4 -DNO_HC128 -DNO_RABBIT -DNO_CHACHA_ASM -DNO_RC4 -DNO_PSK -DNO_MD4 -DNO_PWDBASED -DUSE_FAST_MATH -DWC_NO_ASYNC_THREADING -DHAVE_DH_DEFAULT_PARAMS -DNO_DES3 -DHAVE___UINT128_T=1 -DFP_MAX_BITS=256 -I .. ../wolfcrypt/src/*.c ../IDE/MDK5-ARM/Src/ssl-dummy.c unroll_1.c -o main"
+            cmd = "goto-cc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -DHAVE_CONFIG_H -D_POSIX_THREADS -fvisibility=hidden -DHAVE_THREAD_LS -DTFM_NO_ASM -DWOLFSSL_NO_ASM -pthread -DWC_NO_HARDEN -DHAVE_AESGCM -DHAVE_HKDF -DNO_DSA -DHAVE_ECC -DTFM_ECC256 -DECC_SHAMIR -DNO_DH -DNO_RC4 -DNO_HC128 -DNO_RABBIT -DNO_CHACHA_ASM -DNO_RC4 -DNO_PSK -DNO_MD4 -DNO_PWDBASED -DUSE_FAST_MATH -DWC_NO_ASYNC_THREADING -DHAVE_DH_DEFAULT_PARAMS -DNO_DES3 -DHAVE___UINT128_T=1 -DFP_MAX_BITS=256 -I .. ../wolfcrypt/src/*.c ../IDE/MDK5-ARM/Src/ssl-dummy.c wolfssl_unroll1.c -o main"
             subprocess.run(cmd, capture_output=True, cwd=benchmark_path, env=my_env, shell=True, check=True)
         else:
             subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
