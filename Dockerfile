@@ -2,7 +2,7 @@ FROM nixos/nix
 
 RUN git clone https://github.com/DifferentialSet/DifferentialSet.git &&\
     cd DifferentialSet &&\
-    git checkout 50d0927bac18120db68af9fea241cf7c569df901
+    git checkout 2f78fa93c1fda8949d3b652b43664032c5ce5ad3
 WORKDIR /DifferentialSet
 
 RUN nix --extra-experimental-features "nix-command flakes" develop 
