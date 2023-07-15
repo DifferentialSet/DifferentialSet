@@ -205,6 +205,7 @@
               pkgs.jupyter
               pkgs.util-linux
               pkgs.vim
+              pkgs.clang
             ];
           };
         });
