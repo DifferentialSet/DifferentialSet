@@ -1,3 +1,0 @@
-
-2023-07-09 11:54:09.086555
-{"Building goto TIME": [0.26, 0.0], "Analysis TIME": [0.93, 0.01], "Enumerate DS TIME": [6354.83, 3.7], "Get transform only TIME": [0.06, 0.0], "Transform TIME": [0.23, 0.0], "Dump instrumented.c TIME": [4.46, 0.0], "Do alignment TIME": [0.02, 1.01], "Dump transform only TIME": [0.18, 0.0], "Compile transform_only TIME": [0.35, 0.57], "Combine instrumented.c TIME": [0.0, 0.0], "Compile mitigated.c TIME": [0.64, 0.82], "Run mitigated TIME": [1.94, 0.11], "Run transform_only TIME": [1.9, 0.13], "mitigated_cycle": 195098, "baseline_cycle": 193942, "overhead": 0.005960544905177836, "Total Time": 6372.15, "Wall Clock Time": 101.0940728187561}
