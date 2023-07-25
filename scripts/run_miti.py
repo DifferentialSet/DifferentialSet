@@ -105,69 +105,74 @@ for benchmark_path in benchmark_paths:
 
     wall_clock_time_begin = time.time()
 
-    print("Building goto program: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Building goto"):
-        if "wolfssl" in benchmark_path:
-            cmd = "goto-cc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -DHAVE_CONFIG_H -D_POSIX_THREADS -fvisibility=hidden -DHAVE_THREAD_LS -DTFM_NO_ASM -DWOLFSSL_NO_ASM -pthread -DWC_NO_HARDEN -DHAVE_AESGCM -DHAVE_HKDF -DNO_DSA -DHAVE_ECC -DTFM_ECC256 -DECC_SHAMIR -DNO_DH -DNO_RC4 -DNO_HC128 -DNO_RABBIT -DNO_CHACHA_ASM -DNO_RC4 -DNO_PSK -DNO_MD4 -DNO_PWDBASED -DUSE_FAST_MATH -DWC_NO_ASYNC_THREADING -DHAVE_DH_DEFAULT_PARAMS -DNO_DES3 -DHAVE___UINT128_T=1 -DFP_MAX_BITS=256 -I .. ../wolfcrypt/src/*.c ../IDE/MDK5-ARM/Src/ssl-dummy.c wolfssl_unroll1.c -o main"
-            subprocess.run(cmd, capture_output=True, cwd=benchmark_path, env=my_env, shell=True, check=True)
-        else:
-            subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    print("Capture memops and construct constraints: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Analysis"):
-        subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    print("Enumerate DS: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Enumerate DS"):
-        parallel_enumerate(benchmark_path, n_jobs=n_jobs)
+    try:
+        print("Building goto program: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Building goto"):
+            if "wolfssl" in benchmark_path:
+                cmd = "goto-cc -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -DHAVE_CONFIG_H -D_POSIX_THREADS -fvisibility=hidden -DHAVE_THREAD_LS -DTFM_NO_ASM -DWOLFSSL_NO_ASM -pthread -DWC_NO_HARDEN -DHAVE_AESGCM -DHAVE_HKDF -DNO_DSA -DHAVE_ECC -DTFM_ECC256 -DECC_SHAMIR -DNO_DH -DNO_RC4 -DNO_HC128 -DNO_RABBIT -DNO_CHACHA_ASM -DNO_RC4 -DNO_PSK -DNO_MD4 -DNO_PWDBASED -DUSE_FAST_MATH -DWC_NO_ASYNC_THREADING -DHAVE_DH_DEFAULT_PARAMS -DNO_DES3 -DHAVE___UINT128_T=1 -DFP_MAX_BITS=256 -I .. ../wolfcrypt/src/*.c ../IDE/MDK5-ARM/Src/ssl-dummy.c wolfssl_unroll1.c -o main"
+                subprocess.run(cmd, capture_output=True, cwd=benchmark_path, env=my_env, shell=True, check=True)
+            else:
+                subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        print("Capture memops and construct constraints: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Analysis"):
+            subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        print("Enumerate DS: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Enumerate DS"):
+            parallel_enumerate(benchmark_path, n_jobs=n_jobs)
 
-    print("Get transform only baseline: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Get transform only"):
-        subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--transform-only", "--function", "main", "main", "transform_only_dump"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    print("Replace memops with secure version: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Transform"):
-        subprocess.run(["goto-instrument", "--config-dir", ".", "--mitigate-cache-sidechannel", "--function", "main", "captured", "instrumented"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    print("Dump instrumented code to C: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Dump instrumented.c"):
-        process = subprocess.Popen(["goto-instrument", "--dump-c", "instrumented", "instrumented.c"], cwd=benchmark_path, env=my_env)
-        max_memory = get_max_memory(process)
-        metrics_collector["Max Mem"] = max_memory
-        process.communicate()
-    print("Do alignment: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Do alignment"):
-        do_alignment(benchmark_path, align_only=False, avx_version=avx_version)
-    print("Dump baseline to C: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Dump transform only"):
-        subprocess.run(["goto-instrument", "--dump-c", "transform_only_dump", "transform_only.c"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    print("Compile baseline: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Compile transform_only"):
-        clean_up_code(benchmark_path + "transform_only.c")
-        subprocess.run([compiler, "-O3", "-flto", "transform_only.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "transform_only"] + arch, capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    print("Combining instrumented.c: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Combine instrumented.c"):
-        combine_components(benchmark_path, avx_version)
-    print("Compile mitigated program: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Compile mitigated.c"):
-        clean_up_code(benchmark_path + "mitigated.c")
-        subprocess.run([compiler, "-O3", "-flto", "mitigated.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "mitigated"] + arch, capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    wall_clock_time_end = time.time()
-    print("Run mitigated program: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Run mitigated"):
-        result_mitigated = subprocess.run(["perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./mitigated"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
-    print("Run baseline program: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Run transform_only"):
-        result_baseline = subprocess.run(["perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./transform_only"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
+        print("Get transform only baseline: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Get transform only"):
+            subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--transform-only", "--function", "main", "main", "transform_only_dump"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        print("Replace memops with secure version: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Transform"):
+            subprocess.run(["goto-instrument", "--config-dir", ".", "--mitigate-cache-sidechannel", "--function", "main", "captured", "instrumented"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        print("Dump instrumented code to C: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Dump instrumented.c"):
+            process = subprocess.Popen(["goto-instrument", "--dump-c", "instrumented", "instrumented.c"], cwd=benchmark_path, env=my_env)
+            max_memory = get_max_memory(process)
+            metrics_collector["Max Mem"] = max_memory
+            process.communicate()
+        print("Do alignment: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Do alignment"):
+            do_alignment(benchmark_path, align_only=False, avx_version=avx_version)
+        print("Dump baseline to C: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Dump transform only"):
+            subprocess.run(["goto-instrument", "--dump-c", "transform_only_dump", "transform_only.c"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        print("Compile baseline: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Compile transform_only"):
+            clean_up_code(benchmark_path + "transform_only.c")
+            subprocess.run([compiler, "-O3", "-flto", "transform_only.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "transform_only"] + arch, capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        print("Combining instrumented.c: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Combine instrumented.c"):
+            combine_components(benchmark_path, avx_version)
+        print("Compile mitigated program: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Compile mitigated.c"):
+            clean_up_code(benchmark_path + "mitigated.c")
+            subprocess.run([compiler, "-O3", "-flto", "mitigated.c", "-Wno-int-conversion", "-Wno-shift-op-parentheses", "-o", "mitigated"] + arch, capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        wall_clock_time_end = time.time()
+        print("Run mitigated program: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Run mitigated"):
+            result_mitigated = subprocess.run(["perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./mitigated"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
+        print("Run baseline program: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Run transform_only"):
+            result_baseline = subprocess.run(["perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./transform_only"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
 
-    mitigated_cycle = int(result_mitigated.stderr.split(b",")[0])
-    baseline_cycle = int(result_baseline.stderr.split(b",")[0])
-    metrics_collector["mitigated_cycle"] = mitigated_cycle
-    metrics_collector["baseline_cycle"] = baseline_cycle
-    metrics_collector["overhead"] = (mitigated_cycle - baseline_cycle) / baseline_cycle
-    print(mitigated_cycle)
-    print(baseline_cycle)
-    print((mitigated_cycle - baseline_cycle) / baseline_cycle)
-    assert(str(result_baseline.stdout) == str(result_mitigated.stdout))
+        mitigated_cycle = int(result_mitigated.stderr.split(b",")[0])
+        baseline_cycle = int(result_baseline.stderr.split(b",")[0])
+        metrics_collector["mitigated_cycle"] = mitigated_cycle
+        metrics_collector["baseline_cycle"] = baseline_cycle
+        metrics_collector["overhead"] = (mitigated_cycle - baseline_cycle) / baseline_cycle
+        print(mitigated_cycle)
+        print(baseline_cycle)
+        print((mitigated_cycle - baseline_cycle) / baseline_cycle)
+        assert(str(result_baseline.stdout) == str(result_mitigated.stdout))
 
-    metrics_collector["Total Time"] = sum([v[0] + v[1] for k, v in metrics_collector.items() if k.endswith("TIME")])
-    metrics_collector["Wall Clock Time"] = wall_clock_time_end - wall_clock_time_begin
+        metrics_collector["Total Time"] = sum([v[0] + v[1] for k, v in metrics_collector.items() if k.endswith("TIME")])
+        metrics_collector["Wall Clock Time"] = wall_clock_time_end - wall_clock_time_begin
+    except Exception as e:
+        print("Exception: {}".format(e))
+        metrics_collector["Exception"] = str(e)
+    
     with open(benchmark_path+"/{}".format(metrics_file), "a") as f:
         f.write("\n" + str(datetime.datetime.now()) + "\n")    
         f.write(json.dumps(metrics_collector))
