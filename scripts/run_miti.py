@@ -170,8 +170,10 @@ for benchmark_path in benchmark_paths:
         metrics_collector["Total Time"] = sum([v[0] + v[1] for k, v in metrics_collector.items() if k.endswith("TIME")])
         metrics_collector["Wall Clock Time"] = wall_clock_time_end - wall_clock_time_begin
     except Exception as e:
-        print("Exception: {}".format(e))
-        metrics_collector["Exception"] = str(e)
+        import traceback
+        tb = traceback.format_exc()
+        print(tb)
+        metrics_collector["Exception"] = tb
     
     with open(benchmark_path+"/{}".format(metrics_file), "a") as f:
         f.write("\n" + str(datetime.datetime.now()) + "\n")    
