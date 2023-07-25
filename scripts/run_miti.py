@@ -7,8 +7,7 @@ from combine import combine_components
 import time
 from util import clean_up_code
 import datetime
-
-now = datetime.datetime.now()
+import psutil
 
 @contextmanager
 def time_context(collector, item_name):
@@ -17,11 +16,23 @@ def time_context(collector, item_name):
     try:
         yield None
     finally:
-        usage_end = resource.getrusage(resource.RUSAGE_CHILDREN)
         child_cpu_time = round(resource.getrusage(resource.RUSAGE_CHILDREN).ru_utime - child_usage_start.ru_utime, 2)
         self_cpu_time = round(resource.getrusage(resource.RUSAGE_SELF).ru_utime - self_usage_start.ru_utime, 2)
         collector[item_name + " TIME"] = (child_cpu_time, self_cpu_time)
         print("CPU time: {}".format((child_cpu_time, self_cpu_time)))
+
+def get_max_memory(process):
+    max_memory = 0
+    p = psutil.Process(process.pid)
+    while process.poll() is None:
+        try:
+            mem_info = p.memory_info()
+            memory = mem_info.rss  # resident set size: memory usage in bytes 
+        except psutil.NoSuchProcess:
+            break
+        max_memory = max(max_memory, memory)
+        time.sleep(0.1)  # adjust this as needed
+    return max_memory
 
 my_env = os.environ.copy()
 
@@ -116,7 +127,10 @@ for benchmark_path in benchmark_paths:
         subprocess.run(["goto-instrument", "--config-dir", ".", "--mitigate-cache-sidechannel", "--function", "main", "captured", "instrumented"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
     print("Dump instrumented code to C: {}".format(benchmark_name))
     with time_context(metrics_collector, "Dump instrumented.c"):
-        subprocess.run(["goto-instrument", "--dump-c", "instrumented", "instrumented.c"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        process = subprocess.Popen(["goto-instrument", "--dump-c", "instrumented", "instrumented.c"], cwd=benchmark_path, env=my_env)
+        max_memory = get_max_memory(process)
+        metrics_collector["Max Mem"] = max_memory
+        process.communicate()
     print("Do alignment: {}".format(benchmark_name))
     with time_context(metrics_collector, "Do alignment"):
         do_alignment(benchmark_path, align_only=False, avx_version=avx_version)
@@ -155,10 +169,13 @@ for benchmark_path in benchmark_paths:
     metrics_collector["Total Time"] = sum([v[0] + v[1] for k, v in metrics_collector.items() if k.endswith("TIME")])
     metrics_collector["Wall Clock Time"] = wall_clock_time_end - wall_clock_time_begin
     with open(benchmark_path+"/{}".format(metrics_file), "a") as f:
-        f.write("\n" + str(now) + "\n")    
+        f.write("\n" + str(datetime.datetime.now()) + "\n")    
         f.write(json.dumps(metrics_collector))
 
+    with open("./{}".format("debug_" + metrics_file), "a") as f:
+        f.write("\n" + str(datetime.datetime.now()) + benchmark_name + "\n")  
+        f.write(json.dumps(metrics_collector))
 
 with open("./{}".format(metrics_file), "a") as f:
-    f.write("\n" + str(now) + "\n")    
+    f.write("\n" + str(datetime.datetime.now()) + "\n")    
     f.write(json.dumps({k:(v["baseline_cycle"], v["mitigated_cycle"], v["overhead"]) for k,v in benchmark_collector.items()}))
