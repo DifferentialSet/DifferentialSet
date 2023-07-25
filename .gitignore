@@ -12,6 +12,8 @@ main
 memop_id_to_obsv_id.csv
 miti_metrics.json
 quant_metrics.json
+debug_miti_metrics.json
+debug_quant_metrics.json
 cbmc.smt2_
 *.dimacs
 *.csv_
