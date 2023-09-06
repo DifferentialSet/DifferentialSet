@@ -3,7 +3,7 @@ import z3
 from typing import List
 from tqdm import tqdm
 
-def get_target_literals_old(dimacs_path, target_var_prefixes):
+def get_target_literals_no_filter(dimacs_path, target_var_prefixes):
     target_literals = []
     with open(dimacs_path, 'r') as f:
         first_line = f.readline()
@@ -102,10 +102,8 @@ def get_target_literals(dimacs_path: str, target_var_prefixes: List[str]):
     
     return list(set(output))
 
-def get_target_literals_dimacs(dimacs_path: str, n_jobs, target_var_prefixes: List[str]):
-
-    output = []
-
+# this function is slow because setting up a large number of variables in z3 takes a long time
+def get_target_literals_with_filter(dimacs_path: str, n_jobs, target_var_prefixes: List[str]):
     f = open(dimacs_path, 'r')
     first_line = f.readline()
     splits = first_line.split(" ")
@@ -115,7 +113,7 @@ def get_target_literals_dimacs(dimacs_path: str, n_jobs, target_var_prefixes: Li
     # if there are too many clauses, the optimization of
     # removing non-interefering observations is not worth it
     if clause_num > 1000000:
-        return get_target_literals_old(dimacs_path, target_var_prefixes)
+        return get_target_literals_no_filter(dimacs_path, target_var_prefixes)
 
     def mirror_literal(l: str) -> str:
         return str(int(l) + literal_num) if int(l) > 0 else str(int(l) - literal_num)
@@ -139,17 +137,20 @@ def get_target_literals_dimacs(dimacs_path: str, n_jobs, target_var_prefixes: Li
     import pycryptosat
     
     comments_for_target_vars = [c.strip() for c in comments if any(prefix in c for prefix in target_var_prefixes)]
+    # check if whether the observation is only interfered by public variables
+    # if so, the constraint will be unsat, and we do not include the observation when counting
     def filter_comments(comment):
         target_vars_literals = [l.strip("-") for l in comment.split(" ")[2:]]
-        s = pycryptosat.Solver(time_limit=10)
+        s = z3.Solver()
+        z3_literals = [None] + [z3.Bool('{}'.format(i)) for i in range(1, literal_num*2+1)]
         for c in clauses + dup_clauses:
-            s.add_clause([int(l) for l in c.split(" ")[:-1]])
+            s.add(z3.Or([z3_literals[int(l)] for l in c.split(" ")[:-1]]))
         for l in pub_literals:
-            s.add_xor_clause([abs(int(l)), abs(int(mirror_literal(l)))], False)
-        for l in target_vars_literals:
-            s.add_xor_clause([abs(int(l)), abs(int(mirror_literal(l)))], True)
-        is_sat, _ = s.solve()
-        if is_sat or is_sat is None:
+            s.add(z3_literals[abs(int(l))] == z3_literals[abs(int(mirror_literal(l)))])
+        s.add(z3.Or([z3_literals[abs(int(l))] != z3_literals[abs(int(mirror_literal(l)))] for l in target_vars_literals]))
+        s.set(timeout=10000)
+        is_sat = s.check()
+        if is_sat == z3.sat or is_sat == z3.unknown:
             return target_vars_literals
         return []
     from joblib import Parallel, delayed
@@ -160,7 +161,7 @@ def get_target_literals_dimacs(dimacs_path: str, n_jobs, target_var_prefixes: Li
     return list(set(reduce(lambda x, y: x + y, chunks, [])))
 
 
-def preprocess_dimacs(benchmark_path, n_jobs, new=True):
+def preprocess_dimacs(benchmark_path, n_jobs, filter=True):
     # dimacs_path = benchmark_path + "data_cache_cbmc.dimacs"
     # preprocess_one_dimacs(dimacs_path, ["alignment_"])
 
@@ -168,10 +169,10 @@ def preprocess_dimacs(benchmark_path, n_jobs, new=True):
     # preprocess_one_dimacs(dimacs_path, ["label_alignment_"])
 
     dimacs_path = benchmark_path + "combined_cache_cbmc.dimacs"
-    if new:
-        target_literals = get_target_literals_dimacs(dimacs_path, n_jobs, ["label_alignment_", "alignment_"])
+    if filter:
+        target_literals = get_target_literals_with_filter(dimacs_path, n_jobs, ["label_alignment_", "alignment_"])
     else:
-        target_literals = get_target_literals_old(dimacs_path, ["label_alignment_", "alignment_"])
+        target_literals = get_target_literals_no_filter(dimacs_path, ["label_alignment_", "alignment_"])
 
     with open(dimacs_path, 'a') as f:
         f.write("c ind " + " ".join(target_literals) + " 0 \n")
