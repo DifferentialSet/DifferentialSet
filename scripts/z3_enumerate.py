@@ -504,6 +504,7 @@ def enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_m
             if is_const(sim):
                 offset_name = sim.as_long()
     object_offset_pairs = [(object_id if object_id != None else object_name, offset_val if offset_val != None else offset_name, pub_tuples) for (object_id, offset_val, pub_tuples) in object_offset_pairs]
+    object_offset_pairs = sorted(object_offset_pairs, key=lambda o: (o[0], o[1]))
 
     print("Finish {}".format(target_var_name), flush=True)
     return (target_var_name, object_offset_pairs, pc_is_sensitive)
@@ -576,6 +577,7 @@ def get_ds_macro_def(config_dir, infos, avx_version):
         ds_size = 0
         for base, offsets in base_to_offsets.items():
             offsets = list(set(offsets))
+            offsets = sorted(offsets)
             ds_size += len(offsets)
             if type(base) == int:
                 var_name = pointer_mapping[base][0]
@@ -841,7 +843,7 @@ if __name__ == "__main__":
     # smt2_path = "/home/cream/src/DSA_github/benchmarks/mitigation/play/alias/cbmc.smt2"
     # smt2_path = "/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/cbmc.smt2"
     # config_dir = "/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/"
-    config_dir = "/home/cream/src/constantine/src/apps/wolfssl_case_study/wolfssl/unroll_1/"
+    config_dir = "/home/congm/src/DifferentialSet/benchmarks/mitigation/issta2018-benchmarks-wu/examples/chronos/des3/"
     smt2_path = config_dir + "cbmc.smt2" 
     decls, bounds_script, cbmc_script, object_size_script, obsv_script, branch_script = split_script(smt2_path)
     bounds_script = decls + bounds_script
@@ -873,9 +875,9 @@ if __name__ == "__main__":
         if len(lines) == 0:
             largest_pointer_number = 0
         else:
-            line = f.readlines()[-1]
+            line = lines[-1]
             largest_pointer_number = int(line.split(",")[-1].strip())
-    e = enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_mapping, "Observation_$11$3$3$2$12$3$12$10$1$3$10$4$0$2$16$6$4$4$0$0_4069", ctx, largest_pointer_number, cbmc_script, debug=True)
+    e = enumerate_routine(bounds_mapping, cbmc_mapping, obsv_mapping, branch_label_mapping, "Observation__12", ctx, largest_pointer_number, cbmc_script, debug=True)
     print(e)
 
 # %%
