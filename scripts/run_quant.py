@@ -4,6 +4,7 @@ import subprocess, resource, os, json
 from z3_enumerate import parallel_enumerate, do_alignment
 from contextlib import contextmanager
 from combine import combine_components
+import datetime
 import time
 
 
@@ -132,6 +133,9 @@ for benchmark_path, compositional_multiplier in benchmark_paths:
     with open(benchmark_path+"/{}".format(metrics_file), "a") as f:
         f.write(json.dumps(metrics_collector))
         f.write("\n")
+    with open("./{}".format("debug_" + metrics_file), "a") as f:
+        f.write("\n" + str(datetime.datetime.now()) + benchmark_name + "\n")  
+        f.write(json.dumps(metrics_collector))
 print(json.dumps(benchmark_collector, indent=4))
 
 
