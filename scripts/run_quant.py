@@ -70,59 +70,65 @@ metrics_file = "quant_metrics.json"
 
 benchmark_collector = {}
 for benchmark_path, compositional_multiplier in benchmark_paths:
-    # extract last part of path
-    benchmark_full_name = benchmark_path.split("/")[-3] + "/" + benchmark_path.split("/")[-2]
-    benchmark_name = benchmark_path.split("/")[-2]
-    print("Running benchmark: {}".format(benchmark_name))
-    metrics_collector = {}
-    benchmark_collector[benchmark_full_name] = metrics_collector
+    try:
+        # extract last part of path
+        benchmark_full_name = benchmark_path.split("/")[-3] + "/" + benchmark_path.split("/")[-2]
+        benchmark_name = benchmark_path.split("/")[-2]
+        print("Running benchmark: {}".format(benchmark_name))
+        metrics_collector = {}
+        benchmark_collector[benchmark_full_name] = metrics_collector
 
-    wall_clock_time_begin = time.time()
-    print("Building goto program: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Building goto"):
-        subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    print("Capture memops and construct constraints: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Analysis"):
-        subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-    print("Enumerate DS: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Enumerate DS"):
-        parallel_enumerate(benchmark_path, n_jobs=n_jobs)
+        wall_clock_time_begin = time.time()
+        print("Building goto program: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Building goto"):
+            subprocess.run(["goto-cc", "{}.c".format(benchmark_name), "-o", "main", "-I", "/usr/include/x86_64-linux-gnu/"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        print("Capture memops and construct constraints: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Analysis"):
+            subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+        print("Enumerate DS: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Enumerate DS"):
+            parallel_enumerate(benchmark_path, n_jobs=n_jobs)
 
-    print("Do alignment: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Do alignment"):
-        do_alignment(benchmark_path, align_only=True)
-    print("Generate DIMACS for counting: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Generate DIMACS"):
-        subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--to-dimacs", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
-        from count_cc import preprocess_dimacs
-        preprocess_dimacs(benchmark_path, n_jobs, filter=False)
+        print("Do alignment: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Do alignment"):
+            do_alignment(benchmark_path, align_only=True)
+        print("Generate DIMACS for counting: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Generate DIMACS"):
+            subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--to-dimacs", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
+            from count_cc import preprocess_dimacs
+            preprocess_dimacs(benchmark_path, n_jobs, filter=False)
 
-    print("Counting CC: {}".format(benchmark_name))
-    with time_context(metrics_collector, "Counting CC"):
-        from count_cc import count, get_secret_size
-        dimacs_path = benchmark_path + "combined_cache_cbmc.dimacs"
-        f = open(dimacs_path, 'r')
-        # get last line
-        last_line = f.readlines()[-1]
-        if "c ind  0" in last_line:
-            count = 0
-        else:
-            count = count(dimacs_path, my_env)
-        secret_size = get_secret_size(dimacs_path)
-        import math
-        if count == 0:
-            metrics_collector["CC"] = "0"
-        elif secret_size < math.log(count, 2) * compositional_multiplier:
-            metrics_collector["CC"] = "{}".format(secret_size)
-        elif compositional_multiplier != 1:
-            metrics_collector["CC"] = "log({}) * {}".format(count, compositional_multiplier)
-        else:
-            metrics_collector["CC"] = "log({})".format(count)
-        print(metrics_collector["CC"])
-    wall_clock_time_end = time.time()
+        print("Counting CC: {}".format(benchmark_name))
+        with time_context(metrics_collector, "Counting CC"):
+            from count_cc import count, get_secret_size
+            dimacs_path = benchmark_path + "combined_cache_cbmc.dimacs"
+            f = open(dimacs_path, 'r')
+            # get last line
+            last_line = f.readlines()[-1]
+            if "c ind  0" in last_line:
+                count = 0
+            else:
+                count = count(dimacs_path, my_env)
+            secret_size = get_secret_size(dimacs_path)
+            import math
+            if count == 0:
+                metrics_collector["CC"] = "0"
+            elif secret_size < math.log(count, 2) * compositional_multiplier:
+                metrics_collector["CC"] = "{}".format(secret_size)
+            elif compositional_multiplier != 1:
+                metrics_collector["CC"] = "log({}) * {}".format(count, compositional_multiplier)
+            else:
+                metrics_collector["CC"] = "log({})".format(count)
+            print(metrics_collector["CC"])
+        wall_clock_time_end = time.time()
 
-    metrics_collector["Total Time"] = sum([v[0] + v[1] for k, v in metrics_collector.items() if k.endswith("TIME")])
-    metrics_collector["Wall Clock Time"] = wall_clock_time_end - wall_clock_time_begin
+        metrics_collector["Total Time"] = sum([v[0] + v[1] for k, v in metrics_collector.items() if k.endswith("TIME")])
+        metrics_collector["Wall Clock Time"] = wall_clock_time_end - wall_clock_time_begin
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        print(tb)
+        metrics_collector["Exception"] = tb
     with open(benchmark_path+"/{}".format(metrics_file), "a") as f:
         f.write(json.dumps(metrics_collector))
         f.write("\n")
