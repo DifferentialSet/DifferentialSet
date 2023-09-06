@@ -892,12 +892,13 @@ void des3_ede_decrypt(struct des3_ede_ctx *dctx, uint8_t *dst, const uint8_t *sr
 }
 
 
-static uint8_t in_key[24]  __attribute__((aligned(64)))= {170, 189, 202, 248, 185, 48, 3, 81, 240, 81, 249, 222, 216, 96, 89, 207, 96, 74, 156, 52, 173, 112, 8, 152};
+// static uint8_t in_key[24]  __attribute__((aligned(64)))= {170, 189, 202, 248, 185, 48, 3, 81, 240, 81, 249, 222, 216, 96, 89, 207, 96, 74, 156, 52, 173, 112, 8, 152};
 static uint8_t in_pub[64]  __attribute__((aligned(64)))= {0x00};
 static 	uint8_t out[64]  __attribute__((aligned(64)))= {0};
 
 int main()
 {
+	uint8_t in_key[24];
 	struct des3_ede_ctx ctx = {0};
 	read(0, in_key, 24);
 	read(0, in_pub, 64);
