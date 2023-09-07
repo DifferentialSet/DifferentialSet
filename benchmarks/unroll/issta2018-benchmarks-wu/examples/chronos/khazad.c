@@ -70,9 +70,6 @@ static const uint64_t c[9]={ 0xBA542F7453D3D24Dull, 0x50AC8DBF70529A4Cull, 0xEAD
 // ctx
 // file khazad.c line 835
 struct khazad_ctx ctx={ .E={ 0ul, 0ul, 0ul, 0ul, 0ul, 0ul, 0ul, 0ul, 0ul }, .D={ 0ul, 0ul, 0ul, 0ul, 0ul, 0ul, 0ul, 0ul, 0ul } };
-// in_key
-// file khazad.c line 832
-static uint8_t in_key[32]={ 101, 70, 47, 14, 122, 80, 183, 67, 206, 210, 246, 249, 112, 240, 153, 113, 13, 37, 224, 87, 170, 209, 24, 101, 113, 215, 176, 107, 252, 40, 116, 124 };
 // in_pub
 // file khazad.c line 833
 static uint8_t in_pub[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -110,11 +107,12 @@ signed int main(int argc, char** argv)
   unsigned int khazad_setkey_key_len;
   struct khazad_ctx *khazad_setkey_ctx;
   const uint8_t *khazad_setkey_in_key;
-  read(0, (void *)in_key, 32ul);
+  uint8_t main_in_key[32];
+  read(0, (void *)main_in_key, 32ul);
   read(0, (void *)in_pub, 64ul);
   /* begin function khazad_setkey */
   ;
-  khazad_setkey_in_key = in_key;
+  khazad_setkey_in_key = main_in_key;
   khazad_setkey_ctx = &ctx;
   khazad_setkey_key_len = 16u;
   khazad_setkey_key = (const uint32_t *)khazad_setkey_in_key;

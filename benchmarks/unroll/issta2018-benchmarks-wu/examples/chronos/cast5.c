@@ -50,9 +50,6 @@ static ssize_t __read_chk__return_value;
 // cast5_setkey__return_value
 // 
 static signed int cast5_setkey__return_value;
-// in_key
-// file cast5.c line 777
-static uint8_t in_key[32];
 // in_pub
 // file cast5.c line 778
 static uint8_t in_pub[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -121,11 +118,12 @@ signed int main(int argc, char** argv)
   struct cast5_ctx *cast5_setkey_c;
   uint8_t *cast5_setkey_key;
   struct cast5_ctx main_ctx;
-  read(0, (void *)in_key, 32ul);
+  uint8_t main_in_key[32];
+  read(0, (void *)main_in_key, 32ul);
   read(0, (void *)in_pub, 64ul);
   /* begin function cast5_setkey */
   ;
-  cast5_setkey_key = in_key;
+  cast5_setkey_key = main_in_key;
   cast5_setkey_c = &main_ctx;
   cast5_setkey_key_len = 16u;
   cast5_setkey_p_key = (uint32_t *)cast5_setkey_key;

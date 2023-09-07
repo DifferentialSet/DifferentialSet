@@ -83,9 +83,6 @@ static ssize_t __read_chk__return_value;
 // cast6_setkey__return_value
 // 
 static signed int cast6_setkey__return_value;
-// in_key
-// file cast6.c line 505
-static uint8_t in_key[32]={ 171, 124, 26, 1, 28, 58, 37, 38, 73, 55, 169, 62, 45, 157, 243, 189, 83, 23, 66, 202, 85, 241, 186, 75, 82, 12, 163, 232, 58, 132, 235, 61 };
 // in_pub
 // file cast6.c line 506
 static uint8_t in_pub[16]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -144,12 +141,13 @@ signed int main(int argc, char** argv)
   struct cast6_ctx *cast6_setkey_c;
   const uint8_t *cast6_setkey_in_key;
   struct cast6_ctx main_ctx;
+  uint8_t main_in_key[32];
   main_ctx = (struct cast6_ctx){ .Km={ { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u } }, .Kr={ { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } } };
-  read(0, (void *)in_key, 32ul);
+  read(0, (void *)main_in_key, 32ul);
   read(0, (void *)in_pub, 16ul);
   /* begin function cast6_setkey */
   ;
-  cast6_setkey_in_key = in_key;
+  cast6_setkey_in_key = main_in_key;
   cast6_setkey_c = &main_ctx;
   cast6_setkey_key_len = 32u;
   cast6_setkey_key[0] = 0u;

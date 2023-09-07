@@ -20,9 +20,6 @@ void histogram(signed int *a, signed int *c);
 // __read_chk__return_value
 // 
 static ssize_t __read_chk__return_value;
-// in
-// file histogram.c line 21
-signed int in[1000];
 // main__return_value
 // 
 static signed int main__return_value;
@@ -45,10 +42,11 @@ signed int main(int argc, char** argv)
   signed int histogram_i;
   signed int *histogram_c;
   signed int *histogram_a;
-  read(0, (void *)in, (size_t)sizeof(signed int [1000]) /*4000ul*/ );
+  signed int main_in[1000];
+  read(0, (void *)main_in, (size_t)sizeof(signed int [1000]) /*4000ul*/ );
   /* begin function histogram */
   ;
-  histogram_a = in;
+  histogram_a = main_in;
   histogram_c = out;
   histogram_i = 0;
   histogram_c[histogram_i] = 0;

@@ -24,11 +24,11 @@ struct anonymous$1;
 
 // tag-#anon#UN[*{SYMRsaKey#0={ST?}}$SYMRsaKey#0$'rsa'|*{SYMecc_key#1={ST?}}$SYMecc_key#1$'ecc'|*{V}$V$'ptr']
 // file ../wolfssl/wolfcrypt/asn.h line 661
-union anonymous$0;
+union anonymous$2;
 
 // tag-#anon#UN[ARR4{S8}$S8$'__size'|S32'__align']
 // file /nix/store/hkj250rjsvxcbr31fr1v81cv88cdfp4l-glibc-2.37-8-dev/include/bits/pthreadtypes.h line 32
-union anonymous$2;
+union anonymous;
 
 // tag-#anon#UN[SYM__pthread_mutex_s#0={ST[S32'__lock'|U32'__count'|S32'__owner'|U32'__nusers'|S32'__kind'|S16'__spins'|S16'__elision'|SYM__pthread_internal_list#1={ST[*{SYM__pthread_internal_list#1}$SYM__pthread_internal_list#1$'__prev'|*{SYM__pthread_internal_list#1}$SYM__pthread_internal_list#1$'__next']}'__list']}'__data'|ARR40{S8}$S8$'__size'|S64'__align']
 // file /nix/store/hkj250rjsvxcbr31fr1v81cv88cdfp4l-glibc-2.37-8-dev/include/bits/pthreadtypes.h line 67
@@ -36,7 +36,7 @@ union anonymous$3;
 
 // tag-#anon#UN[SYMwc_Md5#0={ST[U32'buffLen'|U32'loLen'|U32'hiLen'|ARR16{U32}$U32$'buffer'|ARR4{U32}$U32$'digest'|*{V}$V$'heap']}'md5'|SYMwc_Sha#1={ST[U32'buffLen'|U32'loLen'|U32'hiLen'|ARR16{U32}$U32$'buffer'|ARR5{U32}$U32$'digest'|*{V}$V$'heap']}'sha'|SYMwc_Sha256#2={ST[ARR8{U32}$U32$'digest'|ARR16{U32}$U32$'buffer'|U32'buffLen'|U32'loLen'|U32'hiLen'|*{V}$V$'heap']}'sha256']
 // file ../wolfssl/wolfcrypt/hash.h line 92
-union anonymous;
+union anonymous$0;
 
 // tag-Aes
 // file ../wolfssl/wolfcrypt/aes.h line 156
@@ -198,8 +198,8 @@ typedef signed int pem_password_cb(char *, signed int, signed int, void *);
 
 
 typedef signed long int time_t;
-typedef union anonymous wc_HashAlg;
-typedef union anonymous wc_Hmac_Hash;
+typedef union anonymous$0 wc_HashAlg;
+typedef union anonymous$0 wc_Hmac_Hash;
 typedef struct wc_Md5 wc_Md5;
 typedef struct wc_Sha wc_Sha;
 typedef struct wc_Sha256 wc_Sha256;
@@ -2037,7 +2037,7 @@ struct anonymous$1
   mp_int z[1];
 };
 
-union anonymous$0
+union anonymous$2
 {
   // rsa
   struct RsaKey *rsa;
@@ -2047,7 +2047,7 @@ union anonymous$0
   void *ptr;
 };
 
-union anonymous$2
+union anonymous
 {
   // __size
   char __size[4];
@@ -2113,7 +2113,7 @@ typedef struct wc_Sha256
   void *heap;
 } wc_Sha256;
 
-union anonymous
+union anonymous$0
 {
   // md5
   wc_Md5 md5;
@@ -2653,13 +2653,13 @@ const char * const END_RSA_PRIV="-----END RSA PRIVATE KEY-----";
 // file ../wolfcrypt/src/asn.c line 9818
 const char * const END_X509_CRL="-----END X509 CRL-----";
 // G
-// file unroll_1.c line 20
+// file wolfssl_unroll1.c line 19
 ecc_point G;
 // K
 // file ../wolfcrypt/src/sha256.c line 722
 static const word32 K[64]={ 1116352408u, 1899447441u, 3049323471u, 3921009573u, 961987163u, 1508970993u, 2453635748u, 2870763221u, 3624381080u, 310598401u, 607225278u, 1426881987u, 1925078388u, 2162078206u, 2614888103u, 3248222580u, 3835390401u, 4022224774u, 264347078u, 604807628u, 770255983u, 1249150122u, 1555081692u, 1996064986u, 2554220882u, 2821834349u, 2952996808u, 3210313671u, 3336571891u, 3584528711u, 113926993u, 338241895u, 666307205u, 773529912u, 1294757372u, 1396182291u, 1695183700u, 1986661051u, 2177026350u, 2456956037u, 2730485921u, 2820302411u, 3259730800u, 3345764771u, 3516065817u, 3600352804u, 4094571909u, 275423344u, 430227734u, 506948616u, 659060556u, 883997877u, 958139571u, 1322822218u, 1537002063u, 1747873779u, 1955562222u, 2024104815u, 2227730452u, 2361852424u, 2428436474u, 2756734187u, 3204031479u, 3329325298u };
 // R
-// file unroll_1.c line 20
+// file wolfssl_unroll1.c line 19
 ecc_point R;
 // Td
 // file ../wolfcrypt/src/aes.c line 1213
@@ -2677,7 +2677,7 @@ static const word32 Te[4][256]={ { 0xC66363A5u, 0xF87C7C84u, 0xEE777799u, 0xF67B
     { 0x63A5C663u, 0x7C84F87Cu, 0x7799EE77u, 0x7B8DF67Bu, 0xF20DFFF2u, 0x6BBDD66Bu, 0x6FB1DE6Fu, 0xC55491C5u, 0x30506030u, 0x1030201u, 0x67A9CE67u, 0x2B7D562Bu, 0xFE19E7FEu, 0xD762B5D7u, 0xABE64DABu, 0x769AEC76u, 0xCA458FCAu, 0x829D1F82u, 0xC94089C9u, 0x7D87FA7Du, 0xFA15EFFAu, 0x59EBB259u, 0x47C98E47u, 0xF00BFBF0u, 0xADEC41ADu, 0xD467B3D4u, 0xA2FD5FA2u, 0xAFEA45AFu, 0x9CBF239Cu, 0xA4F753A4u, 0x7296E472u, 0xC05B9BC0u, 0xB7C275B7u, 0xFD1CE1FDu, 0x93AE3D93u, 0x266A4C26u, 0x365A6C36u, 0x3F417E3Fu, 0xF702F5F7u, 0xCC4F83CCu, 0x345C6834u, 0xA5F451A5u, 0xE534D1E5u, 0xF108F9F1u, 0x7193E271u, 0xD873ABD8u, 0x31536231u, 0x153F2A15u, 0x40C0804u, 0xC75295C7u, 0x23654623u, 0xC35E9DC3u, 0x18283018u, 0x96A13796u, 0x50F0A05u, 0x9AB52F9Au, 0x7090E07u, 0x12362412u, 0x809B1B80u, 0xE23DDFE2u, 0xEB26CDEBu, 0x27694E27u, 0xB2CD7FB2u, 0x759FEA75u, 0x91B1209u, 0x839E1D83u, 0x2C74582Cu, 0x1A2E341Au, 0x1B2D361Bu, 0x6EB2DC6Eu, 0x5AEEB45Au, 0xA0FB5BA0u, 0x52F6A452u, 0x3B4D763Bu, 0xD661B7D6u, 0xB3CE7DB3u, 0x297B5229u, 0xE33EDDE3u, 0x2F715E2Fu, 0x84971384u, 0x53F5A653u, 0xD168B9D1u, 0x0u, 0xED2CC1EDu, 0x20604020u, 0xFC1FE3FCu, 0xB1C879B1u, 0x5BEDB65Bu, 0x6ABED46Au, 0xCB468DCBu, 0xBED967BEu, 0x394B7239u, 0x4ADE944Au, 0x4CD4984Cu, 0x58E8B058u, 0xCF4A85CFu, 0xD06BBBD0u, 0xEF2AC5EFu, 0xAAE54FAAu, 0xFB16EDFBu, 0x43C58643u, 0x4DD79A4Du, 0x33556633u, 0x85941185u, 0x45CF8A45u, 0xF910E9F9u, 0x2060402u, 0x7F81FE7Fu, 0x50F0A050u, 0x3C44783Cu, 0x9FBA259Fu, 0xA8E34BA8u, 0x51F3A251u, 0xA3FE5DA3u, 0x40C08040u, 0x8F8A058Fu, 0x92AD3F92u, 0x9DBC219Du, 0x38487038u, 0xF504F1F5u, 0xBCDF63BCu, 0xB6C177B6u, 0xDA75AFDAu, 0x21634221u, 0x10302010u, 0xFF1AE5FFu, 0xF30EFDF3u, 0xD26DBFD2u, 0xCD4C81CDu, 0xC14180Cu, 0x13352613u, 0xEC2FC3ECu, 0x5FE1BE5Fu, 0x97A23597u, 0x44CC8844u, 0x17392E17u, 0xC45793C4u, 0xA7F255A7u, 0x7E82FC7Eu, 0x3D477A3Du, 0x64ACC864u, 0x5DE7BA5Du, 0x192B3219u, 0x7395E673u, 0x60A0C060u, 0x81981981u, 0x4FD19E4Fu, 0xDC7FA3DCu, 0x22664422u, 0x2A7E542Au, 0x90AB3B90u, 0x88830B88u, 0x46CA8C46u, 0xEE29C7EEu, 0xB8D36BB8u, 0x143C2814u, 0xDE79A7DEu, 0x5EE2BC5Eu, 0xB1D160Bu, 0xDB76ADDBu, 0xE03BDBE0u, 0x32566432u, 0x3A4E743Au, 0xA1E140Au, 0x49DB9249u, 0x60A0C06u, 0x246C4824u, 0x5CE4B85Cu, 0xC25D9FC2u, 0xD36EBDD3u, 0xACEF43ACu, 0x62A6C462u, 0x91A83991u, 0x95A43195u, 0xE437D3E4u, 0x798BF279u, 0xE732D5E7u, 0xC8438BC8u, 0x37596E37u, 0x6DB7DA6Du, 0x8D8C018Du, 0xD564B1D5u, 0x4ED29C4Eu, 0xA9E049A9u, 0x6CB4D86Cu, 0x56FAAC56u, 0xF407F3F4u, 0xEA25CFEAu, 0x65AFCA65u, 0x7A8EF47Au, 0xAEE947AEu, 0x8181008u, 0xBAD56FBAu, 0x7888F078u, 0x256F4A25u, 0x2E725C2Eu, 0x1C24381Cu, 0xA6F157A6u, 0xB4C773B4u, 0xC65197C6u, 0xE823CBE8u, 0xDD7CA1DDu, 0x749CE874u, 0x1F213E1Fu, 0x4BDD964Bu, 0xBDDC61BDu, 0x8B860D8Bu, 0x8A850F8Au, 0x7090E070u, 0x3E427C3Eu, 0xB5C471B5u, 0x66AACC66u, 0x48D89048u, 0x3050603u, 0xF601F7F6u, 0xE121C0Eu, 0x61A3C261u, 0x355F6A35u, 0x57F9AE57u, 0xB9D069B9u, 0x86911786u, 0xC15899C1u, 0x1D273A1Du, 0x9EB9279Eu, 0xE138D9E1u, 0xF813EBF8u, 0x98B32B98u, 0x11332211u, 0x69BBD269u, 0xD970A9D9u, 0x8E89078Eu, 0x94A73394u, 0x9BB62D9Bu, 0x1E223C1Eu, 0x87921587u, 0xE920C9E9u, 0xCE4987CEu, 0x55FFAA55u, 0x28785028u, 0xDF7AA5DFu, 0x8C8F038Cu, 0xA1F859A1u, 0x89800989u, 0xD171A0Du, 0xBFDA65BFu, 0xE631D7E6u, 0x42C68442u, 0x68B8D068u, 0x41C38241u, 0x99B02999u, 0x2D775A2Du, 0xF111E0Fu, 0xB0CB7BB0u, 0x54FCA854u, 0xBBD66DBBu, 0x163A2C16u }, 
     { 0x6363A5C6u, 0x7C7C84F8u, 0x777799EEu, 0x7B7B8DF6u, 0xF2F20DFFu, 0x6B6BBDD6u, 0x6F6FB1DEu, 0xC5C55491u, 0x30305060u, 0x1010302u, 0x6767A9CEu, 0x2B2B7D56u, 0xFEFE19E7u, 0xD7D762B5u, 0xABABE64Du, 0x76769AECu, 0xCACA458Fu, 0x82829D1Fu, 0xC9C94089u, 0x7D7D87FAu, 0xFAFA15EFu, 0x5959EBB2u, 0x4747C98Eu, 0xF0F00BFBu, 0xADADEC41u, 0xD4D467B3u, 0xA2A2FD5Fu, 0xAFAFEA45u, 0x9C9CBF23u, 0xA4A4F753u, 0x727296E4u, 0xC0C05B9Bu, 0xB7B7C275u, 0xFDFD1CE1u, 0x9393AE3Du, 0x26266A4Cu, 0x36365A6Cu, 0x3F3F417Eu, 0xF7F702F5u, 0xCCCC4F83u, 0x34345C68u, 0xA5A5F451u, 0xE5E534D1u, 0xF1F108F9u, 0x717193E2u, 0xD8D873ABu, 0x31315362u, 0x15153F2Au, 0x4040C08u, 0xC7C75295u, 0x23236546u, 0xC3C35E9Du, 0x18182830u, 0x9696A137u, 0x5050F0Au, 0x9A9AB52Fu, 0x707090Eu, 0x12123624u, 0x80809B1Bu, 0xE2E23DDFu, 0xEBEB26CDu, 0x2727694Eu, 0xB2B2CD7Fu, 0x75759FEAu, 0x9091B12u, 0x83839E1Du, 0x2C2C7458u, 0x1A1A2E34u, 0x1B1B2D36u, 0x6E6EB2DCu, 0x5A5AEEB4u, 0xA0A0FB5Bu, 0x5252F6A4u, 0x3B3B4D76u, 0xD6D661B7u, 0xB3B3CE7Du, 0x29297B52u, 0xE3E33EDDu, 0x2F2F715Eu, 0x84849713u, 0x5353F5A6u, 0xD1D168B9u, 0x0u, 0xEDED2CC1u, 0x20206040u, 0xFCFC1FE3u, 0xB1B1C879u, 0x5B5BEDB6u, 0x6A6ABED4u, 0xCBCB468Du, 0xBEBED967u, 0x39394B72u, 0x4A4ADE94u, 0x4C4CD498u, 0x5858E8B0u, 0xCFCF4A85u, 0xD0D06BBBu, 0xEFEF2AC5u, 0xAAAAE54Fu, 0xFBFB16EDu, 0x4343C586u, 0x4D4DD79Au, 0x33335566u, 0x85859411u, 0x4545CF8Au, 0xF9F910E9u, 0x2020604u, 0x7F7F81FEu, 0x5050F0A0u, 0x3C3C4478u, 0x9F9FBA25u, 0xA8A8E34Bu, 0x5151F3A2u, 0xA3A3FE5Du, 0x4040C080u, 0x8F8F8A05u, 0x9292AD3Fu, 0x9D9DBC21u, 0x38384870u, 0xF5F504F1u, 0xBCBCDF63u, 0xB6B6C177u, 0xDADA75AFu, 0x21216342u, 0x10103020u, 0xFFFF1AE5u, 0xF3F30EFDu, 0xD2D26DBFu, 0xCDCD4C81u, 0xC0C1418u, 0x13133526u, 0xECEC2FC3u, 0x5F5FE1BEu, 0x9797A235u, 0x4444CC88u, 0x1717392Eu, 0xC4C45793u, 0xA7A7F255u, 0x7E7E82FCu, 0x3D3D477Au, 0x6464ACC8u, 0x5D5DE7BAu, 0x19192B32u, 0x737395E6u, 0x6060A0C0u, 0x81819819u, 0x4F4FD19Eu, 0xDCDC7FA3u, 0x22226644u, 0x2A2A7E54u, 0x9090AB3Bu, 0x8888830Bu, 0x4646CA8Cu, 0xEEEE29C7u, 0xB8B8D36Bu, 0x14143C28u, 0xDEDE79A7u, 0x5E5EE2BCu, 0xB0B1D16u, 0xDBDB76ADu, 0xE0E03BDBu, 0x32325664u, 0x3A3A4E74u, 0xA0A1E14u, 0x4949DB92u, 0x6060A0Cu, 0x24246C48u, 0x5C5CE4B8u, 0xC2C25D9Fu, 0xD3D36EBDu, 0xACACEF43u, 0x6262A6C4u, 0x9191A839u, 0x9595A431u, 0xE4E437D3u, 0x79798BF2u, 0xE7E732D5u, 0xC8C8438Bu, 0x3737596Eu, 0x6D6DB7DAu, 0x8D8D8C01u, 0xD5D564B1u, 0x4E4ED29Cu, 0xA9A9E049u, 0x6C6CB4D8u, 0x5656FAACu, 0xF4F407F3u, 0xEAEA25CFu, 0x6565AFCAu, 0x7A7A8EF4u, 0xAEAEE947u, 0x8081810u, 0xBABAD56Fu, 0x787888F0u, 0x25256F4Au, 0x2E2E725Cu, 0x1C1C2438u, 0xA6A6F157u, 0xB4B4C773u, 0xC6C65197u, 0xE8E823CBu, 0xDDDD7CA1u, 0x74749CE8u, 0x1F1F213Eu, 0x4B4BDD96u, 0xBDBDDC61u, 0x8B8B860Du, 0x8A8A850Fu, 0x707090E0u, 0x3E3E427Cu, 0xB5B5C471u, 0x6666AACCu, 0x4848D890u, 0x3030506u, 0xF6F601F7u, 0xE0E121Cu, 0x6161A3C2u, 0x35355F6Au, 0x5757F9AEu, 0xB9B9D069u, 0x86869117u, 0xC1C15899u, 0x1D1D273Au, 0x9E9EB927u, 0xE1E138D9u, 0xF8F813EBu, 0x9898B32Bu, 0x11113322u, 0x6969BBD2u, 0xD9D970A9u, 0x8E8E8907u, 0x9494A733u, 0x9B9BB62Du, 0x1E1E223Cu, 0x87879215u, 0xE9E920C9u, 0xCECE4987u, 0x5555FFAAu, 0x28287850u, 0xDFDF7AA5u, 0x8C8C8F03u, 0xA1A1F859u, 0x89898009u, 0xD0D171Au, 0xBFBFDA65u, 0xE6E631D7u, 0x4242C684u, 0x6868B8D0u, 0x4141C382u, 0x9999B029u, 0x2D2D775Au, 0xF0F111Eu, 0xB0B0CB7Bu, 0x5454FCA8u, 0xBBBBD66Du, 0x16163A2Cu } };
 // a
-// file unroll_1.c line 21
+// file wolfssl_unroll1.c line 20
 mp_int a;
 // base64Decode
 // file ../wolfcrypt/src/coding.c line 57
@@ -2998,10 +2998,10 @@ static const byte hmacSha256Oid[8]={ 42, 134, 72, 134, 247, 13, 2, 9 };
 // file ../wolfcrypt/src/wc_port.c line 104
 static volatile signed int initRefCount=0;
 // key2
-// file unroll_1.c line 22
+// file wolfssl_unroll1.c line 21
 ecc_key key2;
 // key3
-// file unroll_1.c line 22
+// file wolfssl_unroll1.c line 21
 ecc_key key3;
 // keyEcdsaOid
 // file ../wolfcrypt/src/asn.c line 1516
@@ -3025,7 +3025,7 @@ static void *memcpy__return_value;
 // 
 static void *memset__return_value;
 // mod
-// file unroll_1.c line 21
+// file wolfssl_unroll1.c line 20
 mp_int mod;
 // mp_addmod_ct__return_value
 // 
@@ -3084,9 +3084,6 @@ static signed int mp_sub__return_value;
 // mp_submod_ct__return_value
 // 
 static signed int mp_submod_ct__return_value;
-// my_key
-// file unroll_1.c line 18
-mp_int my_key;
 // outputA_data
 // file ../wolfcrypt/src/random.c line 1131
 const byte outputA_data[128]={ 4, 238, 198, 59, 178, 49, 223, 44, 99, 10, 26, 251, 231, 36, 148, 157, 0, 90, 88, 120, 81, 225, 170, 121, 94, 71, 115, 71, 200, 176, 86, 98, 28, 24, 189, 220, 221, 141, 153, 252, 95, 194, 185, 32, 83, 216, 207, 172, 251, 11, 184, 131, 18, 5, 250, 209, 221, 214, 192, 113, 49, 138, 96, 24, 240, 59, 115, 245, 237, 228, 212, 208, 113, 249, 222, 3, 253, 122, 234, 16, 93, 146, 153, 184, 175, 153, 170, 7, 91, 219, 77, 185, 170, 40, 193, 141, 23, 75, 86, 238, 42, 1, 77, 9, 136, 150, 255, 34, 130, 201, 85, 168, 25, 105, 224, 105, 250, 140, 224, 7, 161, 128, 24, 58, 7, 223, 174, 23 };
@@ -3121,7 +3118,7 @@ static wolfSSL_Realloc_cb realloc_function=((wolfSSL_Realloc_cb)NULL);
 // file ../wolfcrypt/src/random.c line 1125
 const byte reseedSeedA_data[32]={ 230, 43, 138, 142, 232, 241, 65, 182, 152, 5, 102, 227, 191, 227, 192, 73, 3, 218, 212, 172, 44, 223, 159, 34, 128, 1, 10, 103, 57, 188, 131, 211 };
 // ret
-// file unroll_1.c line 19
+// file wolfssl_unroll1.c line 18
 signed int ret=0;
 // s_fp_add__return_value
 // 
@@ -3200,7 +3197,7 @@ static const byte wrapAes256Oid[9]={ 96, 134, 72, 1, 101, 3, 4, 1, 45 };
 static ssize_t write__return_value;
 
 // main
-// file unroll_1.c line 23
+// file wolfssl_unroll1.c line 22
 signed int main(int argc, char** argv)
 {
   volatile byte *ForceZero_z$link6;
@@ -3728,6 +3725,7 @@ signed int main(int argc, char** argv)
   ecc_key *wc_ecc_init_ex_key;
   signed int wc_ecc_init_return_value_wc_ecc_init_ex;
   ecc_key *wc_ecc_init_key;
+  mp_int main_my_key;
   /* begin function wc_ecc_init */
   ;
   wc_ecc_init_key = &key2;
@@ -4028,12 +4026,12 @@ signed int main(int argc, char** argv)
   wc_ecc_init_return_value_wc_ecc_init_ex;
   /* end function wc_ecc_init */
   ;
-  read(0, (void *)(unsigned char *)my_key.dp, 32ul);
-  my_key.sign = 0;
-  my_key.used = (signed int)(32u / sizeof(unsigned long int) /*8u*/ );
+  read(0, (void *)(unsigned char *)main_my_key.dp, 32ul);
+  main_my_key.sign = 0;
+  main_my_key.used = (signed int)(32u / sizeof(unsigned long int) /*8u*/ );
   /* begin function wc_ecc_mulmod */
   ;
-  wc_ecc_mulmod_k = &my_key;
+  wc_ecc_mulmod_k = &main_my_key;
   wc_ecc_mulmod_G = &key2.pubkey;
   wc_ecc_mulmod_R = &key3.pubkey;
   wc_ecc_mulmod_a = &key2.k;

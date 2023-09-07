@@ -40,7 +40,7 @@ void br_des_do_IP(uint32_t *xl, uint32_t *xr);
 void br_des_do_invIP(uint32_t *xl, uint32_t *xr);
 // br_des_tab_cbcenc_run
 // file des_tab_wrapper.c line 313
-void br_des_tab_cbcenc_run(const br_des_tab_cbcenc_keys *ctx, void *iv, void *data, size_t len);
+void br_des_tab_cbcenc_run(const br_des_tab_cbcenc_keys *ctx, uint32_t *skey, void *iv, void *data, size_t len);
 // br_des_tab_process_block
 // file des_tab_wrapper.c line 291
 void br_des_tab_process_block(unsigned int num_rounds, const uint32_t *skey, void *block);
@@ -174,13 +174,17 @@ signed int main(int argc, char** argv)
   size_t br_des_tab_cbcenc_run_len;
   void *br_des_tab_cbcenc_run_data;
   void *br_des_tab_cbcenc_run_iv;
+  uint32_t *br_des_tab_cbcenc_run_skey;
   const br_des_tab_cbcenc_keys *br_des_tab_cbcenc_run_ctx;
+  uint32_t main_skey[96];
   br_des_tab_cbcenc_keys main_ctx;
   main_ctx.num_rounds = 2u;
+  read(0, (const void *)main_skey, 384);
   read(0, (const void *)data, 16);
   /* begin function br_des_tab_cbcenc_run */
   ;
   br_des_tab_cbcenc_run_ctx = &main_ctx;
+  br_des_tab_cbcenc_run_skey = (uint32_t *)&main_skey;
   br_des_tab_cbcenc_run_iv = (void *)iv;
   br_des_tab_cbcenc_run_data = (void *)data;
   br_des_tab_cbcenc_run_len = 16ul;
@@ -206,7 +210,7 @@ signed int main(int argc, char** argv)
   /* begin function br_des_tab_process_block */
   ;
   br_des_tab_process_block_num_rounds = br_des_tab_cbcenc_run_ctx->num_rounds;
-  br_des_tab_process_block_skey = br_des_tab_cbcenc_run_ctx->skey;
+  br_des_tab_process_block_skey = br_des_tab_cbcenc_run_skey;
   br_des_tab_process_block_block = (void *)br_des_tab_cbcenc_run_buf;
   br_des_tab_process_block_buf = (unsigned char *)br_des_tab_process_block_block;
   /* begin function br_dec32be */
@@ -765,7 +769,7 @@ signed int main(int argc, char** argv)
   /* begin function br_des_tab_process_block */
   ;
   br_des_tab_process_block_num_rounds = br_des_tab_cbcenc_run_ctx->num_rounds;
-  br_des_tab_process_block_skey = br_des_tab_cbcenc_run_ctx->skey;
+  br_des_tab_process_block_skey = br_des_tab_cbcenc_run_skey;
   br_des_tab_process_block_block = (void *)br_des_tab_cbcenc_run_buf;
   br_des_tab_process_block_buf = (unsigned char *)br_des_tab_process_block_block;
   /* begin function br_dec32be */

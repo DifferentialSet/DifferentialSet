@@ -83,9 +83,6 @@ static ssize_t __read_chk__return_value;
 // in
 // file aes_core.c line 1088
 static uint8_t in[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-// in_key
-// file aes_core.c line 1087
-static uint8_t in_key[32]={ 110, 174, 180, 139, 251, 244, 166, 152, 168, 193, 207, 255, 35, 74, 109, 110, 71, 11, 214, 13, 22, 184, 243, 25, 99, 81, 94, 130, 136, 124, 40, 47 };
 // main__return_value
 // 
 static signed int main__return_value;
@@ -125,11 +122,12 @@ signed int main(int argc, char** argv)
   signed int AES_set_encrypt_key_bits;
   const unsigned char *AES_set_encrypt_key_userKey;
   AES_KEY main_e_key;
-  read(0, (void *)in_key, 32ul);
+  uint8_t main_in_key[32];
+  read(0, (void *)main_in_key, 32ul);
   read(0, (void *)in, 64ul);
   /* begin function AES_set_encrypt_key */
   ;
-  AES_set_encrypt_key_userKey = in_key;
+  AES_set_encrypt_key_userKey = main_in_key;
   AES_set_encrypt_key_bits = 128;
   AES_set_encrypt_key_key = &main_e_key;
   AES_set_encrypt_key_i = 0;

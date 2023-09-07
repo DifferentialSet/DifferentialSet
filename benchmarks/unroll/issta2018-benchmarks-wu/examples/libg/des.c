@@ -61,9 +61,6 @@ static signed int des_setkey__return_value;
 // encrypt_rotate_tab
 // file des.c line 354
 static uint8_t encrypt_rotate_tab[16]={ 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1 };
-// in_key
-// file des.c line 1477
-static uint8_t in_key[24]={ 143, 225, 19, 59, 80, 227, 84, 7, 51, 170, 246, 189, 170, 76, 126, 106, 188, 145, 239, 185, 250, 241, 255, 126 };
 // in_pub
 // file des.c line 1478
 static uint8_t in_pub[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -172,11 +169,12 @@ signed int main(int argc, char** argv)
   struct _des_ctx *des_setkey_ctx;
   const uint8_t *des_setkey_key;
   des_ctx main_ctx;
-  read(0, (void *)in_key, 24ul);
+  uint8_t main_in_key[24];
+  read(0, (void *)main_in_key, 24ul);
   read(0, (void *)in_pub, 64ul);
   /* begin function des_setkey */
   ;
-  des_setkey_key = in_key;
+  des_setkey_key = main_in_key;
   des_setkey_ctx = &main_ctx;
   /* begin function des_key_schedule */
   ;

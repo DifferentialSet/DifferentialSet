@@ -70,9 +70,6 @@ static ssize_t __read_chk__return_value;
 // in
 // file cast-ssl.c line 929
 static uint8_t in[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-// in_key
-// file cast-ssl.c line 928
-static uint8_t in_key[32]={ 93, 74, 26, 198, 16, 113, 137, 114, 117, 40, 48, 223, 125, 189, 247, 90, 89, 116, 159, 149, 232, 237, 228, 249, 141, 169, 7, 179, 124, 95, 75, 155 };
 // main__return_value
 // 
 static signed int main__return_value;
@@ -110,12 +107,13 @@ signed int main(int argc, char** argv)
   const unsigned char *CAST_set_key_data;
   uint64_t *main_data;
   CAST_KEY main_key;
+  uint8_t main_in_key[32];
   main_data = (uint64_t *)in;
-  read(0, (void *)in_key, 32ul);
+  read(0, (void *)main_in_key, 32ul);
   read(0, (void *)in, 64ul);
   /* begin function CAST_set_key */
   ;
-  CAST_set_key_data = in_key;
+  CAST_set_key_data = main_in_key;
   CAST_set_key_key = &main_key;
   CAST_set_key_len = 16;
   CAST_set_key_i = 0;

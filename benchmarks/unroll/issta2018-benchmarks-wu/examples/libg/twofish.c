@@ -64,9 +64,6 @@ static const uint8_t exp_to_poly[748]={ 1, 2, 4, 8, 16, 32, 64, 128, 77, 154, 12
 // in
 // file twofish.c line 1786
 static uint8_t in[16]={ 200, 35, 184, 183, 107, 254, 145, 19, 47, 167, 94, 230, 148, 119, 111, 107 };
-// in_key
-// file twofish.c line 1785
-static uint8_t in_key[16]={ 0, 17, 34, 51, 68, 85, 102, 119, 136, 153, 170, 187, 204, 221, 238, 255 };
 // main__return_value
 // 
 static signed int main__return_value;
@@ -139,11 +136,12 @@ signed int main(int argc, char** argv)
   TWOFISH_context *do_twofish_setkey_ctx;
   const uint8_t *do_twofish_setkey_key;
   TWOFISH_context main_ctx;
-  read(0, (void *)in_key, 16ul);
+  uint8_t main_in_key[16];
+  read(0, (void *)main_in_key, 16ul);
   read(0, (void *)in, 16ul);
   /* begin function do_twofish_setkey */
   ;
-  do_twofish_setkey_key = in_key;
+  do_twofish_setkey_key = main_in_key;
   do_twofish_setkey_ctx = &main_ctx;
   do_twofish_setkey_keylen = 16u;
   do_twofish_setkey_sa = 0;

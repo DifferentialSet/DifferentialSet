@@ -65,9 +65,6 @@ static ssize_t __read_chk__return_value;
 // buf_get_be32__return_value
 // 
 static uint32_t buf_get_be32__return_value;
-// in_key
-// file seed.c line 428
-static uint8_t in_key[16]={ 71, 6, 72, 8, 81, 230, 27, 232, 93, 116, 191, 179, 253, 149, 97, 133 };
 // in_pub
 // file seed.c line 429
 static uint8_t in_pub[16]={ 131, 162, 248, 162, 136, 100, 31, 185, 164, 233, 165, 204, 47, 19, 28, 125 };
@@ -119,11 +116,12 @@ signed int main(int argc, char** argv)
   unsigned int do_setkey_keylen;
   SEED_context *do_setkey_ctx;
   const uint8_t *do_setkey_key;
-  read(0, (void *)in_key, 16ul);
+  uint8_t main_in_key[16];
+  read(0, (void *)main_in_key, 16ul);
   read(0, (void *)in_pub, 16ul);
   /* begin function do_setkey */
   ;
-  do_setkey_key = in_key;
+  do_setkey_key = main_in_key;
   SEED_context main_ctx={ .keyschedule={ 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u } };
   do_setkey_ctx = &main_ctx;
   do_setkey_keylen = 16u;

@@ -100,9 +100,6 @@ static ssize_t __read_chk__return_value;
 // block_size_pub
 // file tls1_cbc_remove_padding_lucky13_wrapper.c line 19
 unsigned int block_size_pub;
-// data
-// file tls1_cbc_remove_padding_lucky13_wrapper.c line 17
-unsigned char data[63];
 // flags_pub
 // file tls1_cbc_remove_padding_lucky13_wrapper.c line 15
 unsigned long int flags_pub;
@@ -156,7 +153,8 @@ signed int main(int argc, char** argv)
   EVP_CIPHER_CTX main_cipher_ctx;
   EVP_CIPHER main_cipher;
   SSL3_STATE main_s3_obj;
-  read(0, (void *)data, 63ul);
+  unsigned char main_data[63];
+  read(0, (void *)main_data, 63ul);
   read(0, (void *)&options_pub, 4ul);
   read(0, (void *)&s3_flags_pub, 4ul);
   read(0, (void *)&flags_pub, 4ul);
@@ -169,7 +167,7 @@ signed int main(int argc, char** argv)
   main_s_obj = (SSL){ .expand=&main_dummy_expand, .options=options_pub, .s3=&main_s3_obj,
     .enc_read_ctx=&main_cipher_ctx, .slicing_cheat=slicing_cheat_pub };
   main_s = &main_s_obj;
-  main_rec_obj = (SSL3_RECORD){ .length=length_pub, .data=data, .type=0, .input=((unsigned char *)NULL) };
+  main_rec_obj = (SSL3_RECORD){ .length=length_pub, .data=main_data, .type=0, .input=((unsigned char *)NULL) };
   main_rec = &main_rec_obj;
   /* begin function tls1_cbc_remove_padding */
   ;
@@ -210,7 +208,7 @@ signed int main(int argc, char** argv)
   /* end function tls1_cbc_remove_padding */
   ;
   main_ret = main_return_value_tls1_cbc_remove_padding;
-  write(1, (const void *)data, 63ul);
+  write(1, (const void *)main_data, 63ul);
   main__return_value = 0;
 }
 

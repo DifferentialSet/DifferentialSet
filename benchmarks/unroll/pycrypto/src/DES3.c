@@ -181,22 +181,6 @@ signed int main(int argc, char** argv)
     { 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u } }, .dk={ { 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u }, 
     { 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u }, 
     { 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u } } } } };
-  main_key[0] = 0;
-  main_key[1] = 0;
-  main_key[2] = 0;
-  main_key[3] = 0;
-  main_key[4] = 0;
-  main_key[5] = 0;
-  main_key[6] = 0;
-  main_key[7] = 0;
-  main_key[8] = 0;
-  main_key[9] = 0;
-  main_key[10] = 0;
-  main_key[11] = 0;
-  main_key[12] = 0;
-  main_key[13] = 0;
-  main_key[14] = 0;
-  main_key[15] = 0;
   main_in_pub[0] = 0;
   main_in_pub[1] = 0;
   main_in_pub[2] = 0;
