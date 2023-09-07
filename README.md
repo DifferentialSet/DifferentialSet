@@ -19,6 +19,8 @@ DSA is a tool that quantifies and mitigate the cache side channel leakage of a p
 
 In the paper, we compare the task of *quantification* with the state-of-art tool *CacheAudit*, and the task of mitigation with the state-of-art tool *Constantine*. This repository contains the source code for CacheAudit, and we provide a Docker image for Constantine. Instructions to run the baselines are provided in the following sections.
 
+As is stated in the paper, we evalaute DSA only on benchmarks without sensitive branches. Functionality of mitigating sensitive branches is implemented, but not evaluated.
+
 .
 ├── benchmarks
 │   ├── collect_unroll.py (Utility script to collect unrolled quantification benchmarks)
