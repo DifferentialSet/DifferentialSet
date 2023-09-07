@@ -94,7 +94,7 @@ def enumerate_solution(constraints, ctx, target_var, pub_vars, sec_vars, timeout
         if debug:
             print(i)
         if time.time() - start_time > total_timeout:
-            print("Z3 enumerating takes more than {} seconds {}".format(timeout, str(target_var)), flush=True)
+            print("Z3 enumerating takes more than {} seconds {}".format(total_timeout, str(target_var)), flush=True)
             return None
         solver_result = solver.check()
         if (solver_result == sat):
