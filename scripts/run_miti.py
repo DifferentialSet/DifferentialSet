@@ -190,4 +190,4 @@ for benchmark_path in benchmark_paths:
 
 with open("./{}".format(metrics_file), "a") as f:
     f.write("\n" + str(datetime.datetime.now()) + "\n")    
-    f.write(json.dumps({k:(v["baseline_cycle"], v["mitigated_cycle"], v["overhead"]) for k,v in benchmark_collector.items()}))
+    f.write(json.dumps({k:(v["baseline_cycle"], v["mitigated_cycle"], v["overhead"]) if "Exception" not in v else (v["Exception"],) for k,v in benchmark_collector.items()}))
