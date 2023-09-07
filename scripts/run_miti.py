@@ -45,37 +45,37 @@ if not os.path.exists(benchmark_dir):
         assert(False)
 
 
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/aes/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/des/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/aes/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/des/"]
 benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/des3/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/anubis/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/cast5/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/cast6/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/fcrypt/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/khazad/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/anubis/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/cast5/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/cast6/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/fcrypt/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/chronos/khazad/"]
 
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/supercop/aes_core/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/supercop/cast-ssl/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/supercop/aes_core/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/supercop/cast-ssl/"]
 
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/camellia/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/des/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/seed/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/twofish/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/camellia/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/des/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/seed/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/libg/twofish/"]
 
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/ghostrider/histogram/"]
-# benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/ghostrider/matmul/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/ghostrider/histogram/"]
+benchmark_paths += [benchmark_dir + "issta2018-benchmarks-wu/examples/ghostrider/matmul/"]
 
-# benchmark_paths += [benchmark_dir + "pycrypto/src/AES/"]
-# benchmark_paths += [benchmark_dir + "pycrypto/src/ARC4/"]
-# benchmark_paths += [benchmark_dir + "pycrypto/src/Blowfish/"]
-# benchmark_paths += [benchmark_dir + "pycrypto/src/CAST/"]
-# benchmark_paths += [benchmark_dir + "pycrypto/src/DES3/"]
+benchmark_paths += [benchmark_dir + "pycrypto/src/AES/"]
+benchmark_paths += [benchmark_dir + "pycrypto/src/ARC4/"]
+benchmark_paths += [benchmark_dir + "pycrypto/src/Blowfish/"]
+benchmark_paths += [benchmark_dir + "pycrypto/src/CAST/"]
+benchmark_paths += [benchmark_dir + "pycrypto/src/DES3/"]
 
-# benchmark_paths += [benchmark_dir + "binsec/bearssl/aes_big_wrapper/"]
-# benchmark_paths += [benchmark_dir + "binsec/bearssl/des_tab_wrapper/"]
-# benchmark_paths += [benchmark_dir + "binsec/tls1_cbc_remove_padding_lucky13_wrapper/"]
+benchmark_paths += [benchmark_dir + "binsec/bearssl/aes_big_wrapper/"]
+benchmark_paths += [benchmark_dir + "binsec/bearssl/des_tab_wrapper/"]
+benchmark_paths += [benchmark_dir + "binsec/tls1_cbc_remove_padding_lucky13_wrapper/"]
 
-# benchmark_paths += [benchmark_dir + "wolfssl/wolfssl_unroll1/"]
+benchmark_paths += [benchmark_dir + "wolfssl/wolfssl_unroll1/"]
 
 import subprocess
 
