@@ -169,3 +169,26 @@ inline static void *memcpy(void * restrict __dest, const void * restrict __src, 
 
     with open(path, "w") as f:
       f.write(code)
+
+def combine_components(config_dir, avx_version):
+    if avx_version == "512":
+        with open("secure_load_store_avx512.c", "r") as f:
+        # with open("secure_load_store.c", "r") as f:
+        # with open("secure_load_store_bulk_only.c", "r") as f:
+            secure_load_store_code = f.read()
+    elif avx_version == "2":
+        with open("secure_load_store.c", "r") as f:
+            secure_load_store_code = f.read()
+    elif avx_version is None:
+        secure_load_store_code = ""
+
+    with open(config_dir + "ds_macros.c", "r") as f:
+        macro_defs = f.read()
+
+    with open(config_dir + "aligned.c", "r") as f:
+        aligned_program = f.read()
+
+    transformed_aligned_program = secure_load_store_code + macro_defs + aligned_program
+
+    with open(config_dir + "mitigated.c", "w") as f:
+        f.write(transformed_aligned_program)

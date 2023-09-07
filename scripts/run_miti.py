@@ -3,9 +3,8 @@
 import subprocess, resource, os, json
 from z3_enumerate import parallel_enumerate, do_alignment
 from contextlib import contextmanager
-from combine import combine_components
 import time
-from util import clean_up_code
+from util import clean_up_code, combine_components
 import datetime
 import psutil
 
