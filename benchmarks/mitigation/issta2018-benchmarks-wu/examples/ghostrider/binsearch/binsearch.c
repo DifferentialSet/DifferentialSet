@@ -33,11 +33,13 @@ __attribute_noinline__ int binarySearch(int arr[], int l, int r, int x)
     return res; 
 } 
   
-int in_pub[INPUT_SIZE] = {0}; 
-int secret = 0;
+// int in_pub[INPUT_SIZE] = {0}; 
+// int secret = 0;
 // Driver program to test above function
 int main() 
 { 
+    int in_pub[INPUT_SIZE];
+    int secret;
     read(0, &secret, 2);
     read(0, in_pub, sizeof(in_pub));
     secret = in_pub[(unsigned)secret % INPUT_SIZE];
