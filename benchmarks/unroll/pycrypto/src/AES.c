@@ -84,9 +84,6 @@ static ssize_t __read_chk__return_value;
 // in_pub
 // file block_template.c line 55
 unsigned char in_pub[16];
-// key
-// file block_template.c line 54
-unsigned char key[32];
 // main__return_value
 // 
 static signed int main__return_value;
@@ -150,11 +147,12 @@ signed int main(int argc, char** argv)
   signed int block_init_keylen;
   unsigned char *block_init_key;
   block_state *block_init_state;
-  read(0, (void *)key, 32ul);
+  unsigned char main_key[32];
+  read(0, (void *)main_key, 32ul);
   /* begin function block_init */
   ;
   block_init_state = &st;
-  block_init_key = key;
+  block_init_key = main_key;
   block_init_keylen = 32;
   block_init_Nr = 0;
   if(block_init_keylen == 16 || block_init_keylen == 24 || block_init_keylen == 32)

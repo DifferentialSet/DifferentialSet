@@ -43,9 +43,6 @@ static ssize_t __read_chk__return_value;
 // fcrypt_setkey__return_value
 // 
 static signed int fcrypt_setkey__return_value;
-// in_key
-// file fcrypt.c line 392
-static uint8_t in_key[32]={ 228, 159, 237, 87, 198, 37, 198, 191, 202, 77, 55, 65, 82, 28, 239, 108, 250, 35, 56, 26, 111, 244, 109, 44, 248, 2, 0, 61, 174, 120, 117, 166 };
 // in_pub
 // file fcrypt.c line 393
 static uint8_t in_pub[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -343,12 +340,13 @@ signed int main(int argc, char** argv)
   struct fcrypt_ctx *fcrypt_setkey_ctx;
   const uint8_t *fcrypt_setkey_key;
   struct fcrypt_ctx main_ctx;
+  uint8_t main_in_key[32];
   main_ctx = (struct fcrypt_ctx){ .sched={ 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u } };
-  read(0, (void *)in_key, 32ul);
+  read(0, (void *)main_in_key, 32ul);
   read(0, (void *)in_pub, 64ul);
   /* begin function fcrypt_setkey */
   ;
-  fcrypt_setkey_key = in_key;
+  fcrypt_setkey_key = main_in_key;
   fcrypt_setkey_ctx = &main_ctx;
   fcrypt_setkey_keylen = 8u;
   fcrypt_setkey_tmp_post_key = fcrypt_setkey_key;

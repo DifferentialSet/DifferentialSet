@@ -76,9 +76,6 @@ static signed int des3_ede_setkey__return_value;
 // des_ekey__return_value
 // 
 static unsigned long int des_ekey__return_value;
-// in_key
-// file des3.c line 895
-static uint8_t in_key[24]={ 170, 189, 202, 248, 185, 48, 3, 81, 240, 81, 249, 222, 216, 96, 89, 207, 96, 74, 156, 52, 173, 112, 8, 152 };
 // in_pub
 // file des3.c line 896
 static uint8_t in_pub[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -140,12 +137,13 @@ signed int main(int argc, char** argv)
   struct des3_ede_ctx *des3_ede_setkey_dctx;
   const uint8_t *des3_ede_setkey_key;
   struct des3_ede_ctx main_ctx;
+  uint8_t main_in_key[24];
   main_ctx = (struct des3_ede_ctx){ .expkey={ 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u } };
-  read(0, (void *)in_key, 24ul);
+  read(0, (void *)main_in_key, 24ul);
   read(0, (void *)in_pub, 64ul);
   /* begin function des3_ede_setkey */
   ;
-  des3_ede_setkey_key = in_key;
+  des3_ede_setkey_key = main_in_key;
   des3_ede_setkey_dctx = &main_ctx;
   des3_ede_setkey_keylen = 24u;
   des3_ede_setkey_K = (const uint32_t *)des3_ede_setkey_key;

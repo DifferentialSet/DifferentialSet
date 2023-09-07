@@ -64,9 +64,6 @@ static ssize_t __read_chk__return_value;
 // anubis_setkey__return_value
 // 
 static signed int anubis_setkey__return_value;
-// in_key
-// file anubis.c line 713
-static uint8_t in_key[32]={ 10, 128, 84, 188, 121, 182, 82, 33, 19, 131, 60, 40, 128, 5, 52, 166, 153, 163, 23, 207, 154, 138, 76, 96, 204, 55, 124, 134, 88, 171, 83, 71 };
 // in_pub
 // file anubis.c line 714
 static uint8_t in_pub[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -120,12 +117,13 @@ signed int main(int argc, char** argv)
   struct anubis_ctx *anubis_setkey_ctx;
   const uint8_t *anubis_setkey_in_key;
   struct anubis_ctx main_ctx;
+  uint8_t main_in_key[32];
   main_ctx = (struct anubis_ctx){ .key_len=0, .R=0, .E={ { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u } }, .D={ { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u }, { 0u, 0u, 0u, 0u } } };
-  read(0, (void *)in_key, 32ul);
+  read(0, (void *)main_in_key, 32ul);
   read(0, (void *)in_pub, 64ul);
   /* begin function anubis_setkey */
   ;
-  anubis_setkey_in_key = in_key;
+  anubis_setkey_in_key = main_in_key;
   anubis_setkey_ctx = &main_ctx;
   anubis_setkey_key_len = 24u;
   anubis_setkey_key = (const uint32_t *)anubis_setkey_in_key;

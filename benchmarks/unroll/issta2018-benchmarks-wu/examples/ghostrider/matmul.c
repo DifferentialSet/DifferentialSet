@@ -20,12 +20,6 @@ void matmul(signed int n, signed int (*a)[16], signed int (*b)[16], signed int (
 // __read_chk__return_value
 // 
 static ssize_t __read_chk__return_value;
-// in1
-// file matmul.c line 17
-signed int in1[16][16];
-// in2
-// file matmul.c line 18
-signed int in2[16][16];
 // main__return_value
 // 
 static signed int main__return_value;
@@ -50,13 +44,15 @@ signed int main(int argc, char** argv)
   signed int (*matmul_b)[16];
   signed int (*matmul_a)[16];
   signed int matmul_n;
-  read(0, (void *)in1, (size_t)sizeof(signed int [16][16]) /*1024ul*/ );
-  read(0, (void *)in2, (size_t)sizeof(signed int [16][16]) /*1024ul*/ );
+  signed int main_in2[16][16];
+  signed int main_in1[16][16];
+  read(0, (void *)main_in1, (size_t)sizeof(signed int [16][16]) /*1024ul*/ );
+  read(0, (void *)main_in2, (size_t)sizeof(signed int [16][16]) /*1024ul*/ );
   /* begin function matmul */
   ;
   matmul_n = 16;
-  matmul_a = in1;
-  matmul_b = in2;
+  matmul_a = main_in1;
+  matmul_b = main_in2;
   matmul_c = out;
   matmul_i = 0;
   matmul_j = 0;

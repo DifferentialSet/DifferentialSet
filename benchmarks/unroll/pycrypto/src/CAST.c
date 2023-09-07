@@ -98,9 +98,6 @@ static uint32 castfunc__return_value;
 // in_pub
 // file block_template.c line 55
 unsigned char in_pub[8];
-// key
-// file block_template.c line 54
-unsigned char key[16];
 // main__return_value
 // 
 static signed int main__return_value;
@@ -163,11 +160,12 @@ signed int main(int argc, char** argv)
   signed int block_init_keylength;
   unsigned char *block_init_key;
   block_state *block_init_self;
-  read(0, (void *)key, 16ul);
+  unsigned char main_key[16];
+  read(0, (void *)main_key, 16ul);
   /* begin function block_init */
   ;
   block_init_self = &st;
-  block_init_key = key;
+  block_init_key = main_key;
   block_init_keylength = 16;
   if(!(block_init_keylength >= 5) || block_init_keylength >= 17)
   {

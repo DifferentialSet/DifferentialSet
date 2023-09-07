@@ -70,9 +70,6 @@ static ssize_t __read_chk__return_value;
 // des_ekey__return_value
 // 
 static unsigned long int des_ekey__return_value;
-// in_key
-// file des.c line 865
-static uint8_t in_key[32]={ 158, 129, 54, 187, 32, 114, 26, 16, 82, 145, 246, 49, 17, 87, 72, 11, 124, 64, 2, 177, 44, 54, 235, 162, 241, 9, 69, 100, 36, 208, 166, 211 };
 // in_pub
 // file des.c line 866
 static uint8_t in_pub[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -122,12 +119,13 @@ signed int main(int argc, char** argv)
   uint32_t *des_ekey_pe;
   const uint8_t *des_ekey_k;
   struct des_ctx main_ctx;
+  uint8_t main_in_key[32];
   main_ctx = (struct des_ctx){ .expkey={ 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u } };
-  read(0, (void *)in_key, 32ul);
+  read(0, (void *)main_in_key, 32ul);
   read(0, (void *)in_pub, 64ul);
   /* begin function des_ekey */
   ;
-  des_ekey_k = in_key;
+  des_ekey_k = main_in_key;
   des_ekey_pe = main_ctx.expkey;
   des_ekey_pt = pc2;
   des_ekey_d = (unsigned long int)des_ekey_k[4];

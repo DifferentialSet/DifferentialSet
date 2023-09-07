@@ -84,9 +84,6 @@ const uint32_t crypto_it_tab[4][256]={ { 1353184337u, 1399144830u, 0xC3A4171Au, 
 // file aes.c line 1376
 struct crypto_aes_ctx ctx={ .key_enc={ 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u }, .key_dec={ 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u },
     .key_length=0u };
-// in_key
-// file aes.c line 1373
-static uint8_t in_key[32]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 // in_pub
 // file aes.c line 1374
 static uint8_t in_pub[64]={ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -335,11 +332,12 @@ signed int main(int argc, char** argv)
   unsigned int crypto_aes_expand_key_key_len;
   struct crypto_aes_ctx *crypto_aes_expand_key_ctx;
   const uint8_t *crypto_aes_expand_key_in_key;
-  read(0, (void *)in_key, 32ul);
+  uint8_t main_in_key[32];
+  read(0, (void *)main_in_key, 32ul);
   read(0, (void *)in_pub, 64ul);
   /* begin function crypto_aes_expand_key */
   ;
-  crypto_aes_expand_key_in_key = in_key;
+  crypto_aes_expand_key_in_key = main_in_key;
   crypto_aes_expand_key_ctx = &ctx;
   crypto_aes_expand_key_key_len = 24u;
   crypto_aes_expand_key_key = (const uint32_t *)crypto_aes_expand_key_in_key;
