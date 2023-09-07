@@ -94,6 +94,11 @@ compiler = "clang"
 
 metrics_file = "miti_metrics.json"
 
+with open('./random_input.txt', 'wb') as f:
+    import numpy as np
+    np.random.seed(42)
+    f.write(np.random.randint(0, 256, 10000000, dtype=np.uint8).tobytes())
+
 benchmark_collector = {}
 for benchmark_path in benchmark_paths:
     # extract last part of path
@@ -152,10 +157,10 @@ for benchmark_path in benchmark_paths:
         wall_clock_time_end = time.time()
         print("Run mitigated program: {}".format(benchmark_name))
         with time_context(metrics_collector, "Run mitigated"):
-            result_mitigated = subprocess.run(["perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./mitigated"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
+            result_mitigated = subprocess.run(["perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./mitigated"], stdin=open("./random_input.txt"), capture_output=True, cwd=benchmark_path)
         print("Run baseline program: {}".format(benchmark_name))
         with time_context(metrics_collector, "Run transform_only"):
-            result_baseline = subprocess.run(["perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./transform_only"], stdin=open("./random_input_large.txt"), capture_output=True, cwd=benchmark_path)
+            result_baseline = subprocess.run(["perf", "stat", "-e", "cpu-cycles:u", "-x", ",", "-r", "2000", "./transform_only"], stdin=open("./random_input.txt"), capture_output=True, cwd=benchmark_path)
 
         mitigated_cycle = int(result_mitigated.stderr.split(b",")[0])
         baseline_cycle = int(result_baseline.stderr.split(b",")[0])

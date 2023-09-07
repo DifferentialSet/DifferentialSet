@@ -178,7 +178,7 @@
         in {
           devShell = with pkgs; mkShell {
             buildInputs = [
-              (python3.withPackages (ps: with ps; [ z3 joblib tqdm pycparser ipdb ipykernel
+              (python3.withPackages (ps: with ps; [ z3 joblib tqdm pycparser ipdb ipykernel numpy
                                                     (
                                                     buildPythonPackage rec {
                                                       pname = "pycryptosat";
