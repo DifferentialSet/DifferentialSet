@@ -103,6 +103,7 @@ cd scripts
 python run_miti.py
 ```
 2. Check results in `miti_metrics.json`. If the script errors out, you can find partial result in `debug_miti_metrics.json`. The *overhead* field in the result denotes the overhead of the mitigation.
+3. To check the size of the differential sets, and thus confirm the reduction in the memory footprint, check `sensitive_ds_info.csv` inside each benchmark folder. The second column denotes the size of the differential set.
 
 ## Running Constantine
 ```console
