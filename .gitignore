@@ -39,3 +39,5 @@ entrypoint.sh
 .vscode/settings.json
 wolfssl/.git
 .direnv/
+ds_size.ipynb
+ds_size.txt
