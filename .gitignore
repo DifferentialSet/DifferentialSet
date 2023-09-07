@@ -41,3 +41,4 @@ wolfssl/.git
 .direnv/
 ds_size.ipynb
 ds_size.txt
+cacheaudit_metrics.json
