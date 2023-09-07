@@ -862,11 +862,12 @@ void des_decrypt(struct des_ctx *ctx, uint8_t *dst, const uint8_t *src)
 }
 
 
-static uint8_t in_key[32] = {158, 129, 54, 187, 32, 114, 26, 16, 82, 145, 246, 49, 17, 87, 72, 11, 124, 64, 2, 177, 44, 54, 235, 162, 241, 9, 69, 100, 36, 208, 166, 211};
+// static uint8_t in_key[32] = {158, 129, 54, 187, 32, 114, 26, 16, 82, 145, 246, 49, 17, 87, 72, 11, 124, 64, 2, 177, 44, 54, 235, 162, 241, 9, 69, 100, 36, 208, 166, 211};
 static uint8_t in_pub[64] = {0x00};
 static 	uint8_t out[64] = {0};
 int main()
 {
+	uint8_t in_key[32];
 	struct des_ctx ctx = {0};
 	read(0, in_key, 32);
 	read(0, in_pub, 64);

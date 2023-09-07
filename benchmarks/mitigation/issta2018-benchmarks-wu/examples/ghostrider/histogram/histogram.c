@@ -18,11 +18,12 @@ void histogram(int a[], int c[]) {
     } 
 }
   
-int in[INPUT_SIZE];
+// int in[INPUT_SIZE];
 int out[INPUT_SIZE];
 // Driver program to test above function
 int main() 
 {
+    int in[INPUT_SIZE];
     read(0, in, sizeof(in));
     histogram(in, out); 
     write(1, out, INPUT_SIZE*4);

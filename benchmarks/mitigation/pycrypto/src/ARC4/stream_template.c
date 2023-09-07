@@ -56,7 +56,8 @@
 
 int main() {
 	stream_state st = {0};
-	unsigned char key[KEY_LEN] = {0};
+	// unsigned char key[KEY_LEN] = {0};
+	unsigned char key[KEY_LEN];
 	unsigned char in_pub[STREAM_SIZE] = {0};
 
 	read(0, key, KEY_LEN);

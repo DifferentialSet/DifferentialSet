@@ -637,10 +637,11 @@ void camellia_setup128(const unsigned char *key, uint32_t *subkey)
     return;
 }
 
-static uint8_t in_key[24]  __attribute__((aligned(64)))={230, 206, 204, 99, 222, 174, 15, 99, 194, 200, 123, 233, 145, 84, 160, 149, 219, 114, 38, 185, 31, 54, 185, 40};
+// static uint8_t in_key[24]  __attribute__((aligned(64)))={230, 206, 204, 99, 222, 174, 15, 99, 194, 200, 123, 233, 145, 84, 160, 149, 219, 114, 38, 185, 31, 54, 185, 40};
 
 int main()
 {
+    uint8_t in_key[24];
     static uint32_t subkey[50] = {0};   
 	read(0, in_key, 24);
     camellia_setup128(in_key, subkey);

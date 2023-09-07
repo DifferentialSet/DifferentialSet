@@ -310,7 +310,7 @@ br_des_tab_process_block(unsigned num_rounds, const uint32_t *skey, void *block)
 
 /* see bearssl_block.h */
 void
-br_des_tab_cbcenc_run(const br_des_tab_cbcenc_keys *ctx,
+br_des_tab_cbcenc_run(const br_des_tab_cbcenc_keys *ctx, uint32_t skey[96],
 	void *iv, void *data, size_t len)
 {
 	unsigned char *buf, *ivbuf;
@@ -323,7 +323,7 @@ br_des_tab_cbcenc_run(const br_des_tab_cbcenc_keys *ctx,
 		for (i = 0; i < 8; i ++) {
 			buf[i] ^= ivbuf[i];
 		}
-		br_des_tab_process_block(ctx->num_rounds, ctx->skey, buf);
+		br_des_tab_process_block(ctx->num_rounds, skey, buf);
 		memcpy(ivbuf, buf, 8);
 		buf += 8;
 		len -= 8;
@@ -339,10 +339,11 @@ int main(){
   br_des_tab_cbcenc_keys ctx;
   ctx.num_rounds = N_ROUND;
 
-  // read(0, ctx.skey, KEY_LEN);
+  uint32_t skey[96];
+  read(0, skey, KEY_LEN);
   read(0, data, DATA_LEN);
 
-  br_des_tab_cbcenc_run(&ctx, iv, data, (size_t) DATA_LEN);
+  br_des_tab_cbcenc_run(&ctx, &skey, iv, data, (size_t) DATA_LEN);
   write(1, data, DATA_LEN);
   return 0;
 }

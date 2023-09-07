@@ -710,11 +710,12 @@ void anubis_crypt(uint32_t roundKey[ANUBIS_MAX_ROUNDS + 1][4],
 		dst[i] = (inter[i]);
 }
 
-static uint8_t in_key[32] = {10, 128, 84, 188, 121, 182, 82, 33, 19, 131, 60, 40, 128, 5, 52, 166, 153, 163, 23, 207, 154, 138, 76, 96, 204, 55, 124, 134, 88, 171, 83, 71};
+// static uint8_t in_key[32] = {10, 128, 84, 188, 121, 182, 82, 33, 19, 131, 60, 40, 128, 5, 52, 166, 153, 163, 23, 207, 154, 138, 76, 96, 204, 55, 124, 134, 88, 171, 83, 71};
 static uint8_t in_pub[64] = {0x00};
 static uint8_t out[64] = {0x00};
 int main()
 {
+	uint8_t in_key[32];
 	struct anubis_ctx ctx = {0};
 	
 	read(0, in_key, 32);

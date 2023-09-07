@@ -829,12 +829,13 @@ void khazad_crypt(const uint64_t roundKey[KHAZAD_ROUNDS + 1],
 }
 
 
-static uint8_t in_key[32] = {101, 70, 47, 14, 122, 80, 183, 67, 206, 210, 246, 249, 112, 240, 153, 113, 13, 37, 224, 87, 170, 209, 24, 101, 113, 215, 176, 107, 252, 40, 116, 124};
+// static uint8_t in_key[32] = {101, 70, 47, 14, 122, 80, 183, 67, 206, 210, 246, 249, 112, 240, 153, 113, 13, 37, 224, 87, 170, 209, 24, 101, 113, 215, 176, 107, 252, 40, 116, 124};
 static uint8_t in_pub[64] = {0x00};
 static uint8_t out[64] = {0x00};
 struct khazad_ctx ctx = {0};
 int main()
 {
+	uint8_t in_key[32];
 	read(0, in_key, 32);
 	read(0, in_pub, 64);
 

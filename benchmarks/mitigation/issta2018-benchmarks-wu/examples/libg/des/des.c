@@ -1474,12 +1474,13 @@ tripledes_amd64_cfb_dec(const void *keys, uint8_t *out, const uint8_t *in, uint8
  */
 
 
-static uint8_t in_key[24]  __attribute__((aligned(64)))={143, 225, 19, 59, 80, 227, 84, 7, 51, 170, 246, 189, 170, 76, 126, 106, 188, 145, 239, 185, 250, 241, 255, 126};
+// static uint8_t in_key[24]  __attribute__((aligned(64)))={143, 225, 19, 59, 80, 227, 84, 7, 51, 170, 246, 189, 170, 76, 126, 106, 188, 145, 239, 185, 250, 241, 255, 126};
 static uint8_t in_pub[64] = {0x00};
 static uint8_t out[64] = {0};
 
 int main()
 { 
+    uint8_t in_key[24];
     des_ctx ctx;
     read(0, in_key, 24);
     read(0, in_pub, 64);

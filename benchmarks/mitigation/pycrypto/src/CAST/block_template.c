@@ -51,12 +51,12 @@
 #endif
 
 block_state st;
-unsigned char key[KEY_LEN];
+// unsigned char key[KEY_LEN];
 unsigned char in_pub[BLOCK_SIZE];
 unsigned char out[BLOCK_SIZE];
 
 int main() {
-
+	unsigned char key[KEY_LEN];
 	read(0, key, KEY_LEN);
 	block_init(&st, key, KEY_LEN);
 	block_encrypt(&st, in_pub, out);

@@ -15,13 +15,13 @@
 static wcchar fp_s_rmap = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                      "abcdefghijklmnopqrstuvwxyz+/";
 
-mp_int my_key;
 int     ret = 0;
 ecc_point G, R;
 mp_int a, mod;
 ecc_key    key2, key3;
 int main()
 {
+    mp_int my_key;
 
     wc_ecc_init(&key2);
     wc_ecc_init(&key3);

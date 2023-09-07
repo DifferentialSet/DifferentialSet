@@ -53,7 +53,8 @@
 
 int main() {
 	block_state st = {0};
-	unsigned char key[KEY_LEN] = {0};
+	// unsigned char key[KEY_LEN] = {0};
+	unsigned char key[KEY_LEN];
 	unsigned char in_pub[BLOCK_SIZE] = {0};
 	unsigned char out[BLOCK_SIZE] = {0};
 

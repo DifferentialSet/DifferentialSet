@@ -1084,12 +1084,13 @@ void AES_decrypt(const unsigned char *in, unsigned char *out,
     PUTU32(out + 12, s3);
 }
 
-static uint8_t in_key[32] = {110, 174, 180, 139, 251, 244, 166, 152, 168, 193, 207, 255, 35, 74, 109, 110, 71, 11, 214, 13, 22, 184, 243, 25, 99, 81, 94, 130, 136, 124, 40, 47};
+// static uint8_t in_key[32] = {110, 174, 180, 139, 251, 244, 166, 152, 168, 193, 207, 255, 35, 74, 109, 110, 71, 11, 214, 13, 22, 184, 243, 25, 99, 81, 94, 130, 136, 124, 40, 47};
 static uint8_t in[64] = {0x00};
 static  uint8_t out[64] = {0};
 
 int main() 
 {
+    uint8_t in_key[32];
     AES_KEY e_key;
 	read(0, in_key, 32);
 	read(0, in, 64);

@@ -14,11 +14,12 @@ unsigned long options_pub;              // public
 long s3_flags_pub;                      // public
 unsigned long flags_pub;                // public
 int slicing_cheat_pub;                  // public                  
-unsigned char data[LEN];            // private (public address)
+// unsigned char data[LEN];            // private (public address)
 unsigned int length_pub = LEN;          // public
 unsigned int block_size_pub;            // public
 unsigned int mac_size_pub;              // public
 int main(){
+  unsigned char data[LEN];            // private (public address)
 
    // Data is private
   HIGH_INPUT(LEN, data);

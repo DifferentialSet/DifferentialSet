@@ -14,12 +14,14 @@ void matmul(int n, int a[][INPUT_SIZE], int b[][INPUT_SIZE], int c[][INPUT_SIZE]
         }
 }
   
-int in1[INPUT_SIZE][INPUT_SIZE];
-int in2[INPUT_SIZE][INPUT_SIZE];
+// int in1[INPUT_SIZE][INPUT_SIZE];
+// int in2[INPUT_SIZE][INPUT_SIZE];
 int out[INPUT_SIZE][INPUT_SIZE];
 // Driver program to test above function
 int main() 
 { 
+    int in1[INPUT_SIZE][INPUT_SIZE];
+    int in2[INPUT_SIZE][INPUT_SIZE];
     read(0, in1, sizeof(in1));
     read(0, in2, sizeof(in2));
     matmul(INPUT_SIZE, in1, in2, out); 

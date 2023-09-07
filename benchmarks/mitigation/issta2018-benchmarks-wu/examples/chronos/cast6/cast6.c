@@ -502,11 +502,12 @@ void cast6_decrypt(struct cast6_ctx *c, uint8_t *outbuf, const uint8_t *inbuf)
 	dst[3] = (block[3]);
 }
 
-static uint8_t in_key[32] = {171, 124, 26, 1, 28, 58, 37, 38, 73, 55, 169, 62, 45, 157, 243, 189, 83, 23, 66, 202, 85, 241, 186, 75, 82, 12, 163, 232, 58, 132, 235, 61};
+// static uint8_t in_key[32] = {171, 124, 26, 1, 28, 58, 37, 38, 73, 55, 169, 62, 45, 157, 243, 189, 83, 23, 66, 202, 85, 241, 186, 75, 82, 12, 163, 232, 58, 132, 235, 61};
 static uint8_t in_pub[16] = {0x00};
 static 	uint8_t out[16] = {0};
 int main()
 {
+	uint8_t in_key[32];
 	struct cast6_ctx ctx = {0};
 	
 	read(0, in_key, 32);

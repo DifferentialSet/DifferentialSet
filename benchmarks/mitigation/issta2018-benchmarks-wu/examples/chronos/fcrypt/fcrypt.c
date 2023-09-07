@@ -389,11 +389,12 @@ int fcrypt_setkey(const uint8_t *key, struct fcrypt_ctx *ctx, unsigned int keyle
 }
 
 
-static uint8_t in_key[32] = {228, 159, 237, 87, 198, 37, 198, 191, 202, 77, 55, 65, 82, 28, 239, 108, 250, 35, 56, 26, 111, 244, 109, 44, 248, 2, 0, 61, 174, 120, 117, 166};
+// static uint8_t in_key[32] = {228, 159, 237, 87, 198, 37, 198, 191, 202, 77, 55, 65, 82, 28, 239, 108, 250, 35, 56, 26, 111, 244, 109, 44, 248, 2, 0, 61, 174, 120, 117, 166};
 static uint8_t in_pub[64] = {0x00};
 static uint8_t out[64] = {0x00};
 int main()
 {
+	uint8_t in_key[32];
 	struct fcrypt_ctx ctx = {0};
 	read(0, in_key, 32);
 	read(0, in_pub, 64);

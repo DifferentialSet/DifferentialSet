@@ -1370,13 +1370,14 @@ void aes_decrypt(struct crypto_aes_ctx *ctx, uint8_t *out, const uint8_t *in)
 	dst[2] = (b0[2]);
 	dst[3] = (b0[3]);
 }
-static uint8_t in_key[32] = {0};
+// static uint8_t in_key[32] = {0};
 static uint8_t in_pub[64] = {0};
 static uint8_t out[64] = {0};
 struct crypto_aes_ctx ctx = {0};
 
 int main()
 {
+	uint8_t in_key[32];
 	read(0, in_key, 32);
 	read(0, in_pub, 64);
 
