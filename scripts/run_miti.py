@@ -137,6 +137,8 @@ for benchmark_path in benchmark_paths:
             max_memory = get_max_memory(process)
             metrics_collector["Max Mem"] = max_memory
             process.communicate()
+            if process.returncode != 0:
+                raise Exception("\"goto-instrument --dump-c instrumented instrumented.c\" failed with return code {}".format(process.returncode))
         print("Do alignment: {}".format(benchmark_name))
         with time_context(metrics_collector, "Do alignment"):
             do_alignment(benchmark_path, align_only=False, avx_version=avx_version)
