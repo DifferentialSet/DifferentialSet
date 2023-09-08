@@ -1,9 +1,10 @@
 FROM nixos/nix
 
-RUN git clone https://github.com/DifferentialSet/DifferentialSet.git &&\
-    cd DifferentialSet &&\
-    git checkout bf475e002f7aa6560997ad61aeb391ee1e359780
+# RUN git clone https://github.com/DifferentialSet/DifferentialSet.git &&\
+#     cd DifferentialSet &&\
+#     git checkout bf475e002f7aa6560997ad61aeb391ee1e359780
 WORKDIR /DifferentialSet
+COPY . .
 
 RUN nix --extra-experimental-features "nix-command flakes" develop 
 
