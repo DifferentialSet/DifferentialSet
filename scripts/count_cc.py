@@ -112,8 +112,8 @@ def get_target_literals_with_filter(dimacs_path: str, n_jobs, target_var_prefixe
 
     # if there are too many clauses, the optimization of
     # removing non-interefering observations is not worth it
-    if clause_num > 1000000:
-        return get_target_literals_no_filter(dimacs_path, target_var_prefixes)
+    # if clause_num > 1000000:
+    #     return get_target_literals_no_filter(dimacs_path, target_var_prefixes)
 
     def mirror_literal(l: str) -> str:
         return str(int(l) + literal_num) if int(l) > 0 else str(int(l) - literal_num)
@@ -136,29 +136,47 @@ def get_target_literals_with_filter(dimacs_path: str, n_jobs, target_var_prefixe
     
     import pycryptosat
     
-    comments_for_target_vars = [c.strip() for c in comments if any(prefix in c for prefix in target_var_prefixes)]
     # check if whether the observation is only interfered by public variables
     # if so, the constraint will be unsat, and we do not include the observation when counting
-    def filter_comments(comment):
-        target_vars_literals = [l.strip("-") for l in comment.split(" ")[2:]]
+    def filter_comments_using_z3(lits):
         s = z3.Solver()
         z3_literals = [None] + [z3.Bool('{}'.format(i)) for i in range(1, literal_num*2+1)]
         for c in clauses + dup_clauses:
             s.add(z3.Or([z3_literals[int(l)] for l in c.split(" ")[:-1]]))
         for l in pub_literals:
             s.add(z3_literals[abs(int(l))] == z3_literals[abs(int(mirror_literal(l)))])
-        s.add(z3.Or([z3_literals[abs(int(l))] != z3_literals[abs(int(mirror_literal(l)))] for l in target_vars_literals]))
-        s.set(timeout=10000)
-        is_sat = s.check()
-        if is_sat == z3.sat or is_sat == z3.unknown:
-            return target_vars_literals
+        results = []
+        for lit in tqdm(lits):
+            s.push()
+            s.add(z3_literals[abs(int(lit))] != z3_literals[abs(int(mirror_literal(lit)))])
+            is_sat = s.check()
+            if is_sat == z3.sat or is_sat == z3.unknown:
+                results.append(lit)
+            s.pop()
+        return results
+    def filter_comments_using_pycrypto(lit):
+        s = pycryptosat.Solver(time_limit=10)
+        for c in clauses + dup_clauses:
+            s.add_clause([int(l) for l in c.split(" ")[:-1]])
+        for l in pub_literals:
+            s.add_xor_clause([abs(int(l)), abs(int(mirror_literal(l)))], False)
+        s.add_xor_clause([abs(int(lit)), abs(int(mirror_literal(lit)))], True)
+        is_sat, _ = s.solve()
+        if is_sat or is_sat is None:
+            return [lit]
         return []
     from joblib import Parallel, delayed
-    chunks = Parallel(n_jobs=n_jobs)(delayed(filter_comments)(c) for c in tqdm(comments_for_target_vars))
-    print("number of interesting vars: {}/{}".format(sum([len(c) != 0 for c in chunks]), len(comments_for_target_vars)))
-    
+    target_literals_candidates = []
+    for c in comments:
+        if any(prefix in c for prefix in target_var_prefixes):
+            target_literals_candidates += [l.strip("-") for l in c.strip().split(" ")[2:]]
+    import numpy as np
+    lits_chunk = [list(arr) for arr in np.array_split(target_literals_candidates, n_jobs)]
+    chunks = Parallel(n_jobs=n_jobs)(delayed(filter_comments_using_z3)(c) for c in lits_chunk)
     from functools import reduce
-    return list(set(reduce(lambda x, y: x + y, chunks, [])))
+    target_literals = list(set(reduce(lambda x, y: x + y, chunks, [])))
+    print("number of interesting literals: {}/{}".format(len(target_literals), len(target_literals_candidates)))
+    return target_literals
 
 
 def preprocess_dimacs(benchmark_path, n_jobs, filter=True):

@@ -19,7 +19,7 @@ DSA is a tool that quantifies and mitigate the cache side channel leakage of a p
 
 In the paper, we compare the task of *quantification* with the state-of-art tool *CacheAudit*, and the task of mitigation with the state-of-art tool *Constantine*. This repository contains the source code for CacheAudit, and we provide a Docker image for Constantine. Instructions to run the baselines are provided in the following sections.
 
-As is stated in the paper, we evalaute DSA only on benchmarks without sensitive branches. Functionality of mitigating sensitive branches is implemented, but not evaluated.
+As is stated in the paper, we evalaute DSA only on mitigation benchmarks without sensitive branches. Functionality of mitigating sensitive branches is implemented, but not evaluated. Quantifying benchmarks with sensitive branches is implemented and evaluated.
 
 .
 ├── benchmarks
@@ -106,6 +106,7 @@ python run_miti.py
 3. To check the size of the differential sets, and thus confirm the reduction in the memory footprint, check `sensitive_ds_info.csv` inside each benchmark folder. The second column denotes the size of the differential set.
 
 ## Running Constantine
+1. Run the Constantine script. The unrolled benchmark programs, which we deem as the source program, are already inside the image.
 ```console
 docker run -it --privileged hflsmax/dsa:constantine
 cd /constantine/src

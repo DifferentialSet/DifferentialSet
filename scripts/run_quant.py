@@ -96,7 +96,7 @@ for benchmark_path, compositional_multiplier in benchmark_paths:
         with time_context(metrics_collector, "Generate DIMACS"):
             subprocess.run(["goto-instrument", "--config-dir", ".", "--capture-mem-ops", "--construct-obsv-constraint", "--to-dimacs", "--function", "main", "main", "captured"], capture_output=True, cwd=benchmark_path, check=True, env=my_env)
             from count_cc import preprocess_dimacs
-            preprocess_dimacs(benchmark_path, n_jobs, filter=False)
+            preprocess_dimacs(benchmark_path, n_jobs, filter=True)
 
         print("Counting CC: {}".format(benchmark_name))
         with time_context(metrics_collector, "Counting CC"):
