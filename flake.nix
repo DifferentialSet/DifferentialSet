@@ -206,6 +206,7 @@
               pkgs.util-linux
               pkgs.vim
               pkgs.clang
+              pkgs.coreutils
             ];
           };
         });
