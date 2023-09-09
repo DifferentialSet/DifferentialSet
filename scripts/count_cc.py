@@ -111,10 +111,10 @@ def get_target_literals_with_filter(dimacs_path: str, n_jobs, target_var_prefixe
     literal_num = int(splits[2])
     clause_num = int(splits[3])
 
-    # if there are too many clauses, the optimization of
-    # removing non-interefering observations is not worth it
-    # if clause_num > 1000000:
-    #     return get_target_literals_no_filter(dimacs_path, target_var_prefixes)
+    # if there are too many clauses, the precision-improvement technique of
+    # removing non-public-interefering observations will OOM and is not worth it
+    if clause_num > 1000000:
+        return get_target_literals_no_filter(dimacs_path, target_var_prefixes)
 
     def mirror_literal(l: str) -> str:
         return str(int(l) + literal_num) if int(l) > 0 else str(int(l) - literal_num)
