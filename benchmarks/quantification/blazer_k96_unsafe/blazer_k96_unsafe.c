@@ -9,7 +9,8 @@ int main() {
     n_pub |= 1; // n_pub can't be zero, since it's used as a modulus
 
     int s;
-    int r = 0;
+    // int r = 0;
+    int r;
     int k;
     // for (int k = 0; k < w; k++) {
         if (x_sec & (1 << k)) {

@@ -8,7 +8,8 @@ int main() {
     // public
     int base_pub, modulus_pub, width=WIDTH;
 
-    int r0 = 1, r1 = base_pub;
+    // int r0 = 1, r1 = base_pub;
+    int r0, r1;
     int i;
 
     // for (int i = 0; i < width; i++) {

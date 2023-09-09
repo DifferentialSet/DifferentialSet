@@ -7,7 +7,8 @@ int main() {
     // public
     int y_pub, n_pub, w=WIDTH;
     int s;
-    int r = 0;
+    // int r = 0;
+    int r;
     int k;
     // for (int k = 0; k < w; k++) {
         if (x_sec & (1 << k)) {
