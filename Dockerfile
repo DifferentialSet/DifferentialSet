@@ -4,11 +4,12 @@ FROM nixos/nix
 #     cd DifferentialSet &&\
 #     git checkout bf475e002f7aa6560997ad61aeb391ee1e359780
 WORKDIR /DifferentialSet
-COPY ./flake.nix .
-COPY ./flake.lock .
+COPY cbmc cbmc
+COPY ./flake.nix ./flake.lock .
 RUN nix --extra-experimental-features "nix-command flakes" develop 
 
-COPY . .
+COPY benchmarks benchmarks
+COPY scripts scripts
 
 RUN echo -e '#!/usr/bin/env bash\n\
 nix --extra-experimental-features "nix-command flakes" develop \n\
