@@ -601,7 +601,7 @@ def get_ds_macro_def(config_dir, infos, avx_version):
             # 0: bulk; 1: simple; 2: gather
             compact = True
             for i in range(2, len(offsets)):
-                if offsets[i] - offsets[i-1] >= 16:
+                if offsets[i] - offsets[i-1] > 16:
                     compact = False
                     break
             if compact:
