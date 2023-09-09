@@ -2,6 +2,7 @@ import subprocess, os
 import z3
 from typing import List
 from tqdm import tqdm
+import time
 
 def get_target_literals_no_filter(dimacs_path, target_var_prefixes):
     target_literals = []
@@ -138,15 +139,24 @@ def get_target_literals_with_filter(dimacs_path: str, n_jobs, target_var_prefixe
     
     # check if whether the observation is only interfered by public variables
     # if so, the constraint will be unsat, and we do not include the observation when counting
+    # a total time out is set 
     def filter_comments_using_z3(lits):
+        start_time = time.time()
+        timeout = 60
         s = z3.Solver()
         z3_literals = [None] + [z3.Bool('{}'.format(i)) for i in range(1, literal_num*2+1)]
         for c in clauses + dup_clauses:
+            if time.time() - start_time > timeout:
+                return lits
             s.add(z3.Or([z3_literals[int(l)] for l in c.split(" ")[:-1]]))
         for l in pub_literals:
+            if time.time() - start_time > timeout:
+                return lits
             s.add(z3_literals[abs(int(l))] == z3_literals[abs(int(mirror_literal(l)))])
         results = []
         for lit in tqdm(lits):
+            if time.time() - start_time > timeout:
+                return lits
             s.push()
             s.add(z3_literals[abs(int(lit))] != z3_literals[abs(int(mirror_literal(lit)))])
             is_sat = s.check()
