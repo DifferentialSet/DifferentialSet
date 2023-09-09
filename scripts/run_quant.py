@@ -11,14 +11,16 @@ import time
 def time_context(collector, item_name):
     child_usage_start = resource.getrusage(resource.RUSAGE_CHILDREN)
     self_usage_start = resource.getrusage(resource.RUSAGE_SELF)
+    wall_clock_start = time.time()
     try:
         yield None
     finally:
         usage_end = resource.getrusage(resource.RUSAGE_CHILDREN)
         child_cpu_time = round(resource.getrusage(resource.RUSAGE_CHILDREN).ru_utime - child_usage_start.ru_utime, 2)
         self_cpu_time = round(resource.getrusage(resource.RUSAGE_SELF).ru_utime - self_usage_start.ru_utime, 2)
-        collector[item_name + " TIME"] = (child_cpu_time, self_cpu_time)
-        print("CPU time: {}".format((child_cpu_time, self_cpu_time)))
+        wall_clock_time = round(time.time() - wall_clock_start, 2)
+        collector[item_name + " TIME"] = (child_cpu_time, self_cpu_time, wall_clock_time)
+        print("CPU time: {}".format((child_cpu_time, self_cpu_time, wall_clock_time)))
 
 my_env = os.environ.copy()
 home_path = my_env['HOME']
