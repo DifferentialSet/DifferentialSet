@@ -21,6 +21,7 @@ In the paper, we compare the task of *quantification* with the state-of-art tool
 
 As is stated in the paper, we evalaute DSA only on mitigation benchmarks without sensitive branches. Functionality of mitigating sensitive branches is implemented, but not evaluated. Quantifying benchmarks with sensitive branches is implemented and evaluated.
 
+```
 .
 ├── benchmarks
 │   ├── collect_unroll.py (Utility script to collect unrolled quantification benchmarks)
@@ -46,6 +47,7 @@ As is stated in the paper, we evalaute DSA only on mitigation benchmarks without
     ├── secure_load_store.c (C code for secure load and store using avx2)
     ├── util.py (Utility functions)
     └── z3_enumerate.py (Using Z3 to enumerate differential sets)
+```
 
 
 ## Platform requirements
