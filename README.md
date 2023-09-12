@@ -24,10 +24,10 @@ As is stated in the paper, we evalaute DSA only on mitigation benchmarks without
 ```
 .
 ├── benchmarks
-│   ├── collect_unroll.py (Utility script to collect unrolled quantification benchmarks)
+│   ├── collect_unroll.py (Utility script to collect unrolled mitigation benchmarks)
 │   ├── mitigation (mitigation benchmark)
 │   ├── quantification (quantification benchmark)
-│   └── unroll (unrolled quantification benchmark for use in Constantine)
+│   └── unroll (unrolled mitigation benchmark for use in Constantine)
 ├── cacheaudit (CacheAudit source code)
 ├── cbmc (CBMC source code)
 ├── Dockerfile
