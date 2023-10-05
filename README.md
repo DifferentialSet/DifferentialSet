@@ -17,7 +17,7 @@ This repository contains the tool source code, benchmarks and instructions to re
 ## Overview
 DSA is a tool that quantifies and mitigate the cache side channel leakage of a program. Part of the implementation is a modified model-checker *CBMC*, which takes in C code and outputs the constraints of the program in either *DIMACS* and *SMT-LIB v.2* format depending on the task. The constraints are analyzed and transformed through a series of Python scripts. For quantification task, we use *approxMC* to count the number of solutions of the constraints. For mitigation task, we use *Z3* to enumerate each differential set.
 
-In the paper, we compare the task of *quantification* with the state-of-art tool *CacheAudit*, and the task of mitigation with the state-of-art tool *Constantine*. This repository contains the source code for CacheAudit, and we provide a Docker image for Constantine. Instructions to run the baselines are provided in the following sections.
+In the paper, we compare the task of *quantification* with the state-of-art tool *CacheAudit*, and the task of mitigation with the state-of-art tool *Constantine*. This repository sets up an environment that contains CacheAudit, and we provide a Docker image for Constantine. Instructions to run the baselines are provided in the following sections.
 
 As is stated in the paper, we evalaute DSA only on mitigation benchmarks without sensitive branches. Functionality of mitigating sensitive branches is implemented, but not evaluated. Quantifying benchmarks with sensitive branches is implemented and evaluated.
 
@@ -28,7 +28,6 @@ As is stated in the paper, we evalaute DSA only on mitigation benchmarks without
 │   ├── mitigation (mitigation benchmark)
 │   ├── quantification (quantification benchmark)
 │   └── unroll (unrolled mitigation benchmark for use in Constantine)
-├── cacheaudit (CacheAudit source code)
 ├── cbmc (CBMC source code)
 ├── Dockerfile
 ├── flake.lock
